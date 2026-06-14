@@ -31,6 +31,44 @@
     document.head.appendChild(s);
   }
 
+  /* ---- Persistent buy button + decorative water-filter element ---- */
+  var isApp = location.pathname.indexOf('/crm/') !== -1 || location.pathname.indexOf('/account/') !== -1 || location.pathname.indexOf('/installer/') !== -1 || location.pathname.indexOf('/marketing/') !== -1;
+  if (!isApp) {
+    var addEls = function () {
+      if (!document.querySelector('.buybar')) {
+        var buy = document.createElement('a');
+        buy.href = 'shop.html'; buy.className = 'buybar'; buy.setAttribute('aria-label', 'Get BetterTap');
+        buy.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M6 7h12l-1 13H7L6 7Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 7a3 3 0 0 1 6 0" stroke="currentColor" stroke-width="1.8"/></svg> Get BetterTap <b>from $25/mo</b>';
+        document.body.appendChild(buy);
+      }
+      if (!document.querySelector('.waterflow')) {
+        var wf = document.createElement('div'); wf.className = 'waterflow'; wf.setAttribute('aria-hidden', 'true');
+        wf.innerHTML = '<div class="waterflow__tube"><div class="waterflow__fill"></div><span class="drop"></span><span class="drop"></span><span class="drop"></span><div class="waterflow__band"></div></div>';
+        document.body.appendChild(wf);
+      }
+    };
+    if (document.body) addEls(); else document.addEventListener('DOMContentLoaded', addEls);
+  }
+
+  /* ---- Early-bird promo popup (home) ---- */
+  var promo = document.querySelector('.promo');
+  if (promo) {
+    var PROMO_END = new Date('2026-06-29T23:59:59'); // ~2 weeks
+    var dismissed = false;
+    try { dismissed = localStorage.getItem('bt_promo_dismissed') === '1'; } catch (e) {}
+    var now = new Date();
+    if (!dismissed && now < PROMO_END) {
+      setTimeout(function () { promo.classList.add('open'); }, 1200);
+    }
+    var close = function () {
+      promo.classList.remove('open');
+      try { localStorage.setItem('bt_promo_dismissed', '1'); } catch (e) {}
+    };
+    promo.querySelectorAll('[data-promo-close]').forEach(function (b) { b.addEventListener('click', close); });
+    promo.addEventListener('click', function (e) { if (e.target === promo) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  }
+
   /* ---- Nav scrolled state ---- */
   var nav = document.querySelector('.nav');
   function onScroll(){ if(nav) nav.classList.toggle('scrolled',(scrollY||pageYOffset)>10); }
