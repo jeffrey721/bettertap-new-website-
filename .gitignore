@@ -8,3 +8,6 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+
+_handoff_pages/
+_handoff_*.png
