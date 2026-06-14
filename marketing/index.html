@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sign in — Better Tap Operations Console</title>
+<title>Sign in — Better Tap Marketing Command Center</title>
 <meta name="theme-color" content="#141937" />
 <link rel="icon" type="image/png" href="../assets/img/bmark-white.png" />
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/css/crm.css" />
+<link rel="stylesheet" href="assets/css/marketing.css" />
 </head>
 <body>
 <div class="auth-wrap">
@@ -24,13 +24,13 @@
       Better Tap
     </div>
     <div class="auth-brand__mid">
-      <h1>Operations<br>Console</h1>
-      <p>The internal command center for the Better Tap team — customers, orders, tasks and projects in one clean workspace.</p>
+      <h1>Marketing<br>Command Center</h1>
+      <p>Every channel, campaign and conversion in one place — paid, organic and community, tied straight to your CRM pipeline.</p>
       <div class="auth-features" id="features">
-        <div class="auth-feature is-on"><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Track every customer from lead to loyal</div>
-        <div class="auth-feature"><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Plan work on Kanban boards &amp; lists</div>
-        <div class="auth-feature"><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Monitor orders, revenue &amp; fulfillment</div>
-        <div class="auth-feature"><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>One source of truth for the whole team</div>
+        <div class="auth-feature is-on"><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Track spend, leads &amp; ROAS across every channel</div>
+        <div class="auth-feature"><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Connect Meta, TikTok, YouTube, Google &amp; more</div>
+        <div class="auth-feature"><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Attribute every click from ad to sale</div>
+        <div class="auth-feature"><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>One reporting layer for the whole marketing team</div>
       </div>
     </div>
     <div class="auth-brand__foot">
@@ -45,13 +45,12 @@
 
       <!-- STEP 1: credentials -->
       <form class="auth-step" id="step-login" autocomplete="on">
-        <h2>Agent sign-in</h2>
-        <p class="sub">Sign in to start your shift on the Better Tap Operations Console.</p>
+        <h2>Marketer sign-in</h2>
+        <p class="sub">Sign in to open the Better Tap Marketing Command Center.</p>
 
         <div class="field">
-          <label for="email">Agent work email</label>
-          <input class="input" type="email" id="email" name="email" placeholder="agent@bettertap.com" required />
-          <p class="auth-foot" style="margin-top:8px;text-align:left">Your email is your agent identity for this shift.</p>
+          <label for="email">Work email</label>
+          <input class="input" type="email" id="email" name="email" placeholder="you@bettertap.com" required />
         </div>
         <div class="field">
           <label for="password">Password</label>
@@ -94,38 +93,14 @@
           <a href="#" class="link" id="back2fa">Back</a>
         </div>
       </form>
-
-      <!-- STEP 3: start of shift check-in -->
-      <form class="auth-step hidden" id="step-shift" autocomplete="off">
-        <h2>Start of shift</h2>
-        <p class="sub" id="shiftWelcome">You're verified. Check in to begin your shift.</p>
-
-        <div class="field">
-          <label for="shiftNote">Shift check-in note <span style="font-weight:400;color:var(--ink-3)">(optional)</span></label>
-          <textarea class="textarea" id="shiftNote" placeholder="e.g. Covering callbacks &amp; web leads today. Catching up on overnight tickets."></textarea>
-        </div>
-        <div class="field">
-          <label for="shiftFocus">Today's focus</label>
-          <select class="select" id="shiftFocus">
-            <option>Calls &amp; callbacks</option>
-            <option>Live chat &amp; messaging</option>
-            <option>Email &amp; quotes</option>
-            <option>New leads / pipeline</option>
-            <option>Mixed queue</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn--primary btn--block btn--lg" id="shiftBtn">Start my shift</button>
-        <p class="auth-foot">Your check-in is logged to your agent profile (demo).</p>
-      </form>
     </div>
   </main>
 </div>
 
 <div class="toast-stack" id="toasts"></div>
 <script>
-/* Login page logic (kept inline; shared seed/data logic lives in crm.js for app.html) */
+/* Login page logic (inline; app data logic lives in marketing.js). */
 (function(){
-  // rotating brand features
   var feats = document.querySelectorAll('#features .auth-feature'), fi = 0;
   setInterval(function(){
     feats[fi].classList.remove('is-on');
@@ -133,8 +108,7 @@
     feats[fi].classList.add('is-on');
   }, 2600);
 
-  // if already authed, skip to app
-  if (localStorage.getItem('bt_crm_auth') === '1') { location.replace('app.html'); return; }
+  if (localStorage.getItem('bt_mkt_auth') === '1') { location.replace('app.html'); return; }
 
   function toast(msg){
     var t=document.createElement('div'); t.className='toast';
@@ -143,16 +117,8 @@
     setTimeout(function(){t.style.opacity='0';t.style.transition='.3s';setTimeout(function(){t.remove()},300)},2200);
   }
 
-  var stepLogin=document.getElementById('step-login'), step2fa=document.getElementById('step-2fa'), stepShift=document.getElementById('step-shift');
-  var agentEmail='';
+  var stepLogin=document.getElementById('step-login'), step2fa=document.getElementById('step-2fa');
 
-  // Derive a friendly agent name from an email, e.g. "jamie.lee@bettertap.com" -> "Jamie Lee"
-  function agentNameFromEmail(em){
-    var local=(em.split('@')[0]||'agent').replace(/[._-]+/g,' ').trim();
-    return local.split(' ').map(function(w){return w?w.charAt(0).toUpperCase()+w.slice(1):'';}).join(' ') || 'Agent';
-  }
-
-  // show/hide password
   var pw=document.getElementById('password'), tg=document.getElementById('togglePw');
   tg.addEventListener('click',function(){
     var show = pw.type==='password'; pw.type = show?'text':'password';
@@ -161,13 +127,12 @@
 
   document.getElementById('forgot').addEventListener('click',function(e){e.preventDefault();toast('Demo: a reset link would be emailed.')});
 
-  // STEP 1 submit
   stepLogin.addEventListener('submit',function(e){
     e.preventDefault();
     var em=document.getElementById('email').value.trim(), p=pw.value.trim();
     var err=document.getElementById('loginErr');
     if(!em || !p){ err.textContent='Please enter both email and password.'; stepLogin.classList.add('shake'); setTimeout(function(){stepLogin.classList.remove('shake')},420); return; }
-    err.textContent=''; agentEmail=em;
+    err.textContent='';
     var b=document.getElementById('signinBtn'); b.disabled=true; b.innerHTML='<span class="spin"></span> Signing in…';
     setTimeout(function(){
       b.disabled=false; b.textContent='Sign in';
@@ -176,7 +141,6 @@
     }, 750);
   });
 
-  // 2FA inputs: auto-advance, backspace, paste
   var codeBoxes = Array.prototype.slice.call(document.querySelectorAll('#codeInputs input'));
   codeBoxes.forEach(function(box,i){
     box.addEventListener('input',function(){
@@ -206,34 +170,12 @@
       wrap.classList.add('error','shake'); setTimeout(function(){wrap.classList.remove('shake')},420);
       return;
     }
-    // demo: accept 123456 or any 6 digits
     err.textContent='';
     var b=document.getElementById('verifyBtn'); b.disabled=true; b.innerHTML='<span class="spin"></span> Verifying…';
     setTimeout(function(){
-      b.disabled=false; b.textContent='Verify';
-      var name=agentNameFromEmail(agentEmail);
-      document.getElementById('shiftWelcome').textContent='Welcome, '+name+'. Check in to begin your shift.';
-      step2fa.classList.add('hidden'); stepShift.classList.remove('hidden');
-      toast('Identity verified — '+name);
-    }, 700);
-  });
-
-  // STEP 3: start of shift -> store agent identity + check-in, then enter app
-  stepShift.addEventListener('submit',function(e){
-    e.preventDefault();
-    var b=document.getElementById('shiftBtn'); b.disabled=true; b.innerHTML='<span class="spin"></span> Starting shift…';
-    var name=agentNameFromEmail(agentEmail);
-    var agent={
-      email:agentEmail, name:name,
-      shiftNote:document.getElementById('shiftNote').value.trim(),
-      shiftFocus:document.getElementById('shiftFocus').value,
-      shiftStart:new Date().toISOString()
-    };
-    setTimeout(function(){
-      localStorage.setItem('bt_crm_auth','1');
-      localStorage.setItem('bt_crm_agent', JSON.stringify(agent));
+      localStorage.setItem('bt_mkt_auth','1');
       location.replace('app.html');
-    }, 650);
+    }, 700);
   });
 
   document.getElementById('resend').addEventListener('click',function(e){e.preventDefault();toast('Demo: new code sent (123456)')});

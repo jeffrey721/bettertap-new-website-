@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Better Tap — Marketing Command Center</title>
+<meta name="theme-color" content="#141937" />
+<link rel="icon" type="image/png" href="../assets/img/bmark-white.png" />
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/marketing.css" />
+<script>
+  /* Auth guard — run before paint */
+  if (localStorage.getItem('bt_mkt_auth') !== '1') location.replace('index.html');
+</script>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <img src="../assets/img/bmark-white.png" alt="" />
+      <span class="nm">Better Tap</span>
+    </div>
+
+    <nav class="sidebar__nav">
+      <div class="nav-label">Marketing</div>
+      <button class="nav-item active" data-view="overview">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="3" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="12" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="3" y="16" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="1.7"/></svg>
+        <span class="nm">Overview</span>
+      </button>
+      <button class="nav-item" data-view="channels">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="6" r="2.5" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="18" r="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M7.7 7.6 11 15.4M16.3 7.6 13 15.4M8.5 6h7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span class="nm">Channels</span><span class="badge-n" id="navChannelCount">0</span>
+      </button>
+      <button class="nav-item" data-view="campaigns">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 11l16-6-3 14-5-4-2 4-1-5-5-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <span class="nm">Campaigns</span>
+      </button>
+      <button class="nav-item" data-view="attribution">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 5h18M6 10h12M9 15h6M11 20h2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span class="nm">Attribution</span>
+      </button>
+
+      <div class="nav-label">System</div>
+      <button class="nav-item" data-view="settings">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 13.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1A2 2 0 1 1 6.9 4.3l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span class="nm">Settings</span>
+      </button>
+    </nav>
+
+    <div class="user-block">
+      <span class="avatar" style="background:#4D97DB">JC</span>
+      <div class="meta"><div class="nm">Jeffrey C.</div><div class="rl">Head of Marketing</div></div>
+      <a href="#" class="icon-btn signout" id="signout" aria-label="Sign out" title="Sign out">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M10 8l-4 4 4 4M6 12h11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn burger" id="burger" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <button class="icon-btn" id="collapseBtn" aria-label="Collapse sidebar" title="Collapse sidebar">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M9.5 4.5v15" stroke="currentColor" stroke-width="1.7"/></svg>
+      </button>
+      <div class="topbar__title">
+        <h1 id="pageTitle">Overview</h1>
+        <div class="crumb">Marketing · <b id="crumb">Overview</b></div>
+      </div>
+      <div class="topbar__filters">
+        <select class="select select--sm" id="rangeSel">
+          <option value="7">Last 7 days</option>
+          <option value="30" selected>Last 30 days</option>
+          <option value="90">Last 90 days</option>
+        </select>
+      </div>
+      <div class="topbar__actions">
+        <span class="demo-badge"><span class="dot"></span> Prototype — demo only</span>
+        <button class="icon-btn notif-dot" aria-label="Notifications" id="bell">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.7"/></svg>
+        </button>
+        <span class="avatar" style="background:#213E3C">JC</span>
+      </div>
+    </header>
+
+    <div class="view-area">
+
+      <!-- ============ OVERVIEW ============ -->
+      <section class="view active" id="view-overview">
+        <div class="page-head">
+          <div><h2>Marketing overview</h2><div class="sub">Spend, leads and revenue across all connected channels — demo data.</div></div>
+        </div>
+        <div class="kpi-grid" id="kpiGrid"></div>
+        <div class="dash-grid">
+          <div class="card">
+            <div class="card__head"><h3>Spend vs. revenue</h3><div class="right"><span class="legend"><i class="sw sw--spend"></i>Spend</span><span class="legend"><i class="sw sw--rev"></i>Revenue</span></div></div>
+            <div class="card__body"><div id="srChart"></div></div>
+          </div>
+          <div class="card">
+            <div class="card__head"><h3>Leads by channel</h3></div>
+            <div class="card__body"><div class="donut-wrap" id="leadsDonut"></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card__head"><h3>Channel performance</h3><div class="right"><button class="btn btn--subtle" data-goto="channels">View channels</button></div></div>
+          <div class="card__body" id="overviewChannelTable"></div>
+        </div>
+      </section>
+
+      <!-- ============ CHANNELS ============ -->
+      <section class="view" id="view-channels">
+        <div class="page-head">
+          <div><h2>Channels</h2><div class="sub">Connect and monitor every paid, organic and community channel.</div></div>
+        </div>
+        <div class="channel-grid" id="channelGrid"></div>
+      </section>
+
+      <!-- ============ CAMPAIGNS ============ -->
+      <section class="view" id="view-campaigns">
+        <div class="page-head">
+          <div><h2>Campaigns</h2><div class="sub">Active campaigns across all channels.</div></div>
+          <div class="right">
+            <select class="select" id="campFilter" style="width:auto">
+              <option value="">All channels</option>
+            </select>
+            <div class="search-sm">
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.2-3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <input type="search" id="campSearch" placeholder="Search campaigns…" />
+            </div>
+          </div>
+        </div>
+        <div class="note-banner">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 11v5M12 8h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <div><b>Ad click tracking.</b> Every ad click is stamped with its source, campaign and creative, then attributed and pushed to the CRM pipeline as a lead source — so revenue can be traced back to the exact ad that earned it.</div>
+        </div>
+        <div id="campTable" class="table-wrap"></div>
+      </section>
+
+      <!-- ============ ATTRIBUTION ============ -->
+      <section class="view" id="view-attribution">
+        <div class="page-head">
+          <div><h2>Attribution</h2><div class="sub">From first impression to closed sale — and the channels that drove it.</div></div>
+        </div>
+        <div class="card">
+          <div class="card__head"><h3>Conversion funnel</h3><div class="right tag">Demo data</div></div>
+          <div class="card__body"><div class="funnel" id="funnel"></div></div>
+        </div>
+        <div class="card">
+          <div class="card__head"><h3>Source breakdown</h3><div class="right">Mirrors CRM lead sources</div></div>
+          <div class="card__body" id="sourceTable"></div>
+        </div>
+      </section>
+
+      <!-- ============ SETTINGS ============ -->
+      <section class="view" id="view-settings">
+        <div class="page-head"><div><h2>Settings</h2><div class="sub">Integrations, team and demo data — prototype only.</div></div></div>
+        <div class="settings-grid">
+          <div class="settings-tabs" id="settingsTabs">
+            <button class="active" data-pane="integrations">Integrations</button>
+            <button data-pane="team">Team</button>
+            <button data-pane="data">Demo data</button>
+          </div>
+          <div>
+            <!-- integrations -->
+            <div class="settings-pane active card" id="pane-integrations">
+              <div class="card__head"><h3>Channel integrations</h3><div class="right tag">Demo OAuth</div></div>
+              <div class="card__body">
+                <p class="muted-p">Connect each marketing channel so the Command Center can pull spend, reach and conversion data. In this prototype connections are simulated and stored locally.</p>
+                <div id="integrationList"></div>
+              </div>
+            </div>
+            <!-- team -->
+            <div class="settings-pane card" id="pane-team">
+              <div class="card__head"><h3>Team members</h3><div class="right"><button class="btn btn--ghost" onclick="BTM.toast('Demo: invite teammate')">Invite</button></div></div>
+              <div class="card__body" id="teamList"></div>
+            </div>
+            <!-- data -->
+            <div class="settings-pane card" id="pane-data">
+              <div class="card__head"><h3>Demo data</h3></div>
+              <div class="card__body">
+                <p class="muted-p">All metrics in this prototype are sample data stored locally in your browser (localStorage, prefix <code>bt_mkt_</code>). Reset to restore the original seeded dataset and clear any connection toggles.</p>
+                <button class="btn btn--danger" id="resetBtn">Reset demo data</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /view-area -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<div class="scrim nav-scrim" id="navScrim"></div>
+<div class="modal" id="modal"><div class="modal__card" id="modalCard"></div></div>
+<div class="toast-stack" id="toasts"></div>
+
+<script src="assets/js/marketing.js"></script>
+</body>
+</html>

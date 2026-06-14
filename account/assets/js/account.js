@@ -353,6 +353,80 @@
       });
     });
 
+    /* ---- refer & earn ---- */
+    initRefer();
+
+    function copyText(text, okMsg) {
+      function fallback() {
+        try {
+          var ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          toast(okMsg);
+        } catch (e) { toast("Copy failed — please copy manually"); }
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { toast(okMsg); }, fallback);
+      } else { fallback(); }
+    }
+
+    function initRefer() {
+      // build code from the customer's name, e.g. "JEFFREY-50"
+      var first = (profile.name || "Friend").split(/\s+/)[0].replace(/[^a-z]/gi, "").toUpperCase() || "FRIEND";
+      var code = first + "-50";
+      var link = "https://drinkbettertap.com/?ref=" + code;
+
+      var codeEl = $("#ref-code");
+      var linkEl = $("#ref-link");
+      if (codeEl) codeEl.textContent = code;
+      if (linkEl) linkEl.textContent = link;
+
+      // copy buttons
+      $$("[data-copy]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var target = $(btn.getAttribute("data-copy"));
+          if (!target) return;
+          var isCode = target === codeEl;
+          copyText(target.textContent.trim(), isCode ? "Code copied to clipboard" : "Link copied to clipboard");
+        });
+      });
+
+      // share intents
+      var msg = "I love my BetterTap water system — use my code " + code + " to get $50 off: " + link;
+      var enc = encodeURIComponent;
+      var wa = $("#share-whatsapp"); if (wa) wa.href = "https://wa.me/?text=" + enc(msg);
+      var em = $("#share-email"); if (em) em.href = "mailto:?subject=" + enc("Get $50 off a BetterTap") + "&body=" + enc(msg);
+      var fb = $("#share-facebook"); if (fb) fb.href = "https://www.facebook.com/sharer/sharer.php?u=" + enc(link);
+      var xs = $("#share-x"); if (xs) xs.href = "https://twitter.com/intent/tweet?text=" + enc(msg);
+
+      // stats tracker (persisted)
+      var DEFAULT_REFER = { invited: 4, signed: 2, earned: 100 };
+      var stats = getJSON("refer", DEFAULT_REFER);
+      function renderStats() {
+        $$("[data-ref-stat]").forEach(function (el) {
+          el.textContent = stats[el.getAttribute("data-ref-stat")];
+        });
+      }
+      renderStats();
+
+      var demo = $("#ref-demo");
+      if (demo) {
+        demo.addEventListener("click", function () {
+          stats.invited += 1;
+          // ~ every other invite signs up and earns $50
+          if (stats.invited % 2 === 0) { stats.signed += 1; stats.earned += 50; }
+          setJSON("refer", stats);
+          renderStats();
+          toast("Referral added — keep sharing!");
+        });
+      }
+    }
+
     /* ---- toast ---- */
     var toastTimer;
     function toast(msg) {

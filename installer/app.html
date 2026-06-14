@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Better Tap — Field Service</title>
+<meta name="theme-color" content="#141937" />
+<link rel="icon" type="image/png" href="../assets/img/bmark-white.png" />
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/installer.css" />
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- ===== Top bar ===== -->
+  <header class="topbar">
+    <div class="topbar__left">
+      <div class="brand">
+        <img src="../assets/img/bmark-white.png" alt="Better Tap" />
+        <span class="brand__name">Field Service</span>
+      </div>
+    </div>
+    <div class="topbar__right">
+      <span class="demo-chip"><span class="dot"></span> Demo only</span>
+      <button class="icon-btn" id="locPing" title="Location status" aria-label="Location status">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11Z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.7"/></svg>
+        <span class="loc-dot" id="locDot"></span>
+      </button>
+      <div class="topbar__user" id="topUser">
+        <span class="avatar" style="background:#4D97DB">MR</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Side nav (desktop) ===== -->
+  <nav class="sidenav" id="sidenav">
+    <button class="nav-item is-active" data-view="route">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2 6-2 5 2v14l-5-2-6 2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 6v14M15 4v14" stroke="currentColor" stroke-width="1.7"/></svg>
+      <span>Route</span>
+    </button>
+    <button class="nav-item" data-view="summary">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5M20 19V11M12 19V8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <span>Day</span>
+    </button>
+    <button class="nav-item" data-view="profile">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.7"/><path d="M5 20c1-3.6 4-5.4 7-5.4s6 1.8 7 5.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <span>Profile</span>
+    </button>
+  </nav>
+
+  <!-- ===== Main ===== -->
+  <main class="main" id="main"><!-- views injected here --></main>
+
+  <!-- ===== Bottom tab nav (mobile) ===== -->
+  <nav class="tabbar" id="tabbar">
+    <button class="tab is-active" data-view="route">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2 6-2 5 2v14l-5-2-6 2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 6v14M15 4v14" stroke="currentColor" stroke-width="1.7"/></svg>
+      <span>Route</span>
+    </button>
+    <button class="tab" data-view="summary">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5M20 19V11M12 19V8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <span>Day</span>
+    </button>
+    <button class="tab" data-view="profile">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.7"/><path d="M5 20c1-3.6 4-5.4 7-5.4s6 1.8 7 5.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <span>Profile</span>
+    </button>
+  </nav>
+
+</div>
+
+<!-- Job detail sheet (full-screen on mobile, panel on desktop) -->
+<div class="sheet" id="jobSheet" aria-hidden="true">
+  <div class="sheet__scrim" data-close-sheet></div>
+  <div class="sheet__panel" id="jobSheetPanel"><!-- job detail injected --></div>
+</div>
+
+<!-- Generic modal (signature, add part) -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal__scrim" data-close-modal></div>
+  <div class="modal__box" id="modalBox"><!-- modal content injected --></div>
+</div>
+
+<div class="toast-stack" id="toasts"></div>
+
+<script src="assets/js/installer.js"></script>
+</body>
+</html>

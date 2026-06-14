@@ -304,6 +304,80 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:700;line-height:1.08;letter-s
 }
 .toast.show{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
 
+/* =================================================================
+   REFER & EARN
+   ================================================================= */
+/* $50 visual badge */
+.fifty-badge{
+  flex:none;display:flex;align-items:baseline;justify-content:center;gap:1px;position:relative;
+  width:148px;height:148px;border-radius:50%;
+  background:linear-gradient(150deg,var(--blue) 0%,var(--navy) 130%);
+  color:#fff;box-shadow:0 18px 40px -16px rgba(77,151,219,.9);
+  font-family:var(--display);font-weight:700;
+}
+.fifty-badge::after{
+  content:"";position:absolute;inset:7px;border-radius:50%;border:2px dashed rgba(255,255,255,.45);
+}
+.fifty-badge__cur{font-size:1.5rem;line-height:1;transform:translateY(-10px)}
+.fifty-badge__num{font-size:3.4rem;line-height:1;letter-spacing:-.03em}
+.fifty-badge__label{
+  position:absolute;bottom:24px;left:0;right:0;text-align:center;
+  font-family:var(--sans);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--yellow)
+}
+.fifty-badge--sm{width:96px;height:96px}
+.fifty-badge--sm .fifty-badge__cur{font-size:1rem;transform:translateY(-6px)}
+.fifty-badge--sm .fifty-badge__num{font-size:2.2rem}
+
+.refer-promo{display:flex;align-items:center;gap:24px;justify-content:space-between;
+  background:linear-gradient(120deg,#fff 0%,var(--blue-050) 130%)}
+.refer-promo__text{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.refer-promo__text .pill{margin-bottom:2px}
+.refer-promo__text h2{font-size:1.5rem}
+.refer-promo__text .btn{margin-top:8px}
+
+.refer-hero{display:flex;align-items:center;gap:28px;justify-content:space-between;
+  background:linear-gradient(120deg,#fff 0%,var(--blue-050) 130%)}
+.refer-hero__text{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.refer-hero__text .pill{margin-bottom:2px}
+.refer-hero__text h2{font-size:clamp(1.6rem,1.2rem+1.2vw,2.1rem)}
+
+.copy-row{display:flex;align-items:stretch;gap:10px;margin-top:4px}
+.copy-field{
+  flex:1;min-width:0;display:flex;align-items:center;
+  padding:13px 15px;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+  background:var(--grey);font-size:14.5px;color:var(--navy);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.copy-field--code{
+  font-family:var(--display);font-weight:700;letter-spacing:.12em;font-size:1.15rem;
+  color:var(--blue-600);background:var(--blue-050);border-color:var(--blue-100)
+}
+.copy-row .btn{flex:none}
+
+.share-row{display:flex;align-items:center;gap:10px;margin-top:22px;flex-wrap:wrap}
+.share-row__label{font-size:13px;font-weight:600;color:var(--ink-60);margin-right:2px}
+.share-btn{
+  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
+  background:var(--grey);color:var(--navy);transition:.2s var(--ease)
+}
+.share-btn svg{width:21px;height:21px}
+.share-btn:hover{transform:translateY(-2px);color:#fff;background:var(--blue);box-shadow:var(--shadow-sm)}
+.share-btn--whatsapp:hover{background:#25D366}
+.share-btn--facebook:hover{background:#1877F2}
+.share-btn--x:hover{background:#000}
+
+.ref-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:6px 0 20px}
+.ref-stat{
+  text-align:center;padding:18px 10px;border-radius:var(--radius-sm);
+  background:var(--grey);border:1px solid var(--line-soft)
+}
+.ref-stat--accent{background:var(--blue-050);border-color:var(--blue-100)}
+.ref-stat__num{font-family:var(--display);font-weight:700;font-size:1.9rem;color:var(--navy);line-height:1}
+.ref-stat--accent .ref-stat__num{color:var(--blue-600)}
+.ref-stat__cur{font-size:1.1rem;vertical-align:top}
+.ref-stat__k{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-40);margin-top:8px}
+
 /* mobile tabs (hidden on desktop) */
 .mobile-tabs{display:none}
 
@@ -315,6 +389,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:700;line-height:1.08;letter-s
   .machine__photo{max-width:280px;aspect-ratio:4/3.4}
   .grid-3{grid-template-columns:1fr 1fr}
   .gallery{grid-template-columns:repeat(2,1fr)}
+  .refer-hero,.refer-promo{flex-direction:column;align-items:flex-start}
 }
 @media(max-width:860px){
   .auth{grid-template-columns:1fr}
