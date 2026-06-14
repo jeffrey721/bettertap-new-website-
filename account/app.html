@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My BetterTap — Account</title>
+<meta name="description" content="Your BetterTap customer dashboard." />
+<meta name="theme-color" content="#141937" />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/png" href="../assets/img/bmark-white.png" />
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/account.css" />
+<script>
+  /* early guard to avoid flash of dashboard for signed-out users */
+  try { if (localStorage.getItem("bt_acct_auth") !== "1") location.replace("index.html"); } catch (e) {}
+</script>
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<header class="appbar">
+  <a href="../index.html" class="appbar__brand">
+    <img src="../assets/img/bmark-white.png" alt="BetterTap" /> My BetterTap
+  </a>
+  <span class="demo-badge">Demo only</span>
+  <div class="appbar__spacer"></div>
+  <a href="../index.html" class="appbar__link">View main site &rarr;</a>
+
+  <div class="user-menu">
+    <button class="avatar" aria-haspopup="true">
+      <span class="circle" data-initials>JC</span>
+      <span data-username>Jeffrey Cohen</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="menu" role="menu">
+      <div class="who">
+        <b data-username>Jeffrey Cohen</b>
+        <span data-useremail>jeffrey@yjctrade.com</span>
+      </div>
+      <a href="#" data-nav="account">Account settings</a>
+      <a href="../index.html">Main website</a>
+      <button type="button" data-signout>Sign out</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== MOBILE TABS ===== -->
+<nav class="mobile-tabs" aria-label="Sections">
+  <button data-nav="machine">Machine</button>
+  <button data-nav="install">Photos</button>
+  <button data-nav="docs">Guides</button>
+  <button data-nav="service">Service</button>
+  <button data-nav="account">Account</button>
+</nav>
+
+<div class="shell">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+    <div class="sb-title">Your account</div>
+    <button class="navlink" data-nav="machine">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="6" y="3" width="12" height="18" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M9 7h6M9 11h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="16.5" r="1.3" fill="currentColor"/></svg>
+      My Machine
+    </button>
+    <button class="navlink" data-nav="install">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 16l5-4 4 3 3-2 6 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="9" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+      Installation Images
+    </button>
+    <button class="navlink" data-nav="docs">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 3h9l4 4v14H6z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5M9 13h6M9 17h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      Guides &amp; Documents
+    </button>
+    <button class="navlink" data-nav="service">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M14.5 5.5a3.5 3.5 0 00-4.9 4.4l-5.3 5.3a1.5 1.5 0 102.1 2.1l5.3-5.3a3.5 3.5 0 004.4-4.9l-2.1 2.1-2.1-.5-.5-2.1 2.1-2.1z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      Service Requests
+    </button>
+    <button class="navlink" data-nav="account">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.7"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      Account
+    </button>
+  </aside>
+
+  <!-- ===== CONTENT ===== -->
+  <main class="content">
+
+    <!-- ============ MY MACHINE ============ -->
+    <section class="section-pane" id="pane-machine">
+      <div class="page-head">
+        <h1>My Machine</h1>
+        <p>Your BetterTap unit, warranty, and registration details.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>BetterTap — Edge</h2>
+            <p class="card-sub">Model WDC-E-032 · Registered to your account</p>
+          </div>
+          <span class="pill pill--ok">Warranty Active — 3 years</span>
+        </div>
+
+        <div class="machine">
+          <div class="machine__photo">
+            <img src="../assets/img/unit-front.jpg" alt="BetterTap Edge unit" loading="lazy" />
+          </div>
+
+          <div>
+            <div class="specs">
+              <div class="spec"><div class="k">Model</div><div class="v">Edge (WDC-E-032)</div></div>
+              <div class="spec"><div class="k">Color</div><div class="v">Matte Black</div></div>
+              <div class="spec"><div class="k">Installation date</div><div class="v">March 14, 2026</div></div>
+              <div class="spec"><div class="k">Warranty</div><div class="v">Active — 3 years</div></div>
+              <div class="spec"><div class="k">Filter</div><div class="v">MAZE · next change Sep 2026</div></div>
+              <div class="spec"><div class="k">Owner</div><div class="v" data-username>Jeffrey Cohen</div></div>
+            </div>
+
+            <div class="spec" style="margin-bottom:10px"><div class="k">Serial / Barcode</div></div>
+            <div class="barcode-box">
+              <svg id="barcode" role="img" aria-label="Machine barcode"></svg>
+              <div class="sn">SN: BT-EDGE-2026-018472</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ INSTALLATION IMAGES ============ -->
+    <section class="section-pane" id="pane-install">
+      <div class="page-head">
+        <h1>Installation Images</h1>
+        <p>Photos from your BetterTap installation.</p>
+      </div>
+
+      <div class="card">
+        <div class="gallery">
+          <button data-full="../assets/img/lifestyle-kitchen.jpg"><img src="../assets/img/lifestyle-kitchen.jpg" alt="Installed unit in kitchen" loading="lazy" /></button>
+          <button data-full="../assets/img/family-kitchen.jpg"><img src="../assets/img/family-kitchen.jpg" alt="Kitchen view" loading="lazy" /></button>
+          <button data-full="../assets/img/dispense.jpg"><img src="../assets/img/dispense.jpg" alt="Dispensing water" loading="lazy" /></button>
+          <button data-full="../assets/img/control-panel.jpg"><img src="../assets/img/control-panel.jpg" alt="Control panel" loading="lazy" /></button>
+        </div>
+        <p class="caption">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-5.5-7-11a7 7 0 1114 0c0 5.5-7 11-7 11z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>
+          Installed in your kitchen · March 14, 2026
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ GUIDES & DOCUMENTS ============ -->
+    <section class="section-pane" id="pane-docs">
+      <div class="page-head">
+        <h1>Guides &amp; Documents</h1>
+        <p>Manuals, warranty, and how-to resources for your BetterTap.</p>
+      </div>
+
+      <div class="grid grid-3">
+        <a class="doc-card" href="../assets/docs/bettertap-user-manual.pdf" target="_blank" rel="noopener">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h9l4 4v14H6z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5M9 13h6M9 17h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+          <h3>User Manual</h3>
+          <p>Setup, daily use, and care instructions for your Edge unit.</p>
+          <span class="open">Open &rarr;</span>
+        </a>
+
+        <a class="doc-card" href="../assets/docs/bettertap-warranty.pdf" target="_blank" rel="noopener">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 12l2.2 2.2 4.8-5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <h3>Warranty Policy</h3>
+          <p>Your 3-year coverage terms, claims process, and exclusions.</p>
+          <span class="open">Open &rarr;</span>
+        </a>
+
+        <a class="doc-card" href="../shop.html">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M10 9.5l5 2.5-5 2.5z" fill="currentColor"/></svg></span>
+          <h3>How-to videos</h3>
+          <p>Watch quick walkthroughs for filter changes and maintenance.</p>
+          <span class="open">Open &rarr;</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ SERVICE REQUESTS ============ -->
+    <section class="section-pane" id="pane-service">
+      <div class="page-head">
+        <h1>Service Requests</h1>
+        <p>Track existing requests and open a new one.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Your requests</h2></div>
+        <table class="table">
+          <thead>
+            <tr><th>Request</th><th>Date</th><th>Status</th></tr>
+          </thead>
+          <tbody id="req-body"></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>New service request</h2>
+        <p class="card-sub">Tell us what's going on and we'll follow up.</p>
+        <form id="req-form" novalidate>
+          <div class="grid grid-2">
+            <div class="field">
+              <label for="req-subject">Subject</label>
+              <input type="text" id="req-subject" placeholder="e.g. Replace MAZE filter" />
+            </div>
+            <div class="field">
+              <label for="req-category">Category</label>
+              <select id="req-category">
+                <option>Filter</option>
+                <option>Repair</option>
+                <option>Installation</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="req-desc">Description</label>
+            <textarea id="req-desc" placeholder="Describe the issue or request…"></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary">Submit request</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ ACCOUNT ============ -->
+    <section class="section-pane" id="pane-account">
+      <div class="page-head">
+        <h1>Account</h1>
+        <p>Manage your profile and notification preferences.</p>
+      </div>
+
+      <div class="card">
+        <h2>Profile</h2>
+        <p class="card-sub">Your contact and delivery details.</p>
+        <form id="profile-form" novalidate>
+          <div class="grid grid-2">
+            <div class="field">
+              <label for="pf-name">Full name</label>
+              <input type="text" id="pf-name" autocomplete="name" />
+            </div>
+            <div class="field">
+              <label for="pf-email">Email</label>
+              <input type="email" id="pf-email" autocomplete="email" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="pf-address">Address</label>
+            <input type="text" id="pf-address" autocomplete="street-address" />
+          </div>
+          <button type="submit" class="btn btn--primary">Save changes</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Notifications</h2>
+        <p class="card-sub">Choose what we email you about. (Demo — saved locally.)</p>
+
+        <div class="toggle-row">
+          <div><div class="tt">Service updates</div><div class="td">Status changes and appointment reminders.</div></div>
+          <label class="switch"><input type="checkbox" data-notif="service" /><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="tt">Care tips &amp; filter reminders</div><div class="td">Maintenance nudges for your Edge unit.</div></div>
+          <label class="switch"><input type="checkbox" data-notif="tips" /><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="tt">Product &amp; marketing emails</div><div class="td">News, offers, and new releases.</div></div>
+          <label class="switch"><input type="checkbox" data-notif="marketing" /><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Session</h2>
+        <p class="card-sub">Signed in as <b data-useremail>jeffrey@yjctrade.com</b>.</p>
+        <button type="button" class="btn btn--ghost" data-signout>Sign out</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- lightbox -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="close" aria-label="Close">&times;</button>
+  <img id="lightbox-img" src="" alt="Installation photo" />
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/account.js"></script>
+</body>
+</html>
