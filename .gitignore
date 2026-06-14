@@ -1,0 +1,10 @@
+# build/preview artifacts
+_bg_pages/
+_bg_text.txt
+_preview*.png
+_verify*.png
+.vercel/
+node_modules/
+*.log
+.DS_Store
+Thumbs.db

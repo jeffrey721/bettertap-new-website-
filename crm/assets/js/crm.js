@@ -1,0 +1,651 @@
+/* ==========================================================================
+   Better Tap — Operations Console  (crm.js)
+   --------------------------------------------------------------------------
+   PROTOTYPE / DEMO ONLY — front-end only. No real backend.
+
+   What a PRODUCTION build would need (NOT implemented here):
+     • Real backend / API server (data fetched & saved via authenticated HTTPS)
+     • Real database (Postgres/etc.), encrypted at rest, with backups
+     • Hashed + salted passwords (bcrypt/argon2) — never plaintext, never client-checked
+     • Real two-factor auth (TOTP/WebAuthn) verified server-side, not "any 6 digits"
+     • Server-issued session tokens / secure HttpOnly cookies — not a localStorage flag
+     • RBAC (role-based access control) + per-record permission checks
+     • Audit logs for sensitive actions; rate limiting; CSRF protection
+     • Input validation & sanitization on the server (never trust the client)
+   Here, auth/2FA are simulated and ALL data is persisted in localStorage so the
+   demo survives reloads.
+   ========================================================================== */
+
+(function () {
+  'use strict';
+
+  /* ---------- auth guard ---------- */
+  if (localStorage.getItem('bt_crm_auth') !== '1') { location.replace('index.html'); return; }
+
+  var STORE_KEY = 'bt_crm_data_v1';
+  var $  = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+  var el = function (tag, cls, html) { var n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); };
+
+  /* ---------- avatar colors ---------- */
+  var PALETTE = ['#1E6BE6', '#213E3C', '#7c3aed', '#0e8a52', '#d97706', '#dc2626', '#0891b2', '#be185d', '#4f46e5', '#b45309'];
+  function colorFor(seed) { var h = 0; seed = seed || '?'; for (var i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0; return PALETTE[h % PALETTE.length]; }
+  function initials(name) { if (!name) return '?'; var p = name.trim().split(/\s+/); var a = (p[0] || '')[0] || ''; var b = p[1] ? p[1][0] : ''; return (a + b).toUpperCase() || '?'; }
+  function avatar(name, cls) { var c = colorFor(name); return '<span class="avatar ' + (cls || '') + '" style="background:' + c + '" title="' + esc(name) + '">' + esc(initials(name)) + '</span>'; }
+
+  /* ---------- dates ---------- */
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function fmtDate(iso) { if (!iso) return '—'; var d = new Date(iso + 'T00:00:00'); return MON[d.getMonth()] + ' ' + d.getDate(); }
+  function todayISO() { var d = new Date(); return d.toISOString().slice(0, 10); }
+  function addDays(n) { var d = new Date(); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); }
+  function isOverdue(iso) { return iso && iso < todayISO(); }
+  function uid(p) { return (p || 'id') + '_' + Math.random().toString(36).slice(2, 9); }
+
+  /* ================== SEED DATA ================== */
+  function seed() {
+    var people = ['Jeffrey C.', 'Maya R.', 'Devon K.', 'Sara L.', 'Tom B.', 'Priya N.'];
+    var STATUSES = ['Backlog', 'To Do', 'In Progress', 'Review', 'Done'];
+    var tasks = [
+      ['Restock filter inventory', 'In Progress', 'High', 'Maya R.', 4, ['Inventory', 'Ops'], 'MAZE filter cartridges are below the 500-unit reorder threshold. Place PO with supplier and confirm lead time.'],
+      ['Follow up: wholesale lead — HydroMart', 'To Do', 'Urgent', 'Devon K.', 1, ['Sales', 'Wholesale'], 'Send pricing tiers and schedule a demo call. They asked about bulk pricing for 50+ units.'],
+      ['QA new firmware v2.4', 'Review', 'High', 'Tom B.', 2, ['Product', 'QA'], 'Verify temperature accuracy and the new eco-mode timer on 5 test units.'],
+      ['Reply to support ticket #1248', 'To Do', 'Normal', 'Sara L.', 0, ['Support'], 'Customer reports slow hot-water dispense. Walk through descale steps.'],
+      ['Draft June newsletter', 'Backlog', 'Low', 'Priya N.', 9, ['Marketing'], 'Feature the new countertop model and the referral promo.'],
+      ['Update NSF certification docs', 'To Do', 'Normal', 'Jeffrey C.', 6, ['Compliance', 'Ops'], 'Upload renewed NSF/ANSI 53 paperwork to the shared drive.'],
+      ['Process refund — order #BT-1042', 'In Progress', 'High', 'Sara L.', 0, ['Support', 'Finance'], 'Approved RMA. Issue refund and email confirmation.'],
+      ['Photograph BetterTap Pro for shop', 'Backlog', 'Low', 'Priya N.', 12, ['Marketing', 'Product'], 'New lifestyle shots for the product page.'],
+      ['Audit warehouse SKUs', 'Done', 'Normal', 'Maya R.', -2, ['Inventory', 'Ops'], 'Reconcile physical count against the system.'],
+      ['Onboard new fulfillment partner', 'In Progress', 'High', 'Devon K.', 5, ['Ops', 'Logistics'], 'Sign SLA and set up the API handoff for label printing.'],
+      ['Fix checkout coupon bug', 'Review', 'Urgent', 'Tom B.', 1, ['Product', 'Bug'], 'WELCOME15 not applying on second item.'],
+      ['Plan Q3 supplier meeting', 'Backlog', 'Normal', 'Jeffrey C.', 18, ['Ops'], 'Agenda: pricing, lead times, capacity.']
+    ].map(function (t, i) {
+      return {
+        id: uid('t'), title: t[0], status: t[1], priority: t[2], assignee: t[3],
+        due: addDays(t[4]), tags: t[5], desc: t[6], order: i,
+        checklist: i % 3 === 0 ? [{ t: 'Confirm details', done: true }, { t: 'Notify team', done: false }] : [],
+        comments: i % 4 === 0 ? [{ who: 'Maya R.', tx: 'Started on this — supplier confirmed stock.', tm: '2h ago' }] : []
+      };
+    });
+
+    var cust = [
+      ['Olivia Bennett', 'olivia.b@gmail.com', 'Austin, TX', 'Active', 1240, -6],
+      ['Marcus Reed', 'marcus@reedcafe.com', 'Denver, CO', 'Active', 3180, -2],
+      ['HydroMart Wholesale', 'buy@hydromart.com', 'Phoenix, AZ', 'Lead', 0, null],
+      ['Nina Patel', 'nina.patel@outlook.com', 'Seattle, WA', 'Active', 760, -14],
+      ['Greg Thompson', 'gregt@yahoo.com', 'Miami, FL', 'Churned', 410, -120],
+      ['The Daily Grind Co.', 'orders@dailygrind.co', 'Portland, OR', 'Active', 5420, -4],
+      ['Amara Okafor', 'amara.o@gmail.com', 'Chicago, IL', 'Lead', 0, null],
+      ['Liam Walsh', 'liam.walsh@proton.me', 'Boston, MA', 'Active', 980, -9],
+      ['Sunrise Wellness Spa', 'hello@sunrisespa.com', 'San Diego, CA', 'Active', 2670, -1],
+      ['Chen Wei', 'chen.wei@gmail.com', 'San Jose, CA', 'Churned', 320, -200],
+      ['Bright Beans Roastery', 'team@brightbeans.com', 'Nashville, TN', 'Lead', 0, null],
+      ['Rosa Martinez', 'rosa.m@icloud.com', 'Dallas, TX', 'Active', 1490, -3]
+    ].map(function (c) {
+      return {
+        id: uid('c'), name: c[0], email: c[1], location: c[2], status: c[3],
+        ltv: c[4], last: c[5] == null ? null : addDays(c[5]),
+        phone: '(555) ' + (100 + Math.floor(Math.random() * 899)) + '-' + (1000 + Math.floor(Math.random() * 8999)),
+        notes: ''
+      };
+    });
+
+    var products = ['BetterTap Pro', 'BetterTap Countertop', 'MAZE Filter (2-pack)', 'BetterTap Pro + Filter Bundle', 'Descale Kit'];
+    var ostat = ['Paid', 'Processing', 'Shipped', 'Delivered', 'Refunded'];
+    var orders = [];
+    for (var i = 0; i < 10; i++) {
+      var c = cust[i % cust.length];
+      orders.push({
+        id: 'BT-' + (1051 - i),
+        customer: c.name,
+        product: products[i % products.length],
+        amount: [499, 349, 79, 559, 39][i % 5] + (i % 3) * 10,
+        status: ostat[i % ostat.length],
+        date: addDays(-(i * 2 + 1))
+      });
+    }
+
+    return { tasks: tasks, statuses: STATUSES, customers: cust, orders: orders, people: people };
+  }
+
+  /* ---------- persistence ---------- */
+  var DB;
+  function load() { try { DB = JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { DB = null; } if (!DB || !DB.tasks) { DB = seed(); save(); } }
+  function save() { localStorage.setItem(STORE_KEY, JSON.stringify(DB)); }
+  load();
+
+  /* ---------- toast ---------- */
+  function toast(msg) {
+    var t = el('div', 'toast', '<svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>' + esc(msg));
+    $('#toasts').appendChild(t);
+    setTimeout(function () { t.style.opacity = '0'; t.style.transition = '.3s'; setTimeout(function () { t.remove(); }, 300); }, 2200);
+  }
+
+  /* ================== NAVIGATION ================== */
+  var TITLES = { dashboard: 'Dashboard', tasks: 'Tasks', customers: 'Customers', orders: 'Orders', calendar: 'Calendar', reports: 'Reports', settings: 'Settings' };
+  function go(view) {
+    $$('.view').forEach(function (v) { v.classList.remove('active'); });
+    var node = $('#view-' + view); if (!node) return;
+    node.classList.add('active');
+    $$('.nav-item[data-view]').forEach(function (b) { b.classList.toggle('active', b.dataset.view === view); });
+    $('#pageTitle').textContent = TITLES[view]; $('#crumb').textContent = TITLES[view];
+    closeNavDrawer();
+    if (view === 'dashboard') renderDashboard();
+    if (view === 'tasks') renderTasks();
+    if (view === 'customers') renderCustomers();
+    if (view === 'orders') renderOrders();
+    if (view === 'calendar') renderCalendar();
+    if (view === 'reports') renderReports();
+    if (view === 'settings') renderTeam();
+    document.querySelector('.view-area').scrollTop = 0;
+  }
+  $$('.nav-item[data-view]').forEach(function (b) { b.addEventListener('click', function () { go(b.dataset.view); }); });
+  document.body.addEventListener('click', function (e) { var g = e.target.closest('[data-goto]'); if (g) go(g.dataset.goto); });
+
+  /* spaces (expandable) */
+  var SPACES = [
+    { name: 'Operations', color: '#1E6BE6', lists: ['Inventory', 'Logistics', 'Compliance'] },
+    { name: 'Marketing', color: '#d97706', lists: ['Campaigns', 'Content', 'Social'] },
+    { name: 'Support', color: '#0e8a52', lists: ['Tickets', 'Returns'] },
+    { name: 'Product', color: '#7c3aed', lists: ['Roadmap', 'QA', 'Firmware'] }
+  ];
+  (function renderSpaces() {
+    var wrap = $('#spaces');
+    SPACES.forEach(function (sp, i) {
+      var g = el('div', 'space-group' + (i === 0 ? ' open' : ''));
+      g.innerHTML =
+        '<div class="space-head"><span class="sq" style="background:' + sp.color + '"></span><span class="nm">' + esc(sp.name) + '</span>' +
+        '<svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>' +
+        '<div class="space-lists">' + sp.lists.map(function (l) { return '<a href="#" data-goto="tasks">' + esc(l) + '</a>'; }).join('') + '</div>';
+      g.querySelector('.space-head').addEventListener('click', function () { g.classList.toggle('open'); });
+      wrap.appendChild(g);
+    });
+  })();
+
+  /* sidebar collapse + mobile drawer */
+  $('#collapseBtn').addEventListener('click', function () { $('#sidebar').classList.toggle('collapsed-x'); });
+  function openNavDrawer() { $('#app').classList.add('drawer-open'); $('#navScrim').classList.add('open'); }
+  function closeNavDrawer() { $('#app').classList.remove('drawer-open'); $('#navScrim').classList.remove('open'); }
+  $('#burger').addEventListener('click', openNavDrawer);
+  $('#navScrim').addEventListener('click', closeNavDrawer);
+
+  /* sign out */
+  $('#signout').addEventListener('click', function (e) { e.preventDefault(); localStorage.removeItem('bt_crm_auth'); location.replace('index.html'); });
+
+  /* top bar */
+  $('#newBtn').addEventListener('click', function () {
+    var active = $('.view.active').id.replace('view-', '');
+    if (active === 'customers') return openCustomerModal();
+    openTaskModal();
+  });
+  $('#bell').addEventListener('click', function () { toast('No new notifications (demo)'); });
+  $('#globalSearch').addEventListener('input', function () {
+    var q = this.value.toLowerCase().trim();
+    if (!q) return;
+    var hitT = DB.tasks.filter(function (t) { return t.title.toLowerCase().indexOf(q) > -1; }).length;
+    var hitC = DB.customers.filter(function (c) { return (c.name + c.email).toLowerCase().indexOf(q) > -1; }).length;
+    // jump to most relevant view + prefill its filter
+    if (hitC > hitT) { go('customers'); $('#custSearch').value = this.value; renderCustomers(); }
+    else { go('tasks'); $('#taskSearch').value = this.value; renderTasks(); }
+  });
+
+  /* ================== DASHBOARD ================== */
+  function money(n) { return '$' + Number(n).toLocaleString(); }
+  function renderDashboard() {
+    var open = DB.tasks.filter(function (t) { return t.status !== 'Done'; }).length;
+    var monthOrders = DB.orders.length;
+    var rev = DB.orders.reduce(function (s, o) { return s + (o.status === 'Refunded' ? 0 : o.amount); }, 0);
+    var kpis = [
+      { lab: 'Open tasks', val: open, delta: '+3 this week', up: true, bg: '#e6f0ff', fg: '#1E6BE6', ic: '<path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4 5.5l1 1 1.6-2M4 11.5l1 1 1.6-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>' },
+      { lab: 'Customers', val: DB.customers.length, delta: '+2 this month', up: true, bg: '#e6f7ee', fg: '#0e8a52', ic: '<circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M4 19c.6-3 2.6-4 5-4s4.4 1 5 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' },
+      { lab: 'Orders this month', val: monthOrders, delta: '+11%', up: true, bg: '#fff1e6', fg: '#d97706', ic: '<path d="M6 7h12l-1 12H7L6 7Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 7a3 3 0 0 1 6 0" stroke="currentColor" stroke-width="1.8"/>' },
+      { lab: 'Revenue (MTD)', val: money(rev), delta: '+8.2%', up: true, bg: '#eef2ff', fg: '#5b5bd6', ic: '<path d="M12 3v18M8 7h6a2.5 2.5 0 0 1 0 5H9a2.5 2.5 0 0 0 0 5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' }
+    ];
+    $('#kpiGrid').innerHTML = kpis.map(function (k) {
+      return '<div class="kpi"><div class="ic" style="background:' + k.bg + ';color:' + k.fg + '"><svg viewBox="0 0 24 24" fill="none">' + k.ic + '</svg></div>' +
+        '<div class="lab">' + k.lab + '</div><div class="val">' + k.val + '</div>' +
+        '<div class="delta ' + (k.up ? 'up' : 'down') + '">▲ ' + k.delta + '</div></div>';
+    }).join('');
+
+    // bar chart
+    var data = [{ m: 'Dec', v: 38 }, { m: 'Jan', v: 44 }, { m: 'Feb', v: 41 }, { m: 'Mar', v: 52 }, { m: 'Apr', v: 49 }, { m: 'May', v: 61 }, { m: 'Jun', v: 67 }];
+    var max = 70;
+    $('#revBars').innerHTML = data.map(function (d) {
+      return '<div class="col"><div class="bar" style="height:0" data-h="' + (d.v / max * 100) + '"><span class="tip">$' + d.v + 'k</span></div><span class="lbl">' + d.m + '</span></div>';
+    }).join('');
+    requestAnimationFrame(function () { $$('#revBars .bar').forEach(function (b) { b.style.height = b.dataset.h + '%'; }); });
+
+    // activity feed
+    var acts = [
+      ['Maya R.', 'moved <b>Restock filter inventory</b> to In Progress', '12m ago'],
+      ['Devon K.', 'added a new lead <b>HydroMart Wholesale</b>', '40m ago'],
+      ['Sara L.', 'closed support ticket <b>#1244</b>', '1h ago'],
+      ['Tom B.', 'pushed <b>firmware v2.4</b> to Review', '2h ago'],
+      ['System', 'order <b>#BT-1051</b> marked Shipped', '3h ago']
+    ];
+    $('#activityFeed').innerHTML = acts.map(function (a) {
+      return '<div class="feed-item">' + avatar(a[0], 'avatar--sm') + '<div><div class="txt"><b>' + a[0] + '</b> ' + a[1] + '</div><div class="tm">' + a[2] + '</div></div></div>';
+    }).join('');
+
+    // my tasks today
+    var mine = DB.tasks.filter(function (t) { return t.assignee === 'Jeffrey C.' || t.priority === 'Urgent' || t.priority === 'High'; }).slice(0, 5);
+    $('#todayTasks').innerHTML = mine.map(function (t) {
+      return '<div class="mini-task' + (t.status === 'Done' ? ' done' : '') + '" data-tid="' + t.id + '">' +
+        '<div class="cbx"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
+        '<span class="tt">' + esc(t.title) + '</span>' + priorityPill(t.priority) +
+        '<span class="meta">' + fmtDate(t.due) + '</span></div>';
+    }).join('') || '<div class="empty">No tasks for today 🎉</div>';
+    $$('#todayTasks .mini-task').forEach(function (m) {
+      m.querySelector('.cbx').addEventListener('click', function (e) {
+        e.stopPropagation();
+        var t = DB.tasks.find(function (x) { return x.id === m.dataset.tid; });
+        t.status = t.status === 'Done' ? 'To Do' : 'Done'; save(); renderDashboard(); updateNavCounts();
+      });
+      m.addEventListener('click', function () { openTaskDrawer(m.dataset.tid); });
+    });
+    updateNavCounts();
+  }
+
+  function updateNavCounts() { $('#navTaskCount').textContent = DB.tasks.filter(function (t) { return t.status !== 'Done'; }).length; }
+
+  /* ================== TASKS ================== */
+  function priorityPill(p) { return '<span class="pill pill--' + p.toLowerCase() + '"><span class="dot"></span>' + p + '</span>'; }
+  var taskMode = 'board';
+  $$('#taskViewToggle button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      $$('#taskViewToggle button').forEach(function (x) { x.classList.remove('active'); }); b.classList.add('active');
+      taskMode = b.dataset.tview; renderTasks();
+    });
+  });
+  $('#taskSearch').addEventListener('input', renderTasks);
+  $('#addTaskBtn').addEventListener('click', function () { openTaskModal(); });
+
+  function filteredTasks() {
+    var q = $('#taskSearch').value.toLowerCase().trim();
+    return DB.tasks.filter(function (t) { return !q || (t.title + t.tags.join(' ') + t.assignee).toLowerCase().indexOf(q) > -1; });
+  }
+
+  function renderTasks() {
+    if (taskMode === 'board') { $('#kanban').style.display = ''; $('#taskList').style.display = 'none'; renderKanban(); }
+    else { $('#kanban').style.display = 'none'; $('#taskList').style.display = ''; renderTaskList(); }
+    updateNavCounts();
+  }
+
+  var COLOR_BY_STATUS = { 'Backlog': '#94a3b8', 'To Do': '#1E6BE6', 'In Progress': '#d97706', 'Review': '#7c3aed', 'Done': '#16a34a' };
+  function renderKanban() {
+    var k = $('#kanban'); k.innerHTML = '';
+    var tasks = filteredTasks();
+    DB.statuses.forEach(function (st) {
+      var col = el('div', 'kcol'); col.dataset.status = st;
+      var inCol = tasks.filter(function (t) { return t.status === st; }).sort(function (a, b) { return a.order - b.order; });
+      col.innerHTML = '<div class="kcol__head"><span class="sq" style="background:' + COLOR_BY_STATUS[st] + '"></span>' + st +
+        '<span class="ct">' + inCol.length + '</span></div>';
+      inCol.forEach(function (t) { col.appendChild(taskCard(t)); });
+      var add = el('button', 'kcol__add', '<svg viewBox="0 0 24 24" fill="none" width="14" height="14"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Add');
+      add.addEventListener('click', function () { openTaskModal(st); });
+      col.appendChild(add);
+
+      /* drop targets */
+      col.addEventListener('dragover', function (e) { e.preventDefault(); col.classList.add('drag-over'); });
+      col.addEventListener('dragleave', function () { col.classList.remove('drag-over'); });
+      col.addEventListener('drop', function (e) {
+        e.preventDefault(); col.classList.remove('drag-over');
+        var id = e.dataTransfer.getData('text/plain');
+        var t = DB.tasks.find(function (x) { return x.id === id; }); if (!t) return;
+        // determine new order based on drop position
+        var after = e.target.closest('.kcard');
+        t.status = st;
+        var siblings = DB.tasks.filter(function (x) { return x.status === st && x.id !== id; }).sort(function (a, b) { return a.order - b.order; });
+        var idx = siblings.length;
+        if (after) { var aid = after.dataset.tid; idx = siblings.findIndex(function (x) { return x.id === aid; }); if (idx < 0) idx = siblings.length; }
+        siblings.splice(idx, 0, t);
+        siblings.forEach(function (x, i) { x.order = i; });
+        save(); renderKanban(); updateNavCounts();
+      });
+      k.appendChild(col);
+    });
+  }
+
+  function taskCard(t) {
+    var c = el('div', 'kcard'); c.dataset.tid = t.id; c.setAttribute('draggable', 'true');
+    var due = isOverdue(t.due) && t.status !== 'Done';
+    c.innerHTML =
+      '<div class="kcard__top">' + priorityPill(t.priority) + '</div>' +
+      '<div class="kcard__title">' + esc(t.title) + '</div>' +
+      '<div class="kcard__tags">' + t.tags.map(function (g) { return '<span class="tag">' + esc(g) + '</span>'; }).join('') + '</div>' +
+      '<div class="kcard__foot">' + avatar(t.assignee, 'avatar--sm') +
+      '<span class="due' + (due ? ' overdue' : '') + '"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' + fmtDate(t.due) + '</span></div>';
+    c.addEventListener('click', function () { openTaskDrawer(t.id); });
+    c.addEventListener('dragstart', function (e) { e.dataTransfer.setData('text/plain', t.id); e.dataTransfer.effectAllowed = 'move'; c.classList.add('dragging'); });
+    c.addEventListener('dragend', function () { c.classList.remove('dragging'); });
+    return c;
+  }
+
+  var taskSort = { key: 'order', dir: 1 };
+  function renderTaskList() {
+    var tasks = filteredTasks().slice();
+    var cols = [['title', 'Task'], ['assignee', 'Assignee'], ['priority', 'Priority'], ['status', 'Status'], ['due', 'Due'], ['tags', 'Tags']];
+    tasks.sort(function (a, b) {
+      var k = taskSort.key, av = a[k], bv = b[k];
+      if (k === 'tags') { av = a.tags.join(); bv = b.tags.join(); }
+      return (av < bv ? -1 : av > bv ? 1 : 0) * taskSort.dir;
+    });
+    var html = '<table class="tbl"><thead><tr>' + cols.map(function (c) {
+      return '<th data-k="' + c[0] + '" class="' + (taskSort.key === c[0] ? 'sorted' : '') + '">' + c[1] + ' <span class="arr">' + (taskSort.key === c[0] ? (taskSort.dir > 0 ? '▲' : '▼') : '↕') + '</span></th>';
+    }).join('') + '</tr></thead><tbody>';
+    html += tasks.map(function (t) {
+      return '<tr data-tid="' + t.id + '">' +
+        '<td><span class="cell-strong">' + esc(t.title) + '</span></td>' +
+        '<td><div class="nmcell">' + avatar(t.assignee, 'avatar--sm') + '<span>' + esc(t.assignee) + '</span></div></td>' +
+        '<td>' + priorityPill(t.priority) + '</td>' +
+        '<td><span class="pill" style="background:' + COLOR_BY_STATUS[t.status] + '22;color:' + COLOR_BY_STATUS[t.status] + '"><span class="dot"></span>' + t.status + '</span></td>' +
+        '<td class="' + (isOverdue(t.due) && t.status !== 'Done' ? 'cell-strong' : '') + '" style="' + (isOverdue(t.due) && t.status !== 'Done' ? 'color:var(--danger)' : '') + '">' + fmtDate(t.due) + '</td>' +
+        '<td>' + t.tags.map(function (g) { return '<span class="tag">' + esc(g) + '</span>'; }).join(' ') + '</td></tr>';
+    }).join('') + '</tbody></table>';
+    $('#taskList').innerHTML = html;
+    $$('#taskList th').forEach(function (h) { h.addEventListener('click', function () { var k = h.dataset.k; if (taskSort.key === k) taskSort.dir *= -1; else { taskSort.key = k; taskSort.dir = 1; } renderTaskList(); }); });
+    $$('#taskList tbody tr').forEach(function (r) { r.addEventListener('click', function () { openTaskDrawer(r.dataset.tid); }); });
+  }
+
+  /* task modal (add) */
+  function openTaskModal(presetStatus) {
+    var opts = DB.people.map(function (p) { return '<option>' + esc(p) + '</option>'; }).join('');
+    var stOpts = DB.statuses.map(function (s) { return '<option' + (s === (presetStatus || 'To Do') ? ' selected' : '') + '>' + s + '</option>'; }).join('');
+    openModal('Add task',
+      '<div class="field"><label>Title</label><input class="input" id="m_title" placeholder="What needs doing?" /></div>' +
+      '<div class="field"><label>Description</label><textarea class="textarea" id="m_desc" placeholder="Add details…"></textarea></div>' +
+      '<div class="form-row"><div class="field"><label>Assignee</label><select class="select" id="m_assignee">' + opts + '</select></div>' +
+      '<div class="field"><label>Status</label><select class="select" id="m_status">' + stOpts + '</select></div></div>' +
+      '<div class="form-row"><div class="field"><label>Priority</label><select class="select" id="m_priority"><option>Low</option><option selected>Normal</option><option>High</option><option>Urgent</option></select></div>' +
+      '<div class="field"><label>Due date</label><input class="input" type="date" id="m_due" value="' + addDays(3) + '" /></div></div>' +
+      '<div class="field"><label>Tags (comma-separated)</label><input class="input" id="m_tags" placeholder="Ops, Sales" /></div>',
+      'Create task',
+      function () {
+        var title = $('#m_title').value.trim(); if (!title) { $('#m_title').focus(); return false; }
+        var st = $('#m_status').value;
+        DB.tasks.push({
+          id: uid('t'), title: title, desc: $('#m_desc').value.trim(),
+          assignee: $('#m_assignee').value, status: st, priority: $('#m_priority').value,
+          due: $('#m_due').value, tags: $('#m_tags').value.split(',').map(function (s) { return s.trim(); }).filter(Boolean),
+          order: DB.tasks.filter(function (x) { return x.status === st; }).length, checklist: [], comments: []
+        });
+        save(); renderTasks(); toast('Task created'); return true;
+      });
+    setTimeout(function () { $('#m_title').focus(); }, 50);
+  }
+
+  /* task detail drawer */
+  function openTaskDrawer(id) {
+    var t = DB.tasks.find(function (x) { return x.id === id; }); if (!t) return;
+    var stOpts = DB.statuses.map(function (s) { return '<option' + (s === t.status ? ' selected' : '') + '>' + s + '</option>'; }).join('');
+    var asOpts = DB.people.map(function (p) { return '<option' + (p === t.assignee ? ' selected' : '') + '>' + esc(p) + '</option>'; }).join('');
+    var prOpts = ['Low', 'Normal', 'High', 'Urgent'].map(function (p) { return '<option' + (p === t.priority ? ' selected' : '') + '>' + p + '</option>'; }).join('');
+
+    var body =
+      '<div class="drawer__sec"><div class="form-row"><div class="field"><label>Status</label><select class="select" id="d_status">' + stOpts + '</select></div>' +
+      '<div class="field"><label>Priority</label><select class="select" id="d_priority">' + prOpts + '</select></div></div>' +
+      '<div class="form-row"><div class="field"><label>Assignee</label><select class="select" id="d_assignee">' + asOpts + '</select></div>' +
+      '<div class="field"><label>Due date</label><input class="input" type="date" id="d_due" value="' + (t.due || '') + '" /></div></div></div>' +
+      '<div class="drawer__sec"><h4>Description</h4><textarea class="textarea" id="d_desc" placeholder="Add a description…">' + esc(t.desc) + '</textarea></div>' +
+      '<div class="drawer__sec"><h4>Checklist</h4><div class="checklist" id="d_checklist"></div>' +
+      '<div class="add-check"><input class="input" id="d_newcheck" placeholder="Add checklist item…" /><button class="btn btn--subtle" id="d_addcheck">Add</button></div></div>' +
+      '<div class="drawer__sec"><h4>Comments</h4><div id="d_comments"></div>' +
+      '<div class="add-check"><input class="input" id="d_newcomment" placeholder="Write a comment…" /><button class="btn btn--primary" id="d_addcomment">Post</button></div></div>' +
+      '<div class="drawer__sec"><button class="btn btn--danger" id="d_delete">Delete task</button></div>';
+
+    openDrawer('<input class="input" id="d_title" value="' + esc(t.title).replace(/"/g, '&quot;') + '" style="font-weight:600;font-size:16px;border:none;padding:6px 0;box-shadow:none" />', body);
+
+    function renderChecklist() {
+      $('#d_checklist').innerHTML = t.checklist.map(function (c, i) {
+        return '<label class="ci' + (c.done ? ' done' : '') + '"><input type="checkbox" data-i="' + i + '"' + (c.done ? ' checked' : '') + '><span>' + esc(c.t) + '</span></label>';
+      }).join('') || '<div style="color:var(--ink-3);font-size:13px">No items yet.</div>';
+      $$('#d_checklist input').forEach(function (cb) { cb.addEventListener('change', function () { t.checklist[cb.dataset.i].done = cb.checked; save(); renderChecklist(); }); });
+    }
+    function renderComments() {
+      $('#d_comments').innerHTML = t.comments.map(function (c) {
+        return '<div class="comment">' + avatar(c.who, 'avatar--sm') + '<div class="body"><div class="who">' + esc(c.who) + '<span>' + esc(c.tm) + '</span></div><div class="tx">' + esc(c.tx) + '</div></div></div>';
+      }).join('') || '<div style="color:var(--ink-3);font-size:13px;padding:4px 0">No comments yet.</div>';
+    }
+    renderChecklist(); renderComments();
+
+    function persist() { save(); refreshActiveTaskViews(); updateNavCounts(); }
+    $('#d_title').addEventListener('change', function () { t.title = this.value.trim() || t.title; persist(); });
+    $('#d_status').addEventListener('change', function () { t.status = this.value; persist(); });
+    $('#d_priority').addEventListener('change', function () { t.priority = this.value; persist(); });
+    $('#d_assignee').addEventListener('change', function () { t.assignee = this.value; persist(); });
+    $('#d_due').addEventListener('change', function () { t.due = this.value; persist(); });
+    $('#d_desc').addEventListener('change', function () { t.desc = this.value; persist(); });
+    $('#d_addcheck').addEventListener('click', function () { var v = $('#d_newcheck').value.trim(); if (!v) return; t.checklist.push({ t: v, done: false }); $('#d_newcheck').value = ''; save(); renderChecklist(); });
+    $('#d_newcheck').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('#d_addcheck').click(); });
+    $('#d_addcomment').addEventListener('click', function () { var v = $('#d_newcomment').value.trim(); if (!v) return; t.comments.push({ who: 'Jeffrey C.', tx: v, tm: 'just now' }); $('#d_newcomment').value = ''; save(); renderComments(); });
+    $('#d_newcomment').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('#d_addcomment').click(); });
+    $('#d_delete').addEventListener('click', function () { DB.tasks = DB.tasks.filter(function (x) { return x.id !== id; }); save(); closeDrawer(); refreshActiveTaskViews(); updateNavCounts(); toast('Task deleted'); });
+  }
+  function refreshActiveTaskViews() {
+    if ($('#view-tasks').classList.contains('active')) renderTasks();
+    if ($('#view-dashboard').classList.contains('active')) renderDashboard();
+  }
+
+  /* ================== CUSTOMERS ================== */
+  $('#custSearch').addEventListener('input', renderCustomers);
+  $('#custFilter').addEventListener('change', renderCustomers);
+  $('#addCustBtn').addEventListener('click', openCustomerModal);
+
+  function renderCustomers() {
+    var q = $('#custSearch').value.toLowerCase().trim(), f = $('#custFilter').value;
+    var rows = DB.customers.filter(function (c) {
+      return (!f || c.status === f) && (!q || (c.name + c.email + c.location).toLowerCase().indexOf(q) > -1);
+    });
+    var html = '<table class="tbl"><thead><tr><th>Customer</th><th>Location</th><th>Status</th><th>Lifetime value</th><th>Last order</th></tr></thead><tbody>';
+    html += rows.map(function (c) {
+      return '<tr data-cid="' + c.id + '"><td><div class="nmcell">' + avatar(c.name, 'avatar--sm') + '<div><b>' + esc(c.name) + '</b><div style="color:var(--ink-3);font-size:12px">' + esc(c.email) + '</div></div></div></td>' +
+        '<td>' + esc(c.location) + '</td><td><span class="pill pill--' + c.status.toLowerCase() + '"><span class="dot"></span>' + c.status + '</span></td>' +
+        '<td class="cell-strong">' + money(c.ltv) + '</td><td>' + (c.last ? fmtDate(c.last) : '—') + '</td></tr>';
+    }).join('') + '</tbody></table>';
+    $('#custTable').innerHTML = rows.length ? html : '<div class="empty">No customers match your filters.</div>';
+    $$('#custTable tbody tr').forEach(function (r) { r.addEventListener('click', function () { openCustomerDrawer(r.dataset.cid); }); });
+  }
+
+  function openCustomerModal() {
+    openModal('Add customer',
+      '<div class="form-row"><div class="field"><label>Name</label><input class="input" id="c_name" placeholder="Jane Doe" /></div>' +
+      '<div class="field"><label>Email</label><input class="input" id="c_email" type="email" placeholder="jane@email.com" /></div></div>' +
+      '<div class="form-row"><div class="field"><label>Location</label><input class="input" id="c_loc" placeholder="City, ST" /></div>' +
+      '<div class="field"><label>Status</label><select class="select" id="c_status"><option>Lead</option><option>Active</option><option>Churned</option></select></div></div>' +
+      '<div class="field"><label>Lifetime value ($)</label><input class="input" id="c_ltv" type="number" value="0" /></div>',
+      'Add customer',
+      function () {
+        var name = $('#c_name').value.trim(); if (!name) { $('#c_name').focus(); return false; }
+        DB.customers.unshift({ id: uid('c'), name: name, email: $('#c_email').value.trim(), location: $('#c_loc').value.trim() || '—', status: $('#c_status').value, ltv: +$('#c_ltv').value || 0, last: null, phone: '(555) 000-0000', notes: '' });
+        save(); renderCustomers(); toast('Customer added'); return true;
+      });
+    setTimeout(function () { $('#c_name').focus(); }, 50);
+  }
+
+  function openCustomerDrawer(id) {
+    var c = DB.customers.find(function (x) { return x.id === id; }); if (!c) return;
+    var orders = DB.orders.filter(function (o) { return o.customer === c.name; });
+    var body =
+      '<div class="drawer__sec" style="display:flex;align-items:center;gap:14px">' + avatar(c.name, 'avatar--lg') +
+      '<div><div style="font-weight:600;font-size:16px">' + esc(c.name) + '</div><span class="pill pill--' + c.status.toLowerCase() + '"><span class="dot"></span>' + c.status + '</span></div></div>' +
+      '<div class="drawer__sec"><h4>Contact</h4><div class="kv">' +
+      '<div class="k">Email</div><div class="v">' + esc(c.email || '—') + '</div>' +
+      '<div class="k">Phone</div><div class="v">' + esc(c.phone) + '</div>' +
+      '<div class="k">Location</div><div class="v">' + esc(c.location) + '</div>' +
+      '<div class="k">Lifetime value</div><div class="v">' + money(c.ltv) + '</div>' +
+      '<div class="k">Last order</div><div class="v">' + (c.last ? fmtDate(c.last) : '—') + '</div></div></div>' +
+      '<div class="drawer__sec"><h4>Order history</h4>' + (orders.length ? orders.map(function (o) {
+        return '<div class="row-line"><div class="gx"><div class="t">' + o.id + ' · ' + esc(o.product) + '</div><div class="d">' + fmtDate(o.date) + '</div></div><span class="pill pill--' + o.status.toLowerCase() + '">' + o.status + '</span><b style="margin-left:8px">' + money(o.amount) + '</b></div>';
+      }).join('') : '<div style="color:var(--ink-3);font-size:13px">No orders yet.</div>') + '</div>' +
+      '<div class="drawer__sec"><h4>Notes</h4><textarea class="textarea" id="cn_notes" placeholder="Add a note…">' + esc(c.notes) + '</textarea></div>' +
+      '<div class="drawer__sec"><button class="btn btn--danger" id="cn_delete">Delete customer</button></div>';
+    openDrawer('Customer', body);
+    $('#cn_notes').addEventListener('change', function () { c.notes = this.value; save(); toast('Note saved'); });
+    $('#cn_delete').addEventListener('click', function () { DB.customers = DB.customers.filter(function (x) { return x.id !== id; }); save(); closeDrawer(); renderCustomers(); toast('Customer deleted'); });
+  }
+
+  /* ================== ORDERS ================== */
+  $('#orderSearch').addEventListener('input', renderOrders);
+  $('#orderFilter').addEventListener('change', renderOrders);
+  function renderOrders() {
+    var q = $('#orderSearch').value.toLowerCase().trim(), f = $('#orderFilter').value;
+    var rows = DB.orders.filter(function (o) {
+      return (!f || o.status === f) && (!q || (o.id + o.customer + o.product).toLowerCase().indexOf(q) > -1);
+    });
+    var html = '<table class="tbl"><thead><tr><th>Order</th><th>Customer</th><th>Product</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>';
+    html += rows.map(function (o) {
+      return '<tr><td><span class="cell-strong">' + o.id + '</span></td><td><div class="nmcell">' + avatar(o.customer, 'avatar--sm') + '<span>' + esc(o.customer) + '</span></div></td>' +
+        '<td>' + esc(o.product) + '</td><td class="cell-strong">' + money(o.amount) + '</td>' +
+        '<td><span class="pill pill--' + o.status.toLowerCase() + '"><span class="dot"></span>' + o.status + '</span></td><td>' + fmtDate(o.date) + '</td></tr>';
+    }).join('') + '</tbody></table>';
+    $('#orderTable').innerHTML = rows.length ? html : '<div class="empty">No orders match your filters.</div>';
+  }
+
+  /* ================== CALENDAR ================== */
+  var calRef = new Date();
+  function renderCalendar() {
+    var year = calRef.getFullYear(), month = calRef.getMonth();
+    var first = new Date(year, month, 1), startDow = first.getDay();
+    var daysInMonth = new Date(year, month + 1, 0).getDate();
+    var prevDays = new Date(year, month, 0).getDate();
+
+    // events: tasks with due dates this month + a few fixed demo events
+    var events = {};
+    function push(day, label, cls) { (events[day] = events[day] || []).push({ label: label, cls: cls }); }
+    DB.tasks.forEach(function (t) {
+      if (!t.due) return; var d = new Date(t.due + 'T00:00:00');
+      if (d.getFullYear() === year && d.getMonth() === month) push(d.getDate(), t.title, t.priority === 'Urgent' || t.priority === 'High' ? 'red' : 'blue');
+    });
+    var demo = [[5, 'Supplier call', 'green'], [12, 'Team standup', 'yellow'], [18, 'Inventory audit', 'green'], [22, 'Marketing review', 'yellow']];
+    demo.forEach(function (e) { push(e[0], e[1], e[2]); });
+
+    var now = new Date();
+    var head = '<div class="cal__head"><h3>' + ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][month] + ' ' + year + '</h3>' +
+      '<div class="cal__nav" style="margin-left:auto"><button class="icon-btn" id="calPrev"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+      '<button class="btn btn--subtle" id="calToday">Today</button>' +
+      '<button class="icon-btn" id="calNext"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>';
+
+    var grid = '<div class="cal__grid">' + ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(function (d) { return '<div class="cal__dow">' + d + '</div>'; }).join('');
+    var cells = [];
+    for (var i = startDow - 1; i >= 0; i--) cells.push({ n: prevDays - i, muted: true });
+    for (var d = 1; d <= daysInMonth; d++) cells.push({ n: d, muted: false });
+    while (cells.length % 7 !== 0) cells.push({ n: cells.length - daysInMonth - startDow + 1, muted: true });
+
+    cells.forEach(function (c) {
+      var isToday = !c.muted && c.n === now.getDate() && month === now.getMonth() && year === now.getFullYear();
+      var evs = (!c.muted && events[c.n]) ? events[c.n].slice(0, 3).map(function (e) { return '<div class="cal-ev ' + e.cls + '" title="' + esc(e.label) + '">' + esc(e.label) + '</div>'; }).join('') : '';
+      var more = (!c.muted && events[c.n] && events[c.n].length > 3) ? '<div class="cal-ev" style="background:none;color:var(--ink-3)">+' + (events[c.n].length - 3) + ' more</div>' : '';
+      grid += '<div class="cal__cell' + (c.muted ? ' muted' : '') + (isToday ? ' today' : '') + '"><div class="dn">' + c.n + '</div>' + evs + more + '</div>';
+    });
+    grid += '</div>';
+    $('#calendar').innerHTML = head + grid;
+    $('#calPrev').addEventListener('click', function () { calRef.setMonth(calRef.getMonth() - 1); renderCalendar(); });
+    $('#calNext').addEventListener('click', function () { calRef.setMonth(calRef.getMonth() + 1); renderCalendar(); });
+    $('#calToday').addEventListener('click', function () { calRef = new Date(); renderCalendar(); });
+    $$('#calendar .cal-ev').forEach(function (e) { e.addEventListener('click', function () { toast(e.title || e.textContent); }); });
+  }
+
+  /* ================== REPORTS ================== */
+  function renderReports() {
+    var rev = DB.orders.reduce(function (s, o) { return s + (o.status === 'Refunded' ? 0 : o.amount); }, 0);
+    var aov = Math.round(rev / Math.max(1, DB.orders.length));
+    var done = DB.tasks.filter(function (t) { return t.status === 'Done'; }).length;
+    var rate = Math.round(done / Math.max(1, DB.tasks.length) * 100);
+    var kpis = [
+      { lab: 'Total revenue', val: money(rev), bg: '#e6f0ff', fg: '#1E6BE6' },
+      { lab: 'Avg order value', val: money(aov), bg: '#e6f7ee', fg: '#0e8a52' },
+      { lab: 'Tasks completed', val: done + ' / ' + DB.tasks.length, bg: '#fff1e6', fg: '#d97706' },
+      { lab: 'Completion rate', val: rate + '%', bg: '#eef2ff', fg: '#5b5bd6' }
+    ];
+    $('#reportKpis').innerHTML = kpis.map(function (k) {
+      return '<div class="kpi"><div class="lab">' + k.lab + '</div><div class="val" style="color:' + k.fg + '">' + k.val + '</div></div>';
+    }).join('');
+
+    // line chart (svg)
+    var pts = [[0, 32], [1, 41], [2, 38], [3, 50], [4, 47], [5, 60], [6, 66]];
+    var W = 520, H = 180, pad = 28, max = 70;
+    var sx = function (i) { return pad + i * ((W - pad * 2) / (pts.length - 1)); };
+    var sy = function (v) { return H - pad - (v / max) * (H - pad * 1.4); };
+    var line = pts.map(function (p, i) { return (i ? 'L' : 'M') + sx(i).toFixed(1) + ' ' + sy(p[1]).toFixed(1); }).join(' ');
+    var area = 'M' + sx(0) + ' ' + (H - pad) + ' ' + line.replace('M', 'L') + ' L' + sx(pts.length - 1) + ' ' + (H - pad) + ' Z';
+    var glabels = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+    var grid = '';
+    for (var g = 0; g <= 3; g++) { var y = pad + g * ((H - pad * 1.7) / 3); grid += '<line class="grid-l" x1="' + pad + '" y1="' + y + '" x2="' + (W - pad) + '" y2="' + y + '"/>'; }
+    var dots = pts.map(function (p, i) { return '<circle class="pt" cx="' + sx(i) + '" cy="' + sy(p[1]) + '" r="3.5"/>'; }).join('');
+    var xls = glabels.map(function (l, i) { return '<text class="xl" x="' + sx(i) + '" y="' + (H - 8) + '" text-anchor="middle">' + l + '</text>'; }).join('');
+    $('#lineChartWrap').innerHTML = '<svg class="linechart" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMid meet">' +
+      '<defs><linearGradient id="bt-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E6BE6" stop-opacity=".22"/><stop offset="1" stop-color="#1E6BE6" stop-opacity="0"/></linearGradient></defs>' +
+      grid + '<path class="area" d="' + area + '"/><path class="line" d="' + line + '"/>' + dots + xls + '</svg>';
+
+    // donut (svg) — tasks by status
+    var counts = DB.statuses.map(function (s) { return { s: s, n: DB.tasks.filter(function (t) { return t.status === s; }).length, c: COLOR_BY_STATUS[s] }; });
+    var total = DB.tasks.length || 1, R = 70, C = 2 * Math.PI * R, off = 0;
+    var segs = counts.map(function (d) {
+      var frac = d.n / total, len = frac * C;
+      var s = '<circle r="' + R + '" cx="90" cy="90" fill="none" stroke="' + d.c + '" stroke-width="22" stroke-dasharray="' + len.toFixed(1) + ' ' + (C - len).toFixed(1) + '" stroke-dashoffset="' + (-off).toFixed(1) + '" transform="rotate(-90 90 90)"/>';
+      off += len; return s;
+    }).join('');
+    var legend = counts.map(function (d) { return '<div class="row"><span class="sw" style="background:' + d.c + '"></span>' + d.s + '<b>' + d.n + '</b></div>'; }).join('');
+    $('#donutWrap').innerHTML =
+      '<svg width="180" height="180" viewBox="0 0 180 180">' + segs +
+      '<text x="90" y="84" text-anchor="middle" font-family="General Sans" font-size="30" font-weight="600" fill="#1a1e36">' + total + '</text>' +
+      '<text x="90" y="104" text-anchor="middle" font-size="12" fill="#8a91ad">tasks</text></svg>' +
+      '<div class="donut-legend">' + legend + '</div>';
+  }
+
+  /* ================== SETTINGS ================== */
+  $$('#settingsTabs button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      $$('#settingsTabs button').forEach(function (x) { x.classList.remove('active'); }); b.classList.add('active');
+      $$('.settings-pane').forEach(function (p) { p.classList.remove('active'); });
+      $('#pane-' + b.dataset.pane).classList.add('active');
+    });
+  });
+  function renderTeam() {
+    var team = [['Jeffrey C.', 'Operations Admin', 'jeffrey@bettertap.com'], ['Maya R.', 'Inventory Lead', 'maya@bettertap.com'], ['Devon K.', 'Sales', 'devon@bettertap.com'], ['Sara L.', 'Support', 'sara@bettertap.com'], ['Tom B.', 'Product Engineer', 'tom@bettertap.com'], ['Priya N.', 'Marketing', 'priya@bettertap.com']];
+    $('#teamList').innerHTML = team.map(function (m) {
+      return '<div class="row-line">' + avatar(m[0]) + '<div class="gx" style="margin-left:4px"><div class="t">' + esc(m[0]) + '</div><div class="d">' + esc(m[2]) + '</div></div><span class="tag">' + esc(m[1]) + '</span></div>';
+    }).join('');
+  }
+  $('#resetBtn').addEventListener('click', function () {
+    DB = seed(); save();
+    toast('Demo data reset'); renderTeam(); renderDashboard();
+    if ($('#view-tasks').classList.contains('active')) renderTasks();
+    if ($('#view-customers').classList.contains('active')) renderCustomers();
+    if ($('#view-orders').classList.contains('active')) renderOrders();
+  });
+
+  /* ================== MODAL + DRAWER helpers ================== */
+  var _modalSubmit = null;
+  function openModal(title, bodyHtml, submitLabel, onSubmit) {
+    _modalSubmit = onSubmit;
+    $('#modalCard').innerHTML =
+      '<div class="modal__head"><h3>' + esc(title) + '</h3><button class="icon-btn x" id="modalX"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>' +
+      '<div class="modal__body">' + bodyHtml + '</div>' +
+      '<div class="modal__foot"><button class="btn btn--ghost" id="modalCancel">Cancel</button><button class="btn btn--primary" id="modalOk">' + esc(submitLabel) + '</button></div>';
+    $('#modal').classList.add('open');
+    $('#modalX').addEventListener('click', closeModal);
+    $('#modalCancel').addEventListener('click', closeModal);
+    $('#modalOk').addEventListener('click', function () { if (!_modalSubmit || _modalSubmit() !== false) closeModal(); });
+  }
+  function closeModal() { $('#modal').classList.remove('open'); _modalSubmit = null; }
+  $('#modal').addEventListener('click', function (e) { if (e.target === $('#modal')) closeModal(); });
+
+  function openDrawer(title, bodyHtml) {
+    $('#drawer').innerHTML =
+      '<div class="drawer__head"><h3 style="flex:1">' + (title.indexOf('<') === 0 ? title : esc(title)) + '</h3>' +
+      '<button class="icon-btn x" id="drawerX"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>' +
+      '<div class="drawer__body">' + bodyHtml + '</div>';
+    $('#drawer').classList.add('open'); $('#drawerScrim').classList.add('open'); $('#drawer').setAttribute('aria-hidden', 'false');
+    $('#drawerX').addEventListener('click', closeDrawer);
+  }
+  function closeDrawer() { $('#drawer').classList.remove('open'); $('#drawerScrim').classList.remove('open'); $('#drawer').setAttribute('aria-hidden', 'true'); }
+  $('#drawerScrim').addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeModal(); closeDrawer(); closeNavDrawer(); } });
+
+  /* expose a couple helpers for inline settings handlers */
+  window.BT = { toast: toast };
+
+  /* ================== INIT ================== */
+  renderDashboard();
+})();

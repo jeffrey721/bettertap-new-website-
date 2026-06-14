@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sign in — Better Tap Operations Console</title>
+<meta name="theme-color" content="#141937" />
+<link rel="icon" type="image/png" href="../assets/img/bmark-blue.png" />
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/crm.css" />
+</head>
+<body>
+<div class="auth-wrap">
+
+  <!-- LEFT: brand panel -->
+  <aside class="auth-brand">
+    <span class="auth-brand__orb a"></span>
+    <span class="auth-brand__orb b"></span>
+    <div class="auth-brand__top">
+      <img src="../assets/img/bmark-white.png" alt="Better Tap" />
+      Better Tap
+    </div>
+    <div class="auth-brand__mid">
+      <h1>Operations<br>Console</h1>
+      <p>The internal command center for the Better Tap team — customers, orders, tasks and projects in one clean workspace.</p>
+      <div class="auth-features" id="features">
+        <div class="auth-feature is-on"><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Track every customer from lead to loyal</div>
+        <div class="auth-feature"><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Plan work on Kanban boards &amp; lists</div>
+        <div class="auth-feature"><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Monitor orders, revenue &amp; fulfillment</div>
+        <div class="auth-feature"><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>One source of truth for the whole team</div>
+      </div>
+    </div>
+    <div class="auth-brand__foot">
+      <span>© 2026 Better Tap, Inc.</span><span>·</span><span>Internal use only</span>
+    </div>
+  </aside>
+
+  <!-- RIGHT: auth card -->
+  <main class="auth-panel">
+    <div class="auth-card">
+      <div class="demo-badge"><span class="dot"></span> Prototype — demo only</div>
+
+      <!-- STEP 1: credentials -->
+      <form class="auth-step" id="step-login" autocomplete="on">
+        <h2>Welcome back</h2>
+        <p class="sub">Sign in to the Better Tap Operations Console.</p>
+
+        <div class="field">
+          <label for="email">Work email</label>
+          <input class="input" type="email" id="email" name="email" placeholder="jeffrey@bettertap.com" required />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-group">
+            <input class="input" type="password" id="password" name="password" placeholder="••••••••" required />
+            <button type="button" class="icon-btn toggle-eye" id="togglePw" aria-label="Show password">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="form-error" id="loginErr"></div>
+        <div class="auth-row">
+          <label class="checkbox"><input type="checkbox" id="remember" checked /> Remember me</label>
+          <a href="#" class="link" id="forgot">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn btn--primary btn--block btn--lg" id="signinBtn">Sign in</button>
+        <p class="auth-foot">Any email + password works in this demo.</p>
+      </form>
+
+      <!-- STEP 2: 2FA -->
+      <form class="auth-step hidden" id="step-2fa" autocomplete="off">
+        <h2>Two-factor authentication</h2>
+        <p class="sub">Enter the 6-digit code from your authenticator app.</p>
+
+        <div class="code-inputs" id="codeInputs">
+          <input inputmode="numeric" maxlength="1" aria-label="Digit 1" />
+          <input inputmode="numeric" maxlength="1" aria-label="Digit 2" />
+          <input inputmode="numeric" maxlength="1" aria-label="Digit 3" />
+          <input inputmode="numeric" maxlength="1" aria-label="Digit 4" />
+          <input inputmode="numeric" maxlength="1" aria-label="Digit 5" />
+          <input inputmode="numeric" maxlength="1" aria-label="Digit 6" />
+        </div>
+        <p class="demo-hint">Tip: <b>demo code: 123456</b> (or any 6 digits)</p>
+        <div class="form-error" id="codeErr"></div>
+
+        <button type="submit" class="btn btn--primary btn--block btn--lg" id="verifyBtn">Verify</button>
+        <div class="auth-row" style="justify-content:center;gap:18px;margin-top:18px">
+          <a href="#" class="link" id="resend">Resend code</a>
+          <span style="color:var(--line)">·</span>
+          <a href="#" class="link" id="back2fa">Back</a>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+
+<div class="toast-stack" id="toasts"></div>
+<script>
+/* Login page logic (kept inline; shared seed/data logic lives in crm.js for app.html) */
+(function(){
+  // rotating brand features
+  var feats = document.querySelectorAll('#features .auth-feature'), fi = 0;
+  setInterval(function(){
+    feats[fi].classList.remove('is-on');
+    fi = (fi+1) % feats.length;
+    feats[fi].classList.add('is-on');
+  }, 2600);
+
+  // if already authed, skip to app
+  if (localStorage.getItem('bt_crm_auth') === '1') { location.replace('app.html'); return; }
+
+  function toast(msg){
+    var t=document.createElement('div'); t.className='toast';
+    t.innerHTML='<svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'+msg;
+    document.getElementById('toasts').appendChild(t);
+    setTimeout(function(){t.style.opacity='0';t.style.transition='.3s';setTimeout(function(){t.remove()},300)},2200);
+  }
+
+  var stepLogin=document.getElementById('step-login'), step2fa=document.getElementById('step-2fa');
+
+  // show/hide password
+  var pw=document.getElementById('password'), tg=document.getElementById('togglePw');
+  tg.addEventListener('click',function(){
+    var show = pw.type==='password'; pw.type = show?'text':'password';
+    tg.setAttribute('aria-label', show?'Hide password':'Show password');
+  });
+
+  document.getElementById('forgot').addEventListener('click',function(e){e.preventDefault();toast('Demo: a reset link would be emailed.')});
+
+  // STEP 1 submit
+  stepLogin.addEventListener('submit',function(e){
+    e.preventDefault();
+    var em=document.getElementById('email').value.trim(), p=pw.value.trim();
+    var err=document.getElementById('loginErr');
+    if(!em || !p){ err.textContent='Please enter both email and password.'; stepLogin.classList.add('shake'); setTimeout(function(){stepLogin.classList.remove('shake')},420); return; }
+    err.textContent='';
+    var b=document.getElementById('signinBtn'); b.disabled=true; b.innerHTML='<span class="spin"></span> Signing in…';
+    setTimeout(function(){
+      b.disabled=false; b.textContent='Sign in';
+      stepLogin.classList.add('hidden'); step2fa.classList.remove('hidden');
+      codeBoxes[0].focus(); toast('Verification code sent (demo: 123456)');
+    }, 750);
+  });
+
+  // 2FA inputs: auto-advance, backspace, paste
+  var codeBoxes = Array.prototype.slice.call(document.querySelectorAll('#codeInputs input'));
+  codeBoxes.forEach(function(box,i){
+    box.addEventListener('input',function(){
+      box.value = box.value.replace(/[^0-9]/g,'').slice(0,1);
+      if(box.value && i<codeBoxes.length-1) codeBoxes[i+1].focus();
+    });
+    box.addEventListener('keydown',function(e){
+      if(e.key==='Backspace' && !box.value && i>0){ codeBoxes[i-1].focus(); codeBoxes[i-1].value=''; e.preventDefault(); }
+      if(e.key==='ArrowLeft' && i>0) codeBoxes[i-1].focus();
+      if(e.key==='ArrowRight' && i<codeBoxes.length-1) codeBoxes[i+1].focus();
+    });
+    box.addEventListener('paste',function(e){
+      e.preventDefault();
+      var d=(e.clipboardData||window.clipboardData).getData('text').replace(/[^0-9]/g,'').slice(0,6);
+      for(var k=0;k<d.length && k<codeBoxes.length;k++) codeBoxes[k].value=d[k];
+      codeBoxes[Math.min(d.length,codeBoxes.length-1)].focus();
+    });
+  });
+
+  function getCode(){ return codeBoxes.map(function(b){return b.value}).join(''); }
+
+  step2fa.addEventListener('submit',function(e){
+    e.preventDefault();
+    var code=getCode(), err=document.getElementById('codeErr'), wrap=document.getElementById('codeInputs');
+    if(code.length<6){
+      err.textContent='Enter all 6 digits.';
+      wrap.classList.add('error','shake'); setTimeout(function(){wrap.classList.remove('shake')},420);
+      return;
+    }
+    // demo: accept 123456 or any 6 digits
+    err.textContent='';
+    var b=document.getElementById('verifyBtn'); b.disabled=true; b.innerHTML='<span class="spin"></span> Verifying…';
+    setTimeout(function(){
+      localStorage.setItem('bt_crm_auth','1');
+      location.replace('app.html');
+    }, 700);
+  });
+
+  document.getElementById('resend').addEventListener('click',function(e){e.preventDefault();toast('Demo: new code sent (123456)')});
+  document.getElementById('back2fa').addEventListener('click',function(e){
+    e.preventDefault();
+    step2fa.classList.add('hidden'); stepLogin.classList.remove('hidden');
+    codeBoxes.forEach(function(b){b.value=''}); document.getElementById('codeErr').textContent='';
+    document.getElementById('codeInputs').classList.remove('error');
+  });
+})();
+</script>
+</body>
+</html>

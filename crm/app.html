@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Better Tap — Operations Console</title>
+<meta name="theme-color" content="#141937" />
+<link rel="icon" type="image/png" href="../assets/img/bmark-blue.png" />
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/crm.css" />
+<script>
+  /* Auth guard — run before paint */
+  if (localStorage.getItem('bt_crm_auth') !== '1') location.replace('index.html');
+</script>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <img src="../assets/img/bmark-white.png" alt="" />
+      <span class="nm">Better Tap</span>
+    </div>
+
+    <nav class="sidebar__nav">
+      <div class="nav-label">Main</div>
+      <button class="nav-item active" data-view="dashboard">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="3" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="12" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="3" y="16" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="1.7"/></svg>
+        <span class="nm">Dashboard</span>
+      </button>
+      <button class="nav-item" data-view="tasks">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M4 5.5l1.2 1.2L7.5 4M4 11.5l1.2 1.2L7.5 10M4 17.5l1.2 1.2L7.5 16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="nm">Tasks</span><span class="badge-n" id="navTaskCount">0</span>
+      </button>
+      <button class="nav-item" data-view="customers">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 19c.6-3 2.9-4.5 5.5-4.5S14 16 14.5 19" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M16 5.2A3 3 0 0 1 16 11M17 14.6c2 .5 3.3 1.9 3.7 4.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span class="nm">Customers</span>
+      </button>
+      <button class="nav-item" data-view="orders">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 7h12l-1 12H7L6 7Z" stroke="currentColor" stroke-width="1.7"/><path d="M9 7a3 3 0 0 1 6 0" stroke="currentColor" stroke-width="1.7"/></svg>
+        <span class="nm">Orders</span>
+      </button>
+      <button class="nav-item" data-view="calendar">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span class="nm">Calendar</span>
+      </button>
+      <button class="nav-item" data-view="reports">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 20V4M4 20h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M8 16l3.5-4 3 2.5L20 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="nm">Reports</span>
+      </button>
+
+      <div class="nav-label">Spaces</div>
+      <div id="spaces"></div>
+
+      <div class="nav-label">System</div>
+      <button class="nav-item" data-view="settings">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 13.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1A2 2 0 1 1 6.9 4.3l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span class="nm">Settings</span>
+      </button>
+    </nav>
+
+    <div class="user-block">
+      <span class="avatar" style="background:#1E6BE6">JC</span>
+      <div class="meta"><div class="nm">Jeffrey C.</div><div class="rl">Operations Admin</div></div>
+      <a href="#" class="icon-btn signout" id="signout" aria-label="Sign out" title="Sign out">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M10 8l-4 4 4 4M6 12h11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn burger" id="burger" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <button class="icon-btn" id="collapseBtn" aria-label="Collapse sidebar" title="Collapse sidebar">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M9.5 4.5v15" stroke="currentColor" stroke-width="1.7"/></svg>
+      </button>
+      <div class="topbar__title">
+        <h1 id="pageTitle">Dashboard</h1>
+        <div class="crumb">Better Tap · <b id="crumb">Dashboard</b></div>
+      </div>
+      <div class="topbar__search">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.2-3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input type="search" id="globalSearch" placeholder="Search tasks, customers, orders…" />
+      </div>
+      <div class="topbar__actions">
+        <span class="demo-badge"><span class="dot"></span> Prototype — demo only</span>
+        <button class="btn btn--primary" id="newBtn"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> New</button>
+        <button class="icon-btn notif-dot" aria-label="Notifications" id="bell">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.7"/></svg>
+        </button>
+        <span class="avatar" style="background:#213E3C">JC</span>
+      </div>
+    </header>
+
+    <div class="view-area">
+
+      <!-- ============ DASHBOARD ============ -->
+      <section class="view active" id="view-dashboard">
+        <div class="page-head">
+          <div><h2>Good day, Jeffrey 👋</h2><div class="sub">Here's what's happening across Better Tap operations today.</div></div>
+        </div>
+        <div class="kpi-grid" id="kpiGrid"></div>
+        <div class="dash-grid">
+          <div class="card">
+            <div class="card__head"><h3>Revenue — last 7 months</h3><div class="right tag">Demo data</div></div>
+            <div class="card__body"><div class="bars" id="revBars"></div></div>
+          </div>
+          <div class="card">
+            <div class="card__head"><h3>Recent activity</h3></div>
+            <div class="card__body"><div class="feed" id="activityFeed"></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card__head"><h3>My tasks today</h3><div class="right"><button class="btn btn--subtle" data-goto="tasks">View all tasks</button></div></div>
+          <div class="card__body"><div id="todayTasks"></div></div>
+        </div>
+      </section>
+
+      <!-- ============ TASKS ============ -->
+      <section class="view" id="view-tasks">
+        <div class="page-head">
+          <div><h2>Tasks</h2><div class="sub">Plan and track operational work across the team.</div></div>
+          <div class="right">
+            <button class="btn btn--primary" id="addTaskBtn"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Add task</button>
+          </div>
+        </div>
+        <div class="toolbar">
+          <div class="seg" id="taskViewToggle">
+            <button class="active" data-tview="board"><svg viewBox="0 0 24 24" fill="none" width="15" height="15"><rect x="3" y="4" width="5" height="16" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="9.5" y="4" width="5" height="11" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="16" y="4" width="5" height="16" rx="1.5" stroke="currentColor" stroke-width="1.7"/></svg> Board</button>
+            <button data-tview="list"><svg viewBox="0 0 24 24" fill="none" width="15" height="15"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> List</button>
+          </div>
+          <div class="search-sm">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.2-3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input type="search" id="taskSearch" placeholder="Filter tasks…" />
+          </div>
+        </div>
+        <div id="kanban" class="kanban"></div>
+        <div id="taskList" class="table-wrap" style="display:none"></div>
+      </section>
+
+      <!-- ============ CUSTOMERS ============ -->
+      <section class="view" id="view-customers">
+        <div class="page-head">
+          <div><h2>Customers</h2><div class="sub">Your CRM — leads, active accounts and churn.</div></div>
+          <div class="right">
+            <select class="select" id="custFilter" style="width:auto">
+              <option value="">All statuses</option><option>Lead</option><option>Active</option><option>Churned</option>
+            </select>
+            <div class="search-sm">
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.2-3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <input type="search" id="custSearch" placeholder="Search customers…" />
+            </div>
+            <button class="btn btn--primary" id="addCustBtn"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Add customer</button>
+          </div>
+        </div>
+        <div id="custTable" class="table-wrap"></div>
+      </section>
+
+      <!-- ============ ORDERS ============ -->
+      <section class="view" id="view-orders">
+        <div class="page-head">
+          <div><h2>Orders</h2><div class="sub">Track fulfillment and payments.</div></div>
+          <div class="right">
+            <select class="select" id="orderFilter" style="width:auto">
+              <option value="">All statuses</option><option>Paid</option><option>Processing</option><option>Shipped</option><option>Delivered</option><option>Refunded</option>
+            </select>
+            <div class="search-sm">
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.2-3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <input type="search" id="orderSearch" placeholder="Search orders…" />
+            </div>
+          </div>
+        </div>
+        <div id="orderTable" class="table-wrap"></div>
+      </section>
+
+      <!-- ============ CALENDAR ============ -->
+      <section class="view" id="view-calendar">
+        <div class="page-head"><div><h2>Calendar</h2><div class="sub">Scheduled events, deadlines and tasks.</div></div></div>
+        <div class="cal" id="calendar"></div>
+      </section>
+
+      <!-- ============ REPORTS ============ -->
+      <section class="view" id="view-reports">
+        <div class="page-head"><div><h2>Reports</h2><div class="sub">Performance snapshots from demo data.</div></div></div>
+        <div class="kpi-grid" id="reportKpis"></div>
+        <div class="report-grid">
+          <div class="card">
+            <div class="card__head"><h3>Sales over time</h3></div>
+            <div class="card__body" id="lineChartWrap"></div>
+          </div>
+          <div class="card">
+            <div class="card__head"><h3>Tasks by status</h3></div>
+            <div class="card__body"><div class="donut-wrap" id="donutWrap"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SETTINGS ============ -->
+      <section class="view" id="view-settings">
+        <div class="page-head"><div><h2>Settings</h2><div class="sub">Profile, security and team — demo only.</div></div></div>
+        <div class="settings-grid">
+          <div class="settings-tabs" id="settingsTabs">
+            <button class="active" data-pane="profile">Profile</button>
+            <button data-pane="security">Security</button>
+            <button data-pane="team">Team</button>
+            <button data-pane="data">Demo data</button>
+          </div>
+          <div>
+            <!-- profile -->
+            <div class="settings-pane active card" id="pane-profile">
+              <div class="card__head"><h3>Profile</h3></div>
+              <div class="card__body">
+                <div class="form-row">
+                  <div class="field"><label>Full name</label><input class="input" value="Jeffrey C." /></div>
+                  <div class="field"><label>Role</label><input class="input" value="Operations Admin" /></div>
+                </div>
+                <div class="form-row">
+                  <div class="field"><label>Email</label><input class="input" value="jeffrey@bettertap.com" /></div>
+                  <div class="field"><label>Timezone</label>
+                    <select class="select"><option>America/New_York</option><option>America/Chicago</option><option>America/Los_Angeles</option></select>
+                  </div>
+                </div>
+                <button class="btn btn--primary" onclick="BT.toast('Profile saved (demo)')">Save changes</button>
+              </div>
+            </div>
+            <!-- security -->
+            <div class="settings-pane card" id="pane-security">
+              <div class="card__head"><h3>Security</h3></div>
+              <div class="card__body">
+                <div class="row-line">
+                  <div class="gx"><div class="t">Two-factor authentication</div><div class="d">Require a 6-digit code at sign-in. Status: <b style="color:var(--ok)">Enabled</b></div></div>
+                  <label class="switch"><input type="checkbox" checked onchange="BT.toast(this.checked?'2FA enabled (demo)':'2FA disabled (demo)')"><span class="sl"></span></label>
+                </div>
+                <div class="row-line">
+                  <div class="gx"><div class="t">Password</div><div class="d">Last changed 38 days ago.</div></div>
+                  <button class="btn btn--ghost" onclick="BT.toast('Demo: password reset flow')">Change</button>
+                </div>
+                <div class="row-line">
+                  <div class="gx"><div class="t">Active sessions</div><div class="d">1 device · This browser (current)</div></div>
+                  <button class="btn btn--danger" onclick="BT.toast('Demo: signed out other sessions')">Sign out others</button>
+                </div>
+              </div>
+            </div>
+            <!-- team -->
+            <div class="settings-pane card" id="pane-team">
+              <div class="card__head"><h3>Team members</h3><div class="right"><button class="btn btn--ghost" onclick="BT.toast('Demo: invite teammate')">Invite</button></div></div>
+              <div class="card__body" id="teamList"></div>
+            </div>
+            <!-- data -->
+            <div class="settings-pane card" id="pane-data">
+              <div class="card__head"><h3>Demo data</h3></div>
+              <div class="card__body">
+                <p style="color:var(--ink-2);margin-top:0">All data in this prototype is stored locally in your browser (localStorage). Reset it to restore the original seeded demo dataset.</p>
+                <button class="btn btn--danger" id="resetBtn">Reset demo data</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /view-area -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- scrims + drawer + modal -->
+<div class="scrim nav-scrim" id="navScrim"></div>
+<div class="scrim" id="drawerScrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true"></aside>
+
+<div class="modal" id="modal"><div class="modal__card" id="modalCard"></div></div>
+<div class="toast-stack" id="toasts"></div>
+
+<script src="assets/js/crm.js"></script>
+</body>
+</html>
