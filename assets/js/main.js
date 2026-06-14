@@ -31,17 +31,6 @@
     document.head.appendChild(s);
   }
 
-  /* ---- Floating Admin/CRM login button (bottom-right) ---- */
-  if (location.pathname.indexOf('/crm/') === -1) {
-    var fab = document.createElement('a');
-    fab.href = 'crm/index.html';
-    fab.className = 'crm-fab';
-    fab.setAttribute('aria-label', 'Admin / CRM login');
-    fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7"/></svg><span class="crm-fab__label">Admin login</span>';
-    if (document.body) { document.body.appendChild(fab); }
-    else { document.addEventListener('DOMContentLoaded', function(){ document.body.appendChild(fab); }); }
-  }
-
   /* ---- Nav scrolled state ---- */
   var nav = document.querySelector('.nav');
   function onScroll(){ if(nav) nav.classList.toggle('scrolled',(scrollY||pageYOffset)>10); }

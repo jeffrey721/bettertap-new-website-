@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Shop BetterTap Pro — Better than filtered. Smarter than bottled.</title>
-<meta name="description" content="BetterTap Pro: our most advanced countertop water system. Purified hot and cold water on demand with smart features for every household. NSF-certified MAZE filtration." />
+<title>Shop BetterTap — Better than filtered. Smarter than bottled.</title>
+<meta name="description" content="BetterTap: our most advanced countertop water system. Purified hot and cold water on demand with smart features for every household. NSF-certified MAZE filtration." />
 <meta name="theme-color" content="#141937" />
 <link rel="icon" type="image/png" href="assets/img/bmark-white.png" />
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
@@ -30,7 +30,7 @@
     </nav>
     <div class="nav__actions">
       <a href="shop.html" class="btn btn--primary">Shop BetterTap</a>
-      <a href="#" class="icon-btn cart-dot" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none"><path d="M6 7h12l-1 13H7L6 7Z" stroke="currentColor" stroke-width="1.7"/><path d="M9 7a3 3 0 0 1 6 0" stroke="currentColor" stroke-width="1.7"/></svg><b data-cart-count style="display:none">0</b></a>
+      <a href="account/index.html" class="icon-btn" aria-label="Customer login" title="My account"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.7"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></a>
       <button class="nav__burger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -50,7 +50,7 @@
     <p style="font-size:var(--step--1);color:var(--ink-40)">
       <a href="index.html" style="color:var(--ink-60)">Home</a> /
       <a href="shop.html" style="color:var(--ink-60)">Shop</a> /
-      <span>BetterTap Pro</span>
+      <span>BetterTap</span>
     </p>
   </div>
 
@@ -63,7 +63,7 @@
         <div class="pdp__gallery" data-rise>
           <div data-gallery>
             <div class="pdp__main" data-gallery-main>
-              <img src="assets/img/unit-hero.jpg" alt="BetterTap Pro countertop water system" />
+              <img src="assets/img/unit-hero.jpg" alt="BetterTap countertop water system" />
             </div>
             <div class="pdp__thumbs">
               <button class="active" data-thumb="assets/img/unit-hero.jpg" aria-label="View 1"><img src="assets/img/unit-hero.jpg" alt="" /></button>
@@ -77,7 +77,7 @@
         <!-- RIGHT: details -->
         <div data-rise data-rise-d="1">
           <span class="pdp__tag">New</span>
-          <h1>Bettertap Pro</h1>
+          <h1>Bettertap</h1>
           <div class="pdp__rating mt-s"><span class="stars">★★★★★</span> 4.9 <span style="color:var(--ink-40)">(1,248 reviews)</span></div>
           <div class="plans" data-plans>
             <div class="plan-tabs" role="tablist" aria-label="Payment options">
@@ -216,7 +216,7 @@
   <!-- ===== COMPARE ===== -->
   <section class="section sec-grey">
     <div class="wrap">
-      <h2 data-rise>See how BetterTap Pro compares</h2>
+      <h2 data-rise>See how BetterTap compares</h2>
       <div style="overflow-x:auto" data-rise>
       <table class="compare-table">
         <thead>
@@ -312,21 +312,23 @@
     </div>
     <div class="footer__bottom">
       <span>© 2026 Bettertap · YJC Trade LLC. All rights reserved.</span>
-      <span><a href="#">Terms of Service</a> &nbsp;·&nbsp; <a href="#">Privacy Policy</a></span>
+      <span class="footer__legal"><a class="footer__admin" href="crm/index.html">Admin login</a><a href="#">Terms of Service</a> &middot; <a href="#">Privacy Policy</a></span>
     </div>
   </div>
 </footer>
 
 <script src="assets/js/main.js"></script>
 <script>
-/* BetterTap Pro — pricing models
+/* BetterTap — pricing models
    1) Cash: $1,280 one-time (3 yrs full service & warranty)
    2) Installments on $1,280 base: +surcharge, then / months
         12mo: +5%  ·  24mo: +10%  ·  36mo: no surcharge (per spec)
    3) Lease: $500 upfront, then $25/mo for life (service & warranty incl.)  */
 (function(){
-  var BASE = 1280;
-  var SURCHARGE = { 12:0.05, 24:0.10, 36:0.0 };
+  var CASH = 1280;                              // pay-in-full, one-time (no term)
+  var INSTALL_BASE = 1320;                      // installments: total of the 12-month plan
+  var SURCHARGE = { 12:0, 24:0.05, 36:0.10 };   // +5% for every additional 12 months
+  var LEASE_UP = 500, LEASE_MO = 25;            // lease: $500 upfront + $25/mo
   var root = document.querySelector('[data-plans]');
   if(!root) return;
   var priceEl = root.querySelector('[data-price]');
@@ -339,20 +341,20 @@
 
   function render(){
     if(plan==='cash'){
-      terms.hidden = true;
-      priceEl.textContent = usd0(BASE); unitEl.textContent = '';
+      terms.hidden = true;                       // pay in full — no months to choose
+      priceEl.textContent = usd0(CASH); unitEl.textContent = '';
       noteEl.innerHTML = 'One-time payment — <strong>3 years</strong> full service &amp; warranty included.';
     } else if(plan==='installments'){
-      terms.hidden = false;
+      terms.hidden = false;                       // choose 12 / 24 / 36 months
       var sur = SURCHARGE[term];
-      var total = BASE*(1+sur);
+      var total = INSTALL_BASE*(1+sur);
       var monthly = total/term;
       priceEl.textContent = usd(monthly); unitEl.textContent = '/mo';
-      noteEl.innerHTML = 'for '+term+' months · '+(sur>0?('+'+Math.round(sur*100)+'% financing · '):'no added fee · ')+'total '+usd(total)+'.';
+      noteEl.innerHTML = term+' monthly payments · '+(sur>0?('+'+Math.round(sur*100)+'% · '):'')+'total '+usd(total)+'.';
     } else { // lease
-      terms.hidden = true;
-      priceEl.textContent = '$25'; unitEl.textContent = '/mo';
-      noteEl.innerHTML = '<strong>$500</strong> today, then <strong>$25/mo</strong> for life — service &amp; warranty included.';
+      terms.hidden = false;                       // choose how many months to view
+      priceEl.textContent = usd0(LEASE_MO); unitEl.textContent = '/mo';
+      noteEl.innerHTML = '<strong>'+usd0(LEASE_UP)+'</strong> upfront, then <strong>'+usd0(LEASE_MO)+'/mo</strong> — service &amp; warranty included. '+term+' months ≈ '+usd0(LEASE_UP+LEASE_MO*term)+' so far.';
     }
   }
   root.querySelectorAll('.plan-tab').forEach(function(b){
