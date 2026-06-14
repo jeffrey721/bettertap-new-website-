@@ -21,8 +21,9 @@
   --green:#213E3C; --cream:#F9F3E7;
   --grey:#F4F4F4; --grey-200:#e9eaee; --black:#000;
   --white:#fff;
-  --blue:#1E6BE6; --blue-600:#155ec9; --blue-050:#eef4ff; --blue-100:#dbe8ff;
-  --blue-bright:#3E8BFF; --blue-soft:#9FD0FF;
+  /* Primary blue sampled directly from the handoff (#4D97DB) */
+  --blue:#4D97DB; --blue-600:#3B82C9; --blue-050:#EAF3FB; --blue-100:#D6E8F8;
+  --blue-bright:#5AA8E8; --blue-soft:#A9D3F2;
   --yellow:#FBF49B;
 
   --ink:#141937;                 /* default text */
@@ -409,4 +410,54 @@ html.io [data-rise].in{opacity:1;transform:none}
   *{animation-duration:.01ms!important;transition-duration:.01ms!important}
   html.io [data-rise]{opacity:1;transform:none}
   .marquee__t{animation:none}
+}
+
+/* =================================================================
+   WATER FLOW — make the page feel like one continuous surface
+   ================================================================= */
+
+/* Lenis smooth scroll */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+
+/* Continuous flowing backdrop behind all default (white) sections.
+   Unclassed sections are transparent, so this gradient shows through
+   and the page reads as one surface instead of separate cubes. */
+body{
+  background:
+    radial-gradient(60vw 40vw at 85% 8%, rgba(77,151,219,.06), transparent 60%),
+    radial-gradient(55vw 45vw at 10% 55%, rgba(77,151,219,.05), transparent 60%),
+    linear-gradient(180deg,#ffffff 0%,#f3f8fe 22%,#ffffff 45%,#eef5fd 68%,#ffffff 100%);
+  background-attachment:fixed;
+}
+main>section:not([class*="sec-"]):not(.hero),
+section.section:not([class*="sec-"]){background:transparent}
+
+/* Wave dividers: each coloured band melts into its neighbours.
+   One mask shape, filled per-section via background-color (DRY). */
+:root{
+  --wave-top:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 52' preserveAspectRatio='none'%3E%3Cpath d='M0,26 C240,52 480,4 720,24 C960,44 1200,6 1440,28 L1440,52 L0,52 Z' fill='%23000'/%3E%3C/svg%3E");
+  --wave-bottom:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 52' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1440,0 L1440,26 C1200,52 960,4 720,24 C480,44 240,6 0,28 Z' fill='%23000'/%3E%3C/svg%3E");
+}
+.sec-grey,.sec-blue,.sec-green,.sec-cream,.sec-bluelight,.footer{position:relative;z-index:1}
+.sec-grey::before,.sec-blue::before,.sec-green::before,.sec-cream::before,.sec-bluelight::before,.footer::before,
+.sec-grey::after,.sec-blue::after,.sec-green::after,.sec-cream::after,.sec-bluelight::after{
+  content:"";position:absolute;left:-1px;right:-1px;height:46px;pointer-events:none;z-index:1;
+  -webkit-mask:var(--wave-top) center/100% 100% no-repeat;mask:var(--wave-top) center/100% 100% no-repeat;
+}
+.sec-grey::before,.sec-blue::before,.sec-green::before,.sec-cream::before,.sec-bluelight::before,.footer::before{top:0;transform:translateY(-99%)}
+.sec-grey::after,.sec-blue::after,.sec-green::after,.sec-cream::after,.sec-bluelight::after{bottom:0;top:auto;transform:translateY(99%);
+  -webkit-mask-image:var(--wave-bottom);mask-image:var(--wave-bottom)}
+.sec-grey::before,.sec-grey::after{background:var(--grey)}
+.sec-blue::before,.sec-blue::after{background:var(--blue)}
+.sec-green::before,.sec-green::after{background:var(--green)}
+.sec-cream::before,.sec-cream::after{background:var(--cream)}
+.sec-bluelight::before,.sec-bluelight::after{background:var(--blue-050)}
+.footer::before{background:var(--blue)}
+/* footer has no section below it */
+.footer::after{display:none}
+
+@media (prefers-reduced-motion:reduce){
+  body{background-attachment:scroll}
 }

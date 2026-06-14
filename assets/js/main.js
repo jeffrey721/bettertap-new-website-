@@ -9,6 +9,28 @@
   var docEl = document.documentElement;
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---- Smooth scroll (Lenis) for the "water flow" feel ---- */
+  var lenis = null;
+  if (!reduce) {
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js';
+    s.onload = function () {
+      if (!window.Lenis) return;
+      lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 1, smoothWheel: true });
+      function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
+      requestAnimationFrame(raf);
+      // in-page anchor links flow smoothly
+      document.querySelectorAll('a[href^="#"]').forEach(function(a){
+        a.addEventListener('click', function(e){
+          var id=a.getAttribute('href'); if(id.length<2) return;
+          var t=document.querySelector(id); if(!t) return;
+          e.preventDefault(); lenis.scrollTo(t,{offset:-80,duration:1.2});
+        });
+      });
+    };
+    document.head.appendChild(s);
+  }
+
   /* ---- Nav scrolled state ---- */
   var nav = document.querySelector('.nav');
   function onScroll(){ if(nav) nav.classList.toggle('scrolled',(scrollY||pageYOffset)>10); }
