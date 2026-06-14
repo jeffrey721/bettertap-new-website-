@@ -277,7 +277,7 @@
   $('#navScrim').addEventListener('click', closeNavDrawer);
 
   /* sign out */
-  $('#signout').addEventListener('click', function (e) { e.preventDefault(); localStorage.removeItem('bt_crm_auth'); location.replace('index.html'); });
+  $('#signout').addEventListener('click', function (e) { e.preventDefault(); localStorage.removeItem('bt_crm_auth'); localStorage.removeItem('bt_crm_agent'); location.replace('index.html'); });
 
   /* top bar */
   $('#newBtn').addEventListener('click', function () {
@@ -335,7 +335,7 @@
     }).join('');
 
     // my tasks today
-    var mine = DB.tasks.filter(function (t) { return t.assignee === 'Jeffrey C.' || t.priority === 'Urgent' || t.priority === 'High'; }).slice(0, 5);
+    var mine = DB.tasks.filter(function (t) { return t.assignee === AGENT.name || t.priority === 'Urgent' || t.priority === 'High'; }).slice(0, 5);
     $('#todayTasks').innerHTML = mine.map(function (t) {
       return '<div class="mini-task' + (t.status === 'Done' ? ' done' : '') + '" data-tid="' + t.id + '">' +
         '<div class="cbx"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
@@ -524,7 +524,7 @@
     $('#d_desc').addEventListener('change', function () { t.desc = this.value; persist(); });
     $('#d_addcheck').addEventListener('click', function () { var v = $('#d_newcheck').value.trim(); if (!v) return; t.checklist.push({ t: v, done: false }); $('#d_newcheck').value = ''; save(); renderChecklist(); });
     $('#d_newcheck').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('#d_addcheck').click(); });
-    $('#d_addcomment').addEventListener('click', function () { var v = $('#d_newcomment').value.trim(); if (!v) return; t.comments.push({ who: 'Jeffrey C.', tx: v, tm: 'just now' }); $('#d_newcomment').value = ''; save(); renderComments(); });
+    $('#d_addcomment').addEventListener('click', function () { var v = $('#d_newcomment').value.trim(); if (!v) return; t.comments.push({ who: AGENT.name, tx: v, tm: 'just now' }); $('#d_newcomment').value = ''; save(); renderComments(); });
     $('#d_newcomment').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('#d_addcomment').click(); });
     $('#d_delete').addEventListener('click', function () { DB.tasks = DB.tasks.filter(function (x) { return x.id !== id; }); save(); closeDrawer(); refreshActiveTaskViews(); updateNavCounts(); toast('Task deleted'); });
   }
@@ -584,9 +584,11 @@
       '<div class="drawer__sec"><h4>Order history</h4>' + (orders.length ? orders.map(function (o) {
         return '<div class="row-line"><div class="gx"><div class="t">' + o.id + ' · ' + esc(o.product) + '</div><div class="d">' + fmtDate(o.date) + '</div></div><span class="pill pill--' + o.status.toLowerCase() + '">' + o.status + '</span><b style="margin-left:8px">' + money(o.amount) + '</b></div>';
       }).join('') : '<div style="color:var(--ink-3);font-size:13px">No orders yet.</div>') + '</div>' +
+      commsHubHTML(c) +
       '<div class="drawer__sec"><h4>Notes</h4><textarea class="textarea" id="cn_notes" placeholder="Add a note…">' + esc(c.notes) + '</textarea></div>' +
       '<div class="drawer__sec"><button class="btn btn--danger" id="cn_delete">Delete customer</button></div>';
     openDrawer('Customer', body);
+    wireCommsHub(c);
     $('#cn_notes').addEventListener('change', function () { c.notes = this.value; save(); toast('Note saved'); });
     $('#cn_delete').addEventListener('click', function () { DB.customers = DB.customers.filter(function (x) { return x.id !== id; }); save(); closeDrawer(); renderCustomers(); toast('Customer deleted'); });
   }
@@ -700,6 +702,394 @@
       '<div class="donut-legend">' + legend + '</div>';
   }
 
+  /* ================== MY DAY — priority to-do lists ================== */
+  var PRIO_RANK = { Urgent: 0, High: 1, Normal: 2, Low: 3 };
+  var TODO_COLS = [
+    { key: 'daily', label: 'Daily', bg: '#e6f0ff', fg: '#1E6BE6', ic: '<circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>' },
+    { key: 'weekly', label: 'Weekly', bg: '#e6f7ee', fg: '#0e8a52', ic: '<rect x="3.5" y="5" width="17" height="15" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' },
+    { key: 'monthly', label: 'Monthly', bg: '#fff1e6', fg: '#d97706', ic: '<path d="M8 3v3M16 3v3M4 9h16M5 6h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.7"/>' }
+  ];
+
+  function totalOpenTodos() {
+    return ['daily', 'weekly', 'monthly'].reduce(function (s, k) {
+      return s + (DB.todos[k] || []).filter(function (t) { return !t.done; }).length;
+    }, 0);
+  }
+
+  function renderMyDay() {
+    if ($('#navTodoCount')) $('#navTodoCount').textContent = totalOpenTodos();
+
+    // shift banner
+    var banner = $('#shiftBanner');
+    if (banner) {
+      var st = AGENT.shiftStart ? new Date(AGENT.shiftStart) : new Date();
+      var time = st.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      banner.innerHTML =
+        '<div class="sb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v9l5 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/></svg></div>' +
+        '<div class="sb-main"><div class="t">Shift started · ' + esc(AGENT.name) + ' @ ' + time + '</div>' +
+        '<div class="d">' + (AGENT.shiftNote ? esc(AGENT.shiftNote) : 'No check-in note added.') + '</div></div>' +
+        '<span class="sb-tag">Focus: ' + esc(AGENT.shiftFocus || 'Mixed queue') + '</span>';
+    }
+
+    var grid = $('#mydayGrid'); if (!grid) return;
+    grid.innerHTML = '';
+    TODO_COLS.forEach(function (col) {
+      var list = (DB.todos[col.key] || []).slice().sort(function (a, b) {
+        if (a.done !== b.done) return a.done ? 1 : -1;            // open first
+        return (PRIO_RANK[a.priority] - PRIO_RANK[b.priority]);   // then by priority
+      });
+      var open = list.filter(function (t) { return !t.done; }).length;
+      var node = el('div', 'todo-col');
+      node.innerHTML =
+        '<div class="todo-col__head"><span class="ic" style="background:' + col.bg + ';color:' + col.fg + '"><svg viewBox="0 0 24 24" fill="none">' + col.ic + '</svg></span>' +
+        '<span class="ttl">' + col.label + '</span><span class="ct">' + open + ' open</span></div>' +
+        '<div class="todo-list" data-list="' + col.key + '">' +
+        (list.length ? list.map(function (t) { return todoItemHTML(t); }).join('') : '<div class="empty" style="padding:24px 10px">Nothing here yet.</div>') +
+        '</div>' +
+        '<div class="todo-add">' +
+        '<input type="text" placeholder="Add a ' + col.label.toLowerCase() + ' task…" data-add-input="' + col.key + '" />' +
+        '<select data-add-prio="' + col.key + '"><option>Urgent</option><option>High</option><option selected>Normal</option><option>Low</option></select>' +
+        '<button class="btn btn--primary" data-add-btn="' + col.key + '"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>' +
+        '</div>';
+      grid.appendChild(node);
+    });
+
+    // wire up checkboxes + deletes
+    $$('#mydayGrid .todo-item').forEach(function (item) {
+      var key = item.closest('.todo-list').dataset.list, id = item.dataset.tid;
+      item.querySelector('.cbx').addEventListener('click', function () {
+        var t = DB.todos[key].find(function (x) { return x.id === id; }); if (!t) return;
+        t.done = !t.done; save(); renderMyDay();
+      });
+      item.querySelector('.del').addEventListener('click', function () {
+        DB.todos[key] = DB.todos[key].filter(function (x) { return x.id !== id; });
+        save(); renderMyDay(); toast('Task removed');
+      });
+    });
+    // add buttons
+    $$('#mydayGrid [data-add-btn]').forEach(function (btn) {
+      var key = btn.dataset.addBtn;
+      var input = grid.querySelector('[data-add-input="' + key + '"]');
+      var prio = grid.querySelector('[data-add-prio="' + key + '"]');
+      function add() {
+        var v = input.value.trim(); if (!v) { input.focus(); return; }
+        var dueOffset = key === 'daily' ? 0 : key === 'weekly' ? 3 : 14;
+        DB.todos[key].unshift({ id: uid('td'), text: v, priority: prio.value, due: addDays(dueOffset), done: false });
+        save(); renderMyDay(); toast('Task added');
+      }
+      btn.addEventListener('click', add);
+      input.addEventListener('keydown', function (e) { if (e.key === 'Enter') add(); });
+    });
+  }
+
+  function todoItemHTML(t) {
+    var overdue = isOverdue(t.due) && !t.done;
+    return '<div class="todo-item' + (t.done ? ' done' : '') + '" data-tid="' + t.id + '">' +
+      '<div class="cbx"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
+      '<div class="body"><div class="tx">' + esc(t.text) + '</div>' +
+      '<div class="sub">' + priorityPill(t.priority) +
+      '<span class="due' + (overdue ? ' overdue' : '') + '">' + (overdue ? 'Overdue · ' : 'Due ') + fmtDate(t.due) + '</span></div></div>' +
+      '<button class="del" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M6 7h12M9 7V5h6v2M8 7l1 12h6l1-12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>';
+  };
+
+  /* ================== LEADS / PIPELINE ================== */
+  var SOURCES = {
+    'Facebook Ad': { color: '#1877F2', ic: '<path d="M14 9h2.5l.5-3H14V4.5c0-.9.3-1.5 1.6-1.5H17V.3C16.6.2 15.7 0 14.7 0 12.4 0 11 1.4 11 3.9V6H8.5v3H11v9h3V9Z" transform="translate(2 3)" fill="currentColor"/>' },
+    'Google Ads': { color: '#34A853', ic: '<circle cx="12" cy="12" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M9 6 4.5 14M15 6l4.5 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' },
+    'TikTok': { color: '#000000', ic: '<path d="M14 4c.4 2 1.8 3.4 4 3.6v2.5c-1.4 0-2.8-.4-4-1.1V15a5 5 0 1 1-5-5c.3 0 .7 0 1 .1v2.6a2.4 2.4 0 1 0 1.6 2.3V4H14Z" fill="currentColor"/>' },
+    'Phone call': { color: '#0e8a52', ic: '<path d="M5 4h3l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V18a2 2 0 0 1-2 2A15 15 0 0 1 5 6a2 2 0 0 1 0-2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>' },
+    'Email': { color: '#d97706', ic: '<rect x="3" y="5.5" width="18" height="13" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>' },
+    'Website form': { color: '#1E6BE6', ic: '<rect x="4" y="3" width="16" height="18" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>' },
+    'Referral': { color: '#7c3aed', ic: '<circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M3 19c.5-3 2.4-4.2 5-4.2M15 6l3 3-3 3M18 9h-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>' }
+  };
+  function sourcePill(src) {
+    var s = SOURCES[src] || { color: '#64748b', ic: '' };
+    return '<span class="src-pill" style="background:' + s.color + '14;color:' + s.color + '"><svg viewBox="0 0 24 24" fill="none">' + s.ic + '</svg>' + esc(src) + '</span>';
+  }
+
+  var PIPE_COLOR = { 'New': '#94a3b8', 'Contacted': '#1E6BE6', 'Qualified': '#d97706', 'Quoted': '#7c3aed', 'Won': '#16a34a', 'Lost': '#dc2626' };
+  var pipeMode = 'board';
+
+  $$('#pipeViewToggle button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      $$('#pipeViewToggle button').forEach(function (x) { x.classList.remove('active'); }); b.classList.add('active');
+      pipeMode = b.dataset.pview; renderPipeline();
+    });
+  });
+  $('#addLeadBtn').addEventListener('click', openLeadModal);
+
+  function renderPipeline() {
+    if (pipeMode === 'board') {
+      $('#pipeBoard').style.display = ''; $('#pipeAttribution').style.display = 'none'; $('#pipeNote').style.display = '';
+      renderPipeBoard();
+    } else {
+      $('#pipeBoard').style.display = 'none'; $('#pipeAttribution').style.display = ''; $('#pipeNote').style.display = 'none';
+      renderAttribution();
+    }
+  }
+
+  function renderPipeBoard() {
+    var board = $('#pipeBoard'); board.innerHTML = '';
+    DB.pstages.forEach(function (st) {
+      var col = el('div', 'kcol'); col.dataset.stage = st;
+      var inCol = DB.leads.filter(function (l) { return l.stage === st; }).sort(function (a, b) { return a.order - b.order; });
+      col.innerHTML = '<div class="kcol__head"><span class="sq" style="background:' + PIPE_COLOR[st] + '"></span>' + st + '<span class="ct">' + inCol.length + '</span></div>';
+      inCol.forEach(function (l) { col.appendChild(leadCard(l)); });
+      board.appendChild(col);
+
+      col.addEventListener('dragover', function (e) { e.preventDefault(); col.classList.add('drag-over'); });
+      col.addEventListener('dragleave', function () { col.classList.remove('drag-over'); });
+      col.addEventListener('drop', function (e) {
+        e.preventDefault(); col.classList.remove('drag-over');
+        var id = e.dataTransfer.getData('text/plain');
+        var l = DB.leads.find(function (x) { return x.id === id; }); if (!l) return;
+        var after = e.target.closest('.kcard');
+        l.stage = st;
+        var sibs = DB.leads.filter(function (x) { return x.stage === st && x.id !== id; }).sort(function (a, b) { return a.order - b.order; });
+        var idx = sibs.length;
+        if (after) { var aid = after.dataset.lid; idx = sibs.findIndex(function (x) { return x.id === aid; }); if (idx < 0) idx = sibs.length; }
+        sibs.splice(idx, 0, l); sibs.forEach(function (x, i) { x.order = i; });
+        save(); renderPipeBoard();
+      });
+    });
+  }
+
+  function leadCard(l) {
+    var c = el('div', 'kcard lead-card'); c.dataset.lid = l.id; c.setAttribute('draggable', 'true');
+    var stageIdx = DB.pstages.indexOf(l.stage);
+    var canAdvance = stageIdx >= 0 && stageIdx < 4; // up to Quoted -> can push toward Won
+    c.innerHTML =
+      '<div class="lead-name">' + esc(l.name) + '</div>' +
+      '<div class="lead-co">' + esc(l.detail) + '</div>' +
+      '<div class="lead-foot">' + sourcePill(l.source) + '<span class="lead-val" style="margin-left:auto">' + money(l.value) + '</span></div>' +
+      '<div class="lead-actions">' +
+      (canAdvance ? '<button class="mini-btn" data-act="advance"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Advance</button>' : '') +
+      (l.stage !== 'Won' && l.stage !== 'Lost' ? '<button class="mini-btn win" data-act="win"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4 10-10.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Push to sale</button>' : '') +
+      '</div>';
+    c.addEventListener('dragstart', function (e) { e.dataTransfer.setData('text/plain', l.id); e.dataTransfer.effectAllowed = 'move'; c.classList.add('dragging'); });
+    c.addEventListener('dragend', function () { c.classList.remove('dragging'); });
+    c.querySelectorAll('.mini-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (btn.dataset.act === 'win') { l.stage = 'Won'; toast(esc(l.name) + ' pushed to sale 🎉'); }
+        else { var i = DB.pstages.indexOf(l.stage); if (i < DB.pstages.indexOf('Won')) l.stage = DB.pstages[i + 1]; toast('Advanced to ' + l.stage); }
+        l.order = DB.leads.filter(function (x) { return x.stage === l.stage; }).length;
+        save(); renderPipeBoard();
+      });
+    });
+    return c;
+  }
+
+  function openLeadModal() {
+    var srcOpts = Object.keys(SOURCES).map(function (s) { return '<option>' + s + '</option>'; }).join('');
+    var stOpts = DB.pstages.map(function (s) { return '<option' + (s === 'New' ? ' selected' : '') + '>' + s + '</option>'; }).join('');
+    openModal('Add lead',
+      '<div class="form-row"><div class="field"><label>Name</label><input class="input" id="l_name" placeholder="Jane Doe / Company" /></div>' +
+      '<div class="field"><label>Deal value ($)</label><input class="input" type="number" id="l_value" value="499" /></div></div>' +
+      '<div class="field"><label>Detail</label><input class="input" id="l_detail" placeholder="Home — 1 unit" /></div>' +
+      '<div class="form-row"><div class="field"><label>Source / attribution</label><select class="select" id="l_source">' + srcOpts + '</select></div>' +
+      '<div class="field"><label>Stage</label><select class="select" id="l_stage">' + stOpts + '</select></div></div>',
+      'Add lead',
+      function () {
+        var name = $('#l_name').value.trim(); if (!name) { $('#l_name').focus(); return false; }
+        var st = $('#l_stage').value;
+        DB.leads.unshift({ id: uid('ld'), name: name, detail: $('#l_detail').value.trim() || '—', value: +$('#l_value').value || 0, stage: st, source: $('#l_source').value, order: 0, owner: AGENT.name });
+        save(); renderPipeline(); toast('Lead added — tracked to ' + $('#l_source').value); return true;
+      });
+    setTimeout(function () { $('#l_name').focus(); }, 50);
+  }
+
+  function renderAttribution() {
+    var wrap = $('#pipeAttribution');
+    var bySource = {};
+    Object.keys(SOURCES).forEach(function (s) { bySource[s] = { total: 0, won: 0 }; });
+    DB.leads.forEach(function (l) {
+      if (!bySource[l.source]) bySource[l.source] = { total: 0, won: 0 };
+      bySource[l.source].total++;
+      if (l.stage === 'Won') bySource[l.source].won++;
+    });
+    var rows = Object.keys(bySource).map(function (s) { return { src: s, total: bySource[s].total, won: bySource[s].won }; })
+      .filter(function (r) { return r.total > 0; })
+      .sort(function (a, b) { return b.total - a.total; });
+    var maxTotal = Math.max.apply(null, rows.map(function (r) { return r.total; }).concat([1]));
+    var totalLeads = DB.leads.length, totalWon = DB.leads.filter(function (l) { return l.stage === 'Won'; }).length;
+
+    var leadsBySource = rows.map(function (r) {
+      var s = SOURCES[r.src] || { color: '#64748b' };
+      return '<div class="attr-bar-row"><div class="lbl">' + sourcePill(r.src) + '</div>' +
+        '<div class="track"><div class="fill" style="width:' + (r.total / maxTotal * 100) + '%;background:' + s.color + '"></div></div>' +
+        '<div class="n">' + r.total + '</div></div>';
+    }).join('');
+
+    var convBySource = rows.map(function (r) {
+      var rate = r.total ? Math.round(r.won / r.total * 100) : 0;
+      var s = SOURCES[r.src] || { color: '#64748b' };
+      return '<div class="attr-bar-row"><div class="lbl">' + sourcePill(r.src) + '</div>' +
+        '<div class="track"><div class="fill" style="width:' + rate + '%;background:' + s.color + '"></div></div>' +
+        '<div class="n">' + rate + '%</div></div>';
+    }).join('');
+
+    wrap.innerHTML =
+      '<div class="attribution-note" style="margin-bottom:16px">' +
+      '<svg viewBox="0 0 24 24" fill="none" width="16" height="16"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 8h.01M11 12h1v4h1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      'Attribution links every ad click, call-tracking number, web form and email back to its source. <b>(Demo data)</b></div>' +
+      '<div class="kpi-grid" style="margin-bottom:16px">' +
+      '<div class="kpi"><div class="lab">Total leads</div><div class="val">' + totalLeads + '</div></div>' +
+      '<div class="kpi"><div class="lab">Won deals</div><div class="val" style="color:var(--ok)">' + totalWon + '</div></div>' +
+      '<div class="kpi"><div class="lab">Overall conversion</div><div class="val" style="color:#5b5bd6">' + (totalLeads ? Math.round(totalWon / totalLeads * 100) : 0) + '%</div></div>' +
+      '<div class="kpi"><div class="lab">Sources tracked</div><div class="val" style="color:#d97706">' + rows.length + '</div></div></div>' +
+      '<div class="attr-grid">' +
+      '<div class="card"><div class="card__head"><h3>Leads by source</h3></div><div class="card__body">' + (leadsBySource || '<div class="empty">No leads yet.</div>') + '</div></div>' +
+      '<div class="card"><div class="card__head"><h3>Conversion by source</h3><div class="right tag">Won / total</div></div><div class="card__body">' + (convBySource || '<div class="empty">No leads yet.</div>') + '</div></div>' +
+      '</div>';
+  }
+
+  /* ================== OMNICHANNEL COMMS (per customer) ================== */
+  var CHANNELS = {
+    call: { label: 'Call', color: '#0e8a52', ic: '<path d="M5 4h3l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V18a2 2 0 0 1-2 2A15 15 0 0 1 5 6a2 2 0 0 1 0-2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>' },
+    sms: { label: 'SMS', color: '#1E6BE6', ic: '<path d="M4 5.5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-4 3v-3H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>' },
+    whatsapp: { label: 'WhatsApp', color: '#25D366', ic: '<path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.6-1.2A9 9 0 1 0 12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 9c0 3 3 6 6 6 1 0 1.5-1 1-1.5l-1.5-1-1 .8c-1-.5-2-1.5-2.5-2.5l.8-1-1-1.5C9.5 7.5 9 8 9 9Z" fill="currentColor"/>' },
+    email: { label: 'Email', color: '#d97706', ic: '<rect x="3" y="5.5" width="18" height="13" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>' },
+    facebook: { label: 'Messenger', color: '#0084FF', ic: '<path d="M12 3C7 3 3 6.7 3 11.3c0 2.5 1.2 4.7 3 6.2V21l2.8-1.5c.7.2 1.4.3 2.2.3 5 0 9-3.7 9-8.5S17 3 12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m7 13 3-3 2 2 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>' }
+  };
+  var MSG_CHANNELS = ['sms', 'whatsapp', 'email', 'facebook'];
+
+  function relTime(iso) {
+    var diff = (Date.now() - new Date(iso).getTime()) / 1000;
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+    var d = Math.floor(diff / 86400);
+    return d + 'd ago';
+  }
+
+  // Simulated AI status summary + next-best-action, keyed off customer status/history.
+  function aiSummaryFor(c, ixs) {
+    if (c.name === 'Olivia Bennett') {
+      return { summary: 'Warm lead — requested 24-month financing after seeing the Facebook ad; awaiting callback. Main objection: price.', nba: 'Send the installment breakdown, then call tomorrow afternoon (she confirmed availability over SMS).' };
+    }
+    if (c.name === 'HydroMart Wholesale') {
+      return { summary: 'Qualified wholesale opportunity (50+ units). Tier sheet shared; they are now asking for lead time confirmation. High deal value.', nba: 'Confirm lead time on 50 units and lock in the Thursday demo call.' };
+    }
+    var open = ixs.length;
+    if (c.status === 'Lead') return { summary: 'New lead with ' + open + ' logged touch' + (open === 1 ? '' : 'es') + '. Not yet qualified — needs were not captured.', nba: 'Make a discovery call to qualify budget, timeline and unit count.' };
+    if (c.status === 'Churned') return { summary: 'Churned customer. No recent positive engagement; last order is well in the past.', nba: 'Send a win-back offer and ask what changed.' };
+    return { summary: 'Active customer in good standing with ' + open + ' interaction' + (open === 1 ? '' : 's') + ' on file. No open issues detected.', nba: 'Check in on satisfaction and surface relevant add-ons (filters, descale kit).' };
+  }
+
+  // Sample transcript text for a past call (simulated AI transcription).
+  function sampleTranscript(c) {
+    var name = c.name.split(/\s+/)[0];
+    return [
+      ['agent', 'Hi ' + name + ', this is ' + AGENT.name.split(/\s+/)[0] + ' from Better Tap — is now a good time?'],
+      ['cust', 'Yes, that works.'],
+      ['agent', 'Great. You reached out about the Pro — did you have questions on financing?'],
+      ['cust', 'Right. The upfront price is a bit high for me. Are there monthly options?'],
+      ['agent', 'Absolutely. We offer 12 and 24-month plans, so it can come down to around the cost of bottled water per month.'],
+      ['cust', 'That sounds more doable. Can you send me the breakdown?'],
+      ['agent', 'Of course — I will text and email the installment breakdown today, and follow up tomorrow afternoon.'],
+      ['cust', 'Perfect, thank you.']
+    ];
+  }
+
+  function logInteraction(custName, channel, dir, text, extra) {
+    DB.interactions[custName] = DB.interactions[custName] || [];
+    var ix = { id: uid('ix'), channel: channel, dir: dir, text: text, when: new Date().toISOString() };
+    if (extra) for (var k in extra) ix[k] = extra[k];
+    DB.interactions[custName].push(ix);
+    save();
+  }
+
+  // Returns HTML for the comms hub embedded in the customer drawer.
+  function commsHubHTML(c) {
+    var ixs = (DB.interactions[c.name] || []).slice().sort(function (a, b) { return new Date(b.when) - new Date(a.when); });
+    var ai = aiSummaryFor(c, ixs);
+
+    var actions = Object.keys(CHANNELS).map(function (ch) {
+      var m = CHANNELS[ch];
+      return '<button class="comm-btn" data-comm="' + ch + '"><span class="ci" style="background:' + m.color + '"><svg viewBox="0 0 24 24" fill="none">' + m.ic + '</svg></span>' + m.label + '</button>';
+    }).join('');
+
+    var timeline = ixs.length ? ixs.map(function (ix) {
+      var m = CHANNELS[ix.channel] || { label: ix.channel, color: '#64748b', ic: '' };
+      var transcriptLink = (ix.channel === 'call' && ix.hasTranscript) ?
+        '<span class="ce-link" data-transcript="' + ix.id + '"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 10h16M4 14h10M4 18h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>View AI call transcript</span>' : '';
+      return '<div class="comm-ev"><span class="ce-ic" style="background:' + m.color + '"><svg viewBox="0 0 24 24" fill="none">' + m.ic + '</svg></span>' +
+        '<div class="ce-body"><div class="ce-top"><span class="ch">' + m.label + '</span>' +
+        '<span class="ce-dir ' + ix.dir + '">' + (ix.dir === 'in' ? 'Inbound' : 'Outbound') + '</span>' +
+        '<span class="ce-tm">' + relTime(ix.when) + '</span></div>' +
+        '<div class="ce-snip">' + esc(ix.text) + '</div>' + transcriptLink + '</div></div>';
+    }).join('') : '<div class="empty">No communications logged yet. Use the buttons above to start.</div>';
+
+    return '<div class="drawer__sec"><h4>Communications hub</h4><div class="comm-actions">' + actions + '</div></div>' +
+      '<div class="drawer__sec"><div class="ai-panel">' +
+      '<div class="ai-panel__head"><span class="spark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Z" fill="currentColor"/></svg></span><span class="ttl">AI Status Summary</span><span class="sim">Simulated</span></div>' +
+      '<div class="ai-summary">' + esc(ai.summary) +
+      '<span class="nba"><span class="lab">Next best action</span>' + esc(ai.nba) + '</span></div></div></div>' +
+      '<div class="drawer__sec"><h4>Communications timeline</h4><div class="comm-timeline" id="commTimeline">' + timeline + '</div></div>';
+  }
+
+  // Wire up comms hub buttons after the drawer body is in the DOM.
+  function wireCommsHub(c) {
+    $$('#drawer .comm-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () { openCommComposer(c, btn.dataset.comm); });
+    });
+    $$('#drawer [data-transcript]').forEach(function (link) {
+      link.addEventListener('click', function () { openTranscriptModal(c, link.dataset.transcript); });
+    });
+  }
+
+  function refreshCustomerDrawer(c) {
+    var tl = $('#commTimeline'); if (!tl) return;
+    // re-render just the comms sections by reopening the drawer (keeps logic in one place)
+    openCustomerDrawer(c.id);
+  }
+
+  function openCommComposer(c, channel) {
+    if (channel === 'call') {
+      // a "call" creates a call log (with a simulated transcript available afterward)
+      openModal('Log a call — ' + c.name,
+        '<p style="margin-top:0;color:var(--ink-2)">Start an outbound call to <b>' + esc(c.phone) + '</b>. When you hang up, a call log is created and an <b>AI transcript</b> is generated (simulated).</p>' +
+        '<div class="field"><label>Call outcome / notes</label><textarea class="textarea" id="call_notes" placeholder="e.g. Discussed financing; sending breakdown.">Outbound call — connected.</textarea></div>',
+        'End call & log',
+        function () {
+          var notes = $('#call_notes').value.trim() || 'Outbound call logged.';
+          logInteraction(c.name, 'call', 'out', notes, { hasTranscript: true });
+          toast('Call logged + AI transcript ready');
+          refreshCustomerDrawer(c);
+          return true;
+        });
+      return;
+    }
+    var m = CHANNELS[channel];
+    openModal(m.label + ' — ' + c.name,
+      '<div class="composer"><div class="field"><label>Message</label><textarea class="textarea" id="comp_msg" placeholder="Write your ' + m.label + ' message…"></textarea></div>' +
+      '<p class="auth-foot" style="text-align:left;margin-top:4px">Sending via ' + m.label + ' is simulated — the message is logged to the timeline.</p></div>',
+      'Send ' + m.label,
+      function () {
+        var msg = $('#comp_msg').value.trim(); if (!msg) { $('#comp_msg').focus(); return false; }
+        logInteraction(c.name, channel, 'out', msg);
+        toast(m.label + ' sent (demo)');
+        refreshCustomerDrawer(c);
+        return true;
+      });
+    setTimeout(function () { var t = $('#comp_msg'); if (t) t.focus(); }, 50);
+  }
+
+  function openTranscriptModal(c, ixId) {
+    var ix = (DB.interactions[c.name] || []).find(function (x) { return x.id === ixId; });
+    var when = ix ? new Date(ix.when) : new Date();
+    var lines = sampleTranscript(c).map(function (l) {
+      return '<div class="tl ' + l[0] + '"><span class="spk">' + (l[0] === 'agent' ? 'Agent' : c.name.split(/\s+/)[0]) + '</span><span>' + esc(l[1]) + '</span></div>';
+    }).join('');
+    openModal('AI call transcript',
+      '<div class="ai-panel" style="margin-top:0">' +
+      '<div class="ai-panel__head"><span class="spark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Z" fill="currentColor"/></svg></span><span class="ttl">Transcribed by AI</span><span class="sim">Simulated</span></div>' +
+      '<div class="meta">' + esc(c.name) + ' · ' + when.toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' · ' + esc(ix ? ix.text : 'Call') + '</div>' +
+      '<div class="transcript">' + lines + '</div></div>',
+      'Close', function () { return true; });
+  }
+
   /* ================== SETTINGS ================== */
   $$('#settingsTabs button').forEach(function (b) {
     b.addEventListener('click', function () {
@@ -709,17 +1099,21 @@
     });
   });
   function renderTeam() {
-    var team = [['Jeffrey C.', 'Operations Admin', 'jeffrey@bettertap.com'], ['Maya R.', 'Inventory Lead', 'maya@bettertap.com'], ['Devon K.', 'Sales', 'devon@bettertap.com'], ['Sara L.', 'Support', 'sara@bettertap.com'], ['Tom B.', 'Product Engineer', 'tom@bettertap.com'], ['Priya N.', 'Marketing', 'priya@bettertap.com']];
-    $('#teamList').innerHTML = team.map(function (m) {
+    var team = [['Maya R.', 'Inventory Lead', 'maya@bettertap.com'], ['Devon K.', 'Sales', 'devon@bettertap.com'], ['Sara L.', 'Support', 'sara@bettertap.com'], ['Tom B.', 'Product Engineer', 'tom@bettertap.com'], ['Priya N.', 'Marketing', 'priya@bettertap.com']];
+    // show the currently signed-in agent first, marked as "You"
+    var rows = '<div class="row-line">' + avatar(AGENT.name) + '<div class="gx" style="margin-left:4px"><div class="t">' + esc(AGENT.name) + ' <span class="tag" style="background:#e6f0ff;color:#1659c4">You · on shift</span></div><div class="d">' + esc(AGENT.email) + '</div></div><span class="tag">Customer Service Agent</span></div>';
+    rows += team.filter(function (m) { return m[2] !== AGENT.email; }).map(function (m) {
       return '<div class="row-line">' + avatar(m[0]) + '<div class="gx" style="margin-left:4px"><div class="t">' + esc(m[0]) + '</div><div class="d">' + esc(m[2]) + '</div></div><span class="tag">' + esc(m[1]) + '</span></div>';
     }).join('');
+    $('#teamList').innerHTML = rows;
   }
   $('#resetBtn').addEventListener('click', function () {
-    DB = seed(); save();
-    toast('Demo data reset'); renderTeam(); renderDashboard();
+    DB = seed(); seedInteractions(); save();
+    toast('Demo data reset'); renderTeam(); renderDashboard(); renderMyDay();
     if ($('#view-tasks').classList.contains('active')) renderTasks();
     if ($('#view-customers').classList.contains('active')) renderCustomers();
     if ($('#view-orders').classList.contains('active')) renderOrders();
+    if ($('#view-pipeline').classList.contains('active')) renderPipeline();
   });
 
   /* ================== MODAL + DRAWER helpers ================== */
@@ -760,6 +1154,8 @@
     if (sbA) { sbA.textContent = ini; sbA.style.background = col; }
     if (tbA) { tbA.textContent = ini; tbA.style.background = col; }
     if ($('#sbName')) $('#sbName').textContent = AGENT.name;
+    if ($('#pf_name')) $('#pf_name').value = AGENT.name;
+    if ($('#pf_email')) $('#pf_email').value = AGENT.email;
     // dashboard greeting
     var dh = $('#view-dashboard .page-head h2');
     if (dh) dh.innerHTML = 'Good day, ' + esc(AGENT.name.split(/\s+/)[0]) + ' 👋';
