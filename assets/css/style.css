@@ -385,6 +385,16 @@ html.io [data-rise].in{opacity:1;transform:none}
 .marquee__t i{color:var(--blue);font-style:normal}
 @keyframes marq{to{transform:translateX(-50%)}}
 
+/* CRM/admin floating login button (bottom-right, all marketing pages) */
+.crm-fab{position:fixed;right:20px;bottom:20px;z-index:950;display:inline-flex;align-items:center;gap:9px;
+  background:var(--navy);color:#fff;font-family:var(--sans);font-weight:600;font-size:var(--step--1);
+  padding:12px 18px;border-radius:100px;box-shadow:0 14px 34px -12px rgba(20,25,55,.6);
+  transition:transform .3s var(--ease),background .3s}
+.crm-fab svg{width:18px;height:18px}
+.crm-fab:hover{transform:translateY(-3px);background:var(--blue)}
+.crm-fab__label{white-space:nowrap}
+@media (max-width:560px){.crm-fab__label{display:none}.crm-fab{padding:13px;right:16px;bottom:16px}}
+
 /* helpers */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,64px);align-items:center}
 .stack-sm>*+*{margin-top:12px}

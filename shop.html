@@ -105,9 +105,10 @@
 
           <p style="font-size:var(--step--1);font-weight:600;color:var(--navy);letter-spacing:.04em">COLOR: <span data-swatch-label style="color:var(--ink-60);font-weight:500">Matte Black</span></p>
           <div class="pdp__swatches" data-swatches>
-            <button class="swatch active" data-name="Matte Black" style="background:#1c1c1c" aria-label="Matte Black"></button>
-            <button class="swatch" data-name="White" style="background:#f2f2f2" aria-label="White"></button>
-            <button class="swatch" data-name="Ocean Blue" style="background:#1E6BE6" aria-label="Ocean Blue"></button>
+            <button class="swatch active" data-name="Matte Black" style="background:#1c1c1c" aria-label="Matte Black"
+              data-imgs="assets/img/unit-hero.jpg,assets/img/unit-front.jpg,assets/img/unit-angle.jpg,assets/img/unit-side.jpg"></button>
+            <button class="swatch" data-name="White" style="background:#f2f2f2;border-color:rgba(20,25,55,.2)" aria-label="White"
+              data-imgs="assets/img/unit-hero-white.jpg,assets/img/unit-front-white.jpg,assets/img/unit-angle-white.jpg,assets/img/unit-side-white.jpg"></button>
           </div>
 
           <div class="qty" data-qty>
@@ -367,6 +368,29 @@
     });
   });
   render();
+})();
+
+/* Colour swatch -> swap the product gallery to that colourway */
+(function(){
+  var gallery = document.querySelector('[data-gallery]');
+  var swatches = document.querySelector('[data-swatches]');
+  if(!gallery || !swatches) return;
+  var mainImg = gallery.querySelector('[data-gallery-main] img');
+  var thumbs = gallery.querySelectorAll('.pdp__thumbs button');
+  function applyColor(sw){
+    var list = (sw.getAttribute('data-imgs')||'').split(',').filter(Boolean);
+    if(!list.length) return;
+    thumbs.forEach(function(btn,i){
+      var src = list[i] || list[list.length-1];
+      btn.setAttribute('data-thumb', src);
+      var im = btn.querySelector('img'); if(im) im.src = src;
+      btn.classList.toggle('active', i===0);
+    });
+    if(mainImg) mainImg.src = list[0];
+  }
+  swatches.querySelectorAll('.swatch').forEach(function(sw){
+    sw.addEventListener('click', function(){ applyColor(sw); });
+  });
 })();
 </script>
 </body>
