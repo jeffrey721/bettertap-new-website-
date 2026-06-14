@@ -456,14 +456,13 @@ body{
    Light/neutral sections become transparent and merge into the flowing
    backdrop; only the strong colour bands (blue/green/dark) keep a fill,
    and even those dissolve at top/bottom so there are no hard edges. */
-main>section:not(.hero),
-section.section,
+/* light/neutral bands disappear into the flowing backdrop */
 .sec-grey,.sec-cream,.sec-bluelight{background:transparent !important}
 
-/* Colour bands emerge from and melt back into the flow (soft vertical fade) */
-.sec-blue{background:linear-gradient(180deg,rgba(77,151,219,0) 0%,var(--blue) 9%,var(--blue) 91%,rgba(77,151,219,0) 100%) !important}
-.sec-green{background:linear-gradient(180deg,rgba(33,62,60,0) 0%,var(--green) 9%,var(--green) 91%,rgba(33,62,60,0) 100%) !important}
-.sec-dark{background:linear-gradient(180deg,rgba(20,25,55,0) 0%,var(--navy) 9%,var(--navy) 91%,rgba(20,25,55,0) 100%) !important}
+/* strong colour bands emerge from and melt back into the flow (soft vertical fade) */
+section.sec-blue{background:linear-gradient(180deg,rgba(77,151,219,0) 0%,var(--blue) 9%,var(--blue) 91%,rgba(77,151,219,0) 100%) !important}
+section.sec-green{background:linear-gradient(180deg,rgba(33,62,60,0) 0%,var(--green) 9%,var(--green) 91%,rgba(33,62,60,0) 100%) !important}
+section.sec-dark{background:linear-gradient(180deg,rgba(20,25,55,0) 0%,var(--navy) 9%,var(--navy) 91%,rgba(20,25,55,0) 100%) !important}
 
 @media (prefers-reduced-motion:reduce){
   body{background-attachment:scroll}
