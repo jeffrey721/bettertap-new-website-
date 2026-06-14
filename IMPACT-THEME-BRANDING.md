@@ -36,19 +36,31 @@ Accent / links colour: blue `#1E6BE6`.
 
 ## 2) Typography — Theme settings → Typography
 
-Shopify's built-in font picker doesn't include Clash Display / Satoshi. Two options:
+Your brand fonts (confirmed from the embedded fonts in `BetterTap_Logo.pdf`) are:
+- **Aeonik** — display / headlines
+- **Neue Haas Grotesk** — body / UI
 
-**A. Closest in-library match (no code):**
-- Headings: **Archivo** (or Hanken Grotesk) — bold, loud grotesque
-- Body: **Assistant** (or Inter)
-- Crank heading sizes / scale to the maximum the theme allows — "loud" lives in the scale.
+Both are commercial licenses. Two options:
 
-**B. Use the real brand fonts (Clash Display + Satoshi):**
-Edit `layout/theme.liquid`, and just before `</head>` add:
+**A. Use the licensed fonts (best — exact brand match):**
+If you have the Aeonik + Neue Haas web licenses, upload the `.woff2` files to the theme
+(`assets/`) and add `@font-face` in `layout/theme.liquid` before `</head>`, then set the
+Custom CSS below. (The standalone site already has matching `@font-face` hooks in
+`assets/css/style.css` — drop the files into `assets/fonts/` and they activate.)
+
+**B. Closest FREE matches (no license needed):**
+- Headings → **General Sans** (Fontshare) — closest free match to Aeonik
+- Body → **Inter** — closest free match to Neue Haas Grotesk
+
+Add before `</head>` in `layout/theme.liquid`:
 ```html
-<link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 ```
 Then add the Custom CSS below.
+
+> The full standalone site in this folder (Home, Why BetterTap, Shop, About, Contact) is your
+> visual reference — match Impact's sections to those layouts.
 
 ---
 
