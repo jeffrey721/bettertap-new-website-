@@ -310,6 +310,18 @@ body.menu-open .mobile-menu{transform:translateX(0)}
 .pdp__buy{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
 .pdp__fine{margin-top:14px;font-size:var(--step--2);color:var(--ink-40)}
 
+/* pricing plans */
+.plans{margin:14px 0 4px}
+.plan-tabs{display:inline-flex;background:var(--grey);border-radius:100px;padding:4px;gap:4px}
+.plan-tab{padding:9px 18px;border-radius:100px;font-size:var(--step--1);font-weight:600;color:var(--ink-60);transition:.25s}
+.plan-tab.active{background:var(--blue);color:#fff;box-shadow:0 6px 16px -8px rgba(77,151,219,.8)}
+.plan-terms{display:flex;gap:8px;margin:14px 0 4px}
+.term{padding:8px 16px;border:1.5px solid var(--line);border-radius:100px;font-size:var(--step--1);font-weight:600;color:var(--ink);transition:.25s}
+.term.active{border-color:var(--blue);background:var(--blue-050);color:var(--blue-600)}
+.plans .pdp__price{margin:14px 0 2px;display:flex;align-items:baseline;gap:8px;font-variant-numeric:tabular-nums}
+.plan-unit{font-family:var(--sans);font-size:var(--step-1);font-weight:600;color:var(--ink-60);letter-spacing:0}
+.plan-note{font-size:var(--step--1);color:var(--ink-60);margin:0}
+
 /* temperature scale */
 .tempscale{height:8px;border-radius:8px;background:linear-gradient(90deg,#3E8BFF,#9FD0FF,#F9F3E7,#FBC15B,#E2452F);position:relative;margin:30px 0 8px}
 .tempscale span{position:absolute;top:-26px;transform:translateX(-50%);font-size:var(--step--2);color:var(--ink-60)}

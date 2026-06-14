@@ -79,8 +79,20 @@
           <span class="pdp__tag">New</span>
           <h1>Bettertap Pro</h1>
           <div class="pdp__rating mt-s"><span class="stars">★★★★★</span> 4.9 <span style="color:var(--ink-40)">(1,248 reviews)</span></div>
-          <div class="pdp__price">$499.00</div>
-          <p style="font-size:var(--step--1);color:var(--ink-60);margin-top:-4px">or 4 interest-free payments of $124.75</p>
+          <div class="plans" data-plans>
+            <div class="plan-tabs" role="tablist" aria-label="Payment options">
+              <button class="plan-tab active" data-plan="cash" role="tab">Pay in full</button>
+              <button class="plan-tab" data-plan="installments" role="tab">Installments</button>
+              <button class="plan-tab" data-plan="lease" role="tab">Lease</button>
+            </div>
+            <div class="plan-terms" data-terms hidden>
+              <button class="term active" data-term="12">12 mo</button>
+              <button class="term" data-term="24">24 mo</button>
+              <button class="term" data-term="36">36 mo</button>
+            </div>
+            <div class="pdp__price"><span data-price>$1,280</span><span class="plan-unit" data-price-unit></span></div>
+            <p class="plan-note" data-price-note>One-time payment — 3 years full service &amp; warranty included.</p>
+          </div>
           <p style="margin:18px 0;color:var(--ink-60)">Our most advanced countertop water system. Purified hot and cold water on demand, with smart features for every household.</p>
 
           <ul class="pdp__list">
@@ -305,5 +317,57 @@
 </footer>
 
 <script src="assets/js/main.js"></script>
+<script>
+/* BetterTap Pro — pricing models
+   1) Cash: $1,280 one-time (3 yrs full service & warranty)
+   2) Installments on $1,280 base: +surcharge, then / months
+        12mo: +5%  ·  24mo: +10%  ·  36mo: no surcharge (per spec)
+   3) Lease: $500 upfront, then $25/mo for life (service & warranty incl.)  */
+(function(){
+  var BASE = 1280;
+  var SURCHARGE = { 12:0.05, 24:0.10, 36:0.0 };
+  var root = document.querySelector('[data-plans]');
+  if(!root) return;
+  var priceEl = root.querySelector('[data-price]');
+  var unitEl  = root.querySelector('[data-price-unit]');
+  var noteEl  = root.querySelector('[data-price-note]');
+  var terms   = root.querySelector('[data-terms]');
+  var plan = 'cash', term = 12;
+  var usd = function(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); };
+  var usd0 = function(n){ return '$' + n.toLocaleString('en-US'); };
+
+  function render(){
+    if(plan==='cash'){
+      terms.hidden = true;
+      priceEl.textContent = usd0(BASE); unitEl.textContent = '';
+      noteEl.innerHTML = 'One-time payment — <strong>3 years</strong> full service &amp; warranty included.';
+    } else if(plan==='installments'){
+      terms.hidden = false;
+      var sur = SURCHARGE[term];
+      var total = BASE*(1+sur);
+      var monthly = total/term;
+      priceEl.textContent = usd(monthly); unitEl.textContent = '/mo';
+      noteEl.innerHTML = 'for '+term+' months · '+(sur>0?('+'+Math.round(sur*100)+'% financing · '):'no added fee · ')+'total '+usd(total)+'.';
+    } else { // lease
+      terms.hidden = true;
+      priceEl.textContent = '$25'; unitEl.textContent = '/mo';
+      noteEl.innerHTML = '<strong>$500</strong> today, then <strong>$25/mo</strong> for life — service &amp; warranty included.';
+    }
+  }
+  root.querySelectorAll('.plan-tab').forEach(function(b){
+    b.addEventListener('click', function(){
+      root.querySelectorAll('.plan-tab').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active'); plan = b.getAttribute('data-plan'); render();
+    });
+  });
+  root.querySelectorAll('.term').forEach(function(b){
+    b.addEventListener('click', function(){
+      root.querySelectorAll('.term').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active'); term = parseInt(b.getAttribute('data-term'),10); render();
+    });
+  });
+  render();
+})();
+</script>
 </body>
 </html>
