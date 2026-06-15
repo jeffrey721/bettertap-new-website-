@@ -563,3 +563,44 @@ section.sec-dark{background:linear-gradient(180deg,rgba(20,25,55,0) 0%,var(--nav
 .promo__close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:1.2rem;display:grid;place-items:center;z-index:2}
 .promo__close:hover{background:rgba(255,255,255,.35)}
 .promo__fine{font-size:var(--step--2);color:var(--ink-40);margin-top:10px}
+
+/* =================================================================
+   Mobile polish pass
+   - No input zoom-jump on iOS (inputs ≥16px)
+   - 44px tap targets, thumb-friendly stacked CTAs
+   - Fixed buy bar clears content + respects the notch (safe-area)
+   - Less motion/jank on phones
+   ================================================================= */
+/* iOS treats font-size <16px as a cue to zoom on focus — keep all inputs ≥16px */
+input,textarea,select{font-size:max(16px,1em)}
+
+@media (max-width:760px){
+  /* background-attachment:fixed is janky / often broken on mobile browsers */
+  body{background-attachment:scroll}
+}
+
+@media (max-width:560px){
+  /* Declutter the header — the persistent buy bar + mobile menu cover purchase */
+  .nav__actions .btn--primary{display:none}
+  .nav__burger{padding:10px;min-height:44px;justify-content:center}
+
+  /* 44×44 minimum tap targets */
+  .icon-btn{width:44px;height:44px}
+  .footer__social a{width:44px;height:44px}
+  .promo__close{width:44px;height:44px}
+  .faq-chip,.term,.plan-tab{min-height:44px;display:inline-flex;align-items:center}
+  .swatch{width:44px;height:44px}
+
+  /* Comfortable, full-width CTAs and input rows stack so nothing clips */
+  .hero__actions .btn{width:100%}
+  .promo__form,.zipbox,.subscribe{flex-direction:column;max-width:none}
+  .promo__form .btn,.zipbox .btn,.subscribe .btn{width:100%}
+
+  /* lighten heavy hero blur for smoother scrolling */
+  .hero__orb{filter:blur(44px)}
+
+  /* keep the fixed buy bar from sitting under the notch */
+  .buybar{bottom:calc(12px + env(safe-area-inset-bottom))}
+  /* and from permanently covering the end-of-page footer content */
+  .footer{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+}
