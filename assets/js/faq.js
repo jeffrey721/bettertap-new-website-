@@ -18,8 +18,8 @@
 
   var SUPPORT = {
     email: 'hello@bettertap.com',
-    phone: '(833) 269-1704',
-    whatsapp: 'https://wa.me/18332691704'
+    phone: '(646) 386-1427',
+    whatsapp: 'https://wa.me/16463861427'
   };
 
   // Knowledge base — curated from BetterTap / Strauss Edge FAQ content.
