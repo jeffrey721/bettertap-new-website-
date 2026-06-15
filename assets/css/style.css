@@ -469,7 +469,11 @@ body{
 .sec-grey,.sec-cream,.sec-bluelight{background:transparent !important}
 
 /* strong colour bands emerge from and melt back into the flow (soft vertical fade) */
-section.sec-blue{background:linear-gradient(180deg,rgba(77,151,219,0) 0%,var(--blue) 9%,var(--blue) 91%,rgba(77,151,219,0) 100%) !important}
+/* BLUE -> WHITE: a deep on-brand blue with a soft top glow that melts to white
+   at both edges. Content lives in the 8–80% blue band so white text stays AA. */
+section.sec-blue{background:
+  radial-gradient(120% 75% at 50% 0%, rgba(255,255,255,.18), transparent 58%),
+  linear-gradient(180deg, rgba(47,124,198,0) 0%, #2f7cc6 8%, var(--blue) 50%, #6fb0e4 86%, rgba(255,255,255,0) 100%) !important}
 section.sec-green{background:linear-gradient(180deg,rgba(33,62,60,0) 0%,var(--green) 9%,var(--green) 91%,rgba(33,62,60,0) 100%) !important}
 section.sec-dark{background:linear-gradient(180deg,rgba(20,25,55,0) 0%,var(--navy) 9%,var(--navy) 91%,rgba(20,25,55,0) 100%) !important}
 
@@ -480,30 +484,32 @@ section.sec-dark{background:linear-gradient(180deg,rgba(20,25,55,0) 0%,var(--nav
 /* =================================================================
    Creative side element — a glass of water that fills up (decorative)
    ================================================================= */
-.waterflow{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:60;pointer-events:none;opacity:.95}
-/* the glass: a tumbler with a subtle taper, rounded base, open top */
-.glass{position:relative;width:44px;height:62px;border:2.5px solid var(--blue);border-top:none;
+.waterflow{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:60;pointer-events:none;opacity:.96}
+/* SIGNATURE: this glass fills as you scroll DOWN and empties as you scroll UP.
+   JS sets --fill (8–92%) from scroll progress, rAF-smoothed. Water is the
+   site's living material — the scroll indicator IS a glass being poured. */
+.glass{position:relative;width:46px;height:64px;border:2.5px solid var(--blue);border-top:none;
   border-radius:6px 6px 15px 15px;overflow:hidden;
   background:linear-gradient(180deg,rgba(77,151,219,.05),rgba(77,151,219,.12));
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.5),0 10px 22px -12px rgba(30,107,230,.5)}
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.5),0 0 0 6px rgba(77,151,219,.06),0 12px 26px -12px rgba(30,107,230,.55)}
 /* glass rim */
 .glass::after{content:"";position:absolute;top:0;left:-3px;right:-3px;height:3px;border-radius:3px;background:var(--blue)}
-/* the rising water */
-.glass__water{position:absolute;left:0;right:0;bottom:0;height:20%;
-  background:linear-gradient(180deg,#7fc0f0,var(--blue));animation:glassFill 5s var(--ease) infinite}
-/* wavy meniscus on top of the water */
+/* the water — height is scroll-bound via --fill */
+.glass__water{position:absolute;left:0;right:0;bottom:0;height:var(--fill,10%);
+  background:linear-gradient(180deg,#7fc0f0,var(--blue));will-change:height}
+/* wavy meniscus on top of the water (the only looping motion) */
 .glass__water::before{content:"";position:absolute;top:-5px;left:-10%;width:120%;height:10px;border-radius:50%;
-  background:#9bd0f5;animation:glassWave 2.2s linear infinite}
+  background:#9bd0f5;animation:glassWave 2.4s linear infinite}
 /* rising bubbles */
 .glass__water .b{position:absolute;bottom:8%;width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.75);animation:glassBubble 2.8s ease-in infinite}
 .glass__water .b1{left:28%;animation-delay:.2s}
 .glass__water .b2{left:54%;width:3px;height:3px;animation-delay:1.1s}
 .glass__water .b3{left:70%;animation-delay:1.9s}
-@keyframes glassFill{0%{height:16%}55%{height:92%}100%{height:16%}}
 @keyframes glassWave{0%{transform:translateX(0) rotate(0)}50%{transform:translateX(-6%) rotate(3deg)}100%{transform:translateX(0) rotate(0)}}
 @keyframes glassBubble{0%{transform:translateY(0);opacity:0}20%{opacity:.9}100%{transform:translateY(-34px);opacity:0}}
 @media (max-width:1100px){.waterflow{display:none}}
-@media (prefers-reduced-motion:reduce){.glass__water,.glass__water::before,.glass__water .b{animation:none}.glass__water{height:64%}}
+/* reduced motion: a calm, static half-full glass; no wave/bubbles, no scroll bind */
+@media (prefers-reduced-motion:reduce){.glass__water,.glass__water::before,.glass__water .b{animation:none}.glass__water{height:55%}}
 
 /* =================================================================
    Persistent "Buy" button (every page, always visible)
@@ -656,3 +662,62 @@ input,textarea,select{font-size:max(16px,1em)}
   border:1.5px dashed var(--line);border-radius:var(--radius-lg);color:var(--ink-40);padding:30px;min-height:220px}
 .assetph b{color:var(--ink-60);font-size:var(--step--1);font-family:var(--display)}
 .assetph small{font-size:var(--step--2)}
+
+/* =================================================================
+   Award craft layer — focus states, magnetic cursor, ripple,
+   alternating media/text rhythm, droplet hover. All additive and
+   reduced-motion / touch aware.
+   ================================================================= */
+
+/* --- Accessible focus (WCAG 2.1 AA): visible, on-brand, never on mouse --- */
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:6px}
+.sec-blue :focus-visible,.sec-dark :focus-visible,.sec-green :focus-visible,.footer :focus-visible{outline-color:#fff}
+.btn:focus-visible{outline-offset:4px}
+
+/* --- Magnetic custom cursor (desktop, fine pointer, motion-allowed) --- */
+.cursor{position:fixed;top:0;left:0;width:34px;height:34px;border:1.6px solid var(--blue);border-radius:50%;
+  pointer-events:none;z-index:1200;will-change:transform,width,height;
+  transition:width .25s var(--ease),height .25s var(--ease),background .25s,border-color .25s,opacity .3s}
+.cursor::after{content:"";position:absolute;inset:50% auto auto 50%;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:var(--blue)}
+.cursor.is-hover{width:56px;height:56px;background:rgba(77,151,219,.12)}
+.cursor.is-down{width:26px;height:26px}
+body.cursor-on{cursor:none}
+body.cursor-on a,body.cursor-on button,body.cursor-on .btn{cursor:none}
+body.cursor-on input,body.cursor-on textarea,body.cursor-on select,body.cursor-on [contenteditable]{cursor:auto}
+@media (max-width:1100px),(pointer:coarse){.cursor{display:none!important}body.cursor-on{cursor:auto}}
+@media (prefers-reduced-motion:reduce){.cursor{display:none!important}body.cursor-on{cursor:auto}}
+
+/* --- Button ripple (droplet) on click --- */
+.btn{position:relative}
+.btn .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.45);transform:translate(-50%,-50%);
+  pointer-events:none;width:0;height:0;opacity:.5;z-index:0}
+.btn--ghost .ripple,.btn--yellow .ripple{background:rgba(77,151,219,.3)}
+.btn.rippling .ripple{animation:btnRipple .6s var(--ease) forwards}
+@keyframes btnRipple{to{width:320px;height:320px;opacity:0}}
+@media (prefers-reduced-motion:reduce){.btn.rippling .ripple{animation:none;opacity:0}}
+
+/* --- Droplet/ripple hover on icon tiles (signature water language) --- */
+.icontile__ic{position:relative;overflow:hidden}
+.icontile__ic::after{content:"";position:absolute;inset:0;border-radius:inherit;
+  background:radial-gradient(circle at 50% 120%, rgba(255,255,255,.5), transparent 60%);
+  opacity:0;transition:opacity .4s var(--ease)}
+.icontile:hover .icontile__ic::after{opacity:1}
+
+/* --- Alternating media/text rhythm (ceevue-style zig-zag) --- */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,72px);align-items:center}
+.split--rev > :first-child{order:2}
+.split__media{position:relative;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow)}
+.split__media img,.split__media video{width:100%;height:100%;object-fit:cover;display:block}
+.split__media::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 80% 0%,rgba(77,151,219,.16),transparent 55%);pointer-events:none}
+.split__body{max-width:46ch}
+@media (max-width:760px){.split{grid-template-columns:1fr;gap:28px}.split--rev > :first-child{order:0}}
+
+/* reuse: flip any existing two-column grid for alternation */
+.grid-2--rev > :first-child{order:2}
+@media (max-width:760px){.grid-2--rev > :first-child{order:0}}
+
+/* --- Loading skeleton + lazy-image fade-in (no layout shift) --- */
+.skeleton{background:linear-gradient(100deg,var(--grey) 30%,#fdfdfd 50%,var(--grey) 70%);
+  background-size:200% 100%;animation:shimmer 1.3s linear infinite;border-radius:var(--radius)}
+@keyframes shimmer{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.skeleton{animation:none}}
