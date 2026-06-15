@@ -69,13 +69,10 @@
       // remember email (demo)
       if ($("#remember").checked) { set("remember_email", email); }
       else { try { localStorage.removeItem(PREFIX + "remember_email"); } catch (x) {} }
-      set("pending_email", email);
-
-      stepEmail.style.display = "none";
-      step2fa.style.display = "block";
-      $("#otp-target").textContent = email;
-      var first = $(".otp input");
-      if (first) first.focus();
+      // Customers sign in in ONE step (no 2FA). Authenticate and go to the dashboard.
+      set("email", email);
+      try { localStorage.setItem("bt_acct_auth", "1"); } catch (x) {}
+      window.location.href = "app.html";
     });
 
     // prefill remembered email
@@ -85,52 +82,7 @@
       $("#remember").checked = true;
     }
 
-    // OTP auto-advance
-    var otps = $$(".otp input");
-    otps.forEach(function (inp, i) {
-      inp.addEventListener("input", function () {
-        inp.value = inp.value.replace(/\D/g, "").slice(0, 1);
-        if (inp.value && i < otps.length - 1) otps[i + 1].focus();
-        $("#otp-err").textContent = "";
-      });
-      inp.addEventListener("keydown", function (e) {
-        if (e.key === "Backspace" && !inp.value && i > 0) otps[i - 1].focus();
-      });
-      inp.addEventListener("paste", function (e) {
-        e.preventDefault();
-        var data = (e.clipboardData || window.clipboardData).getData("text").replace(/\D/g, "").slice(0, 6);
-        for (var j = 0; j < data.length && j < otps.length; j++) otps[j].value = data[j];
-        var next = Math.min(data.length, otps.length - 1);
-        otps[next].focus();
-      });
-    });
-
-    // Verify
-    var verifyForm = $("#verify-form");
-    verifyForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var code = otps.map(function (o) { return o.value; }).join("");
-      var err = $("#otp-err");
-      if (!/^\d{6}$/.test(code)) {
-        err.textContent = "Enter all 6 digits.";
-        return;
-      }
-      // PROTOTYPE: accept 123456 or any 6 digits
-      set("auth", "1");
-      set("email", get("pending_email", "you@example.com"));
-      window.location.href = "app.html";
-    });
-
-    // Back to step 1
-    var back2fa = $("#back-2fa");
-    if (back2fa) {
-      back2fa.addEventListener("click", function () {
-        step2fa.style.display = "none";
-        stepEmail.style.display = "block";
-        otps.forEach(function (o) { o.value = ""; });
-        $("#otp-err").textContent = "";
-      });
-    }
+    // (Customer 2FA removed — login is a single step.)
 
     // demo "forgot password"
     var forgot = $("#forgot");
