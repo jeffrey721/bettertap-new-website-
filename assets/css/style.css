@@ -480,10 +480,13 @@ section.sec-dark{background:linear-gradient(180deg,rgba(20,25,55,0) 0%,var(--nav
 /* =================================================================
    Creative side element — water being filtered (decorative)
    ================================================================= */
-.waterflow{position:fixed;top:0;right:14px;width:26px;height:100vh;z-index:60;pointer-events:none;display:flex;flex-direction:column;align-items:center;opacity:.5}
+/* mix-blend-mode:difference makes the tube render as the inverse/contrasting
+   colour of whatever section sits behind it — so the water streak always pops,
+   light over dark sections and dark over light ones, on any page. */
+.waterflow{position:fixed;top:0;right:14px;width:26px;height:100vh;z-index:60;pointer-events:none;display:flex;flex-direction:column;align-items:center;opacity:.8;mix-blend-mode:difference}
 .waterflow__tube{position:relative;width:8px;height:100%;border-radius:8px;overflow:hidden;
-  background:linear-gradient(180deg,rgba(77,151,219,.10),rgba(77,151,219,.04));box-shadow:inset 0 0 0 1px rgba(77,151,219,.18)}
-.waterflow__fill{position:absolute;inset:0;background:linear-gradient(180deg,var(--blue-soft),var(--blue));opacity:.25}
+  background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.05));box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+.waterflow__fill{position:absolute;inset:0;background:linear-gradient(180deg,#9be7ff,#ffffff 45%,#4D97DB);opacity:.9}
 .waterflow__band{position:absolute;left:-5px;right:-5px;height:18px;border-radius:4px;background:repeating-linear-gradient(45deg,rgba(20,25,55,.5) 0 3px,rgba(20,25,55,.2) 3px 6px);top:48%}
 .waterflow__band::after{content:"MAZE";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(90deg);font-size:7px;letter-spacing:.1em;color:#fff;font-family:var(--display);font-weight:700}
 .waterflow .drop{position:absolute;left:50%;width:6px;height:8px;margin-left:-3px;border-radius:0 100% 100% 100%;transform:rotate(45deg);background:var(--blue);animation:wdrop 3.4s linear infinite}
