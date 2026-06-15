@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+<!-- On-brand line icons. Stroke = currentColor, so set color via CSS.
+     Use:  <svg class="ic"><use href="assets/img/icons.svg#temp-cold"></use></svg>  -->
+<defs></defs>
+
+<symbol id="temp-cold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 2v20M3.4 7l17.2 10M20.6 7L3.4 17"/>
+  <path d="M12 2l-2.2 2.4M12 2l2.2 2.4M12 22l-2.2-2.4M12 22l2.2-2.4"/>
+  <path d="M3.4 7l.3 3.1M3.4 7l3-.6M20.6 17l-.3-3.1M20.6 17l-3 .6M20.6 7l-3-.6M20.6 7l-.3 3.1M3.4 17l3 .6M3.4 17l.3-3.1"/>
+</symbol>
+
+<symbol id="temp-ambient" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3c4.2 5.2 6.2 8 6.2 10.5a6.2 6.2 0 1 1-12.4 0C5.8 11 7.8 8.2 12 3Z"/>
+  <path d="M9.4 13.6a2.7 2.7 0 0 0 2.6 2.6"/>
+</symbol>
+
+<symbol id="temp-hot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M10 13.5V5a2 2 0 1 1 4 0v8.5a4 4 0 1 1-4 0Z"/>
+  <path d="M12 9.5v6.2"/>
+</symbol>
+
+<symbol id="temp-boil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 12h13a6.5 6.5 0 0 1-13 0Z"/><path d="M18 13.5h1.4a2 2 0 0 0 0-4H18"/>
+  <path d="M8.5 6.2c.8-.8.8-1.6 0-2.4M12 6.2c.8-.8.8-1.6 0-2.4M15.5 6.2c.8-.8.8-1.6 0-2.4"/>
+  <path d="M6 20h12"/>
+</symbol>
+
+<symbol id="uv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="4"/>
+  <path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/>
+</symbol>
+
+<symbol id="maze" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3.5" y="4" width="17" height="16" rx="3"/>
+  <path d="M3.5 9h13M20.5 9h-2M7.5 14H3.5M20.5 14h-9M3.5 19h6"/>
+</symbol>
+
+<symbol id="sparkling" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M6 8h12l-1.2 11a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 8Z"/>
+  <circle cx="10" cy="13" r="1"/><circle cx="14" cy="15.5" r="1"/><circle cx="12.5" cy="11" r=".7"/>
+  <path d="M9 8V5.5M15 8V5.5M9 5.5h6"/>
+</symbol>
+
+<symbol id="leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 4S8 3 5.5 11.5C4 16.5 7 19.5 7 19.5S18 19 20 8c.4-2.2 0-4 0-4Z"/>
+  <path d="M7 19.5C9 14 13 10 18 7.5"/>
+</symbol>
+
+<symbol id="mineral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 2.5l8.2 4.7v9.6L12 21.5 3.8 16.8V7.2L12 2.5Z"/>
+  <circle cx="12" cy="12" r="2.4"/>
+</symbol>
+
+<symbol id="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z"/>
+  <path d="M8.5 12l2.2 2.2 4.8-5.4"/>
+</symbol>
+
+<symbol id="instant" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M13 2L5 13h6l-1 9 8-11h-6l1-9Z"/>
+</symbol>
+
+<symbol id="no-bottle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M10 2.5h4M10.5 2.5v2.2c0 .8-.4 1.3-1 1.9L8 8.2A3 3 0 0 0 7 10.4V19a2.5 2.5 0 0 0 2.5 2.5h5A2.5 2.5 0 0 0 17 19v-8.6a3 3 0 0 0-1-2.2l-1.5-1.6c-.6-.6-1-1.1-1-1.9V2.5"/>
+  <path d="M4 4l16 16"/>
+</symbol>
+
+<symbol id="app" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.5 18.5h3"/>
+</symbol>
+</svg>
