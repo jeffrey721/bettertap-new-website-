@@ -9,12 +9,16 @@
             Grey #F4F4F4 · Black #000 · Blue #1E6BE6 (primary UI)
    ================================================================= */
 
-/* ---- Licensed brand fonts (optional drop-in) ---- */
+/* ---- Licensed brand fonts (optional drop-in) ----
+   When you have the Aeonik + Neue Haas Grotesk web licenses, add the .woff2
+   files to assets/fonts/ and UNCOMMENT the @font-face blocks below — the font
+   stack already prefers them. Left commented so there are no 404s until then.
 @font-face{font-family:'Aeonik';src:url('../fonts/Aeonik-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
 @font-face{font-family:'Aeonik';src:url('../fonts/Aeonik-Medium.woff2') format('woff2');font-weight:500;font-display:swap}
 @font-face{font-family:'Neue Haas Grotesk';src:url('../fonts/NeueHaasGroteskDisplayPro-55Roman.woff2') format('woff2');font-weight:400;font-display:swap}
 @font-face{font-family:'Neue Haas Grotesk';src:url('../fonts/NeueHaasGroteskDisplayPro-65Medium.woff2') format('woff2');font-weight:500;font-display:swap}
 @font-face{font-family:'Neue Haas Grotesk';src:url('../fonts/NeueHaasGroteskDisplayPro-75Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+*/
 
 :root{
   --navy:#141937; --navy-600:#222a52;
