@@ -88,28 +88,7 @@
         <p class="auth__alt">Any non-empty credentials work in this prototype.</p>
       </div>
 
-      <!-- STEP 2: 2FA -->
-      <div id="step-2fa" style="display:none">
-        <h2>Two-factor verification</h2>
-        <p class="lede">Enter the 6-digit code we sent to <b id="otp-target">your email</b>.</p>
-
-        <form id="verify-form" novalidate>
-          <div class="otp">
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 1" />
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 2" />
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 3" />
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 4" />
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 5" />
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 6" />
-          </div>
-          <div class="err" id="otp-err"></div>
-
-          <div class="demo-hint">Demo hint: use code <b>123456</b> (or any 6 digits).</div>
-
-          <button type="submit" class="btn btn--primary btn--block">Verify</button>
-          <p class="auth__alt"><button type="button" id="back-2fa" class="link" style="background:none">&larr; Use a different account</button></p>
-        </form>
-      </div>
+      <!-- Customer login is a single step — no two-factor verification. -->
 
     </div>
   </section>
