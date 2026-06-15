@@ -68,4 +68,19 @@
 <symbol id="app" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
   <rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.5 18.5h3"/>
 </symbol>
+
+<symbol id="calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/>
+  <path d="M3.5 9.5h17M8 3v4M16 3v4"/>
+  <path d="M7.5 13h2M11 13h2M14.5 13h2M7.5 16.5h2M11 16.5h2"/>
+</symbol>
+
+<symbol id="wrench" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20.8 5.2a4.3 4.3 0 0 1-5.6 5.5L7 18.9a2.05 2.05 0 1 1-2.9-2.9l8.2-8.2A4.3 4.3 0 0 1 18 2.2l-2.9 2.9 1.6 1.6 2.9-2.9c.4.4.8 1 1.2 1.4Z"/>
+</symbol>
+
+<symbol id="cup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M6 4.5h12l-1.1 14.4a2 2 0 0 1-2 1.85H9.1a2 2 0 0 1-2-1.85L6 4.5Z"/>
+  <path d="M6.6 11h10.8"/>
+</symbol>
 </svg>
