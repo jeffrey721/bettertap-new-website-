@@ -705,6 +705,7 @@ body.cursor-on input,body.cursor-on textarea,body.cursor-on select,body.cursor-o
 
 /* --- Alternating media/text rhythm (ceevue-style zig-zag) --- */
 .split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,72px);align-items:center}
+.split > *{min-width:0}
 .split--rev > :first-child{order:2}
 .split__media{position:relative;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow)}
 .split__media img,.split__media video{width:100%;height:100%;object-fit:cover;display:block}
