@@ -505,10 +505,15 @@ section.sec-dark{background:linear-gradient(180deg,rgba(20,25,55,0) 0%,var(--nav
    Payment method icons (generic — replace with official badges)
    ================================================================= */
 .paymethods{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
-.paymethods .pm{height:30px;min-width:46px;padding:0 10px;border-radius:7px;background:#fff;border:1px solid var(--line);
-  display:inline-flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:.72rem;letter-spacing:-.01em;color:var(--navy)}
-.paymethods .pm small{font-weight:600}
+.paymethods .pm{height:30px;width:44px;border-radius:7px;background:#fff;border:1px solid var(--line);
+  display:inline-flex;align-items:center;justify-content:center;color:var(--navy)}
+.paymethods .pm svg{width:30px;height:20px}
 .paymethods .lbl{font-size:var(--step--2);color:var(--ink-40);width:100%;margin-bottom:2px}
+
+/* product (refill/add-on) price + buy row */
+.prod-buy{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px}
+.prod-price{font-family:var(--display);font-weight:700;font-size:var(--step-1);color:var(--navy);white-space:nowrap}
+.prod-price small{font-weight:600;font-size:.6em;color:var(--blue);margin-left:4px}
 
 /* =================================================================
    Early-bird promo popup
