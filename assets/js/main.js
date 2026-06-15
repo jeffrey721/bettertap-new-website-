@@ -43,7 +43,7 @@
       }
       if (!document.querySelector('.waterflow')) {
         var wf = document.createElement('div'); wf.className = 'waterflow'; wf.setAttribute('aria-hidden', 'true');
-        wf.innerHTML = '<div class="waterflow__tube"><div class="waterflow__fill"></div><span class="drop"></span><span class="drop"></span><span class="drop"></span><div class="waterflow__band"></div></div>';
+        wf.innerHTML = '<div class="glass"><div class="glass__water"><span class="b b1"></span><span class="b b2"></span><span class="b b3"></span></div></div>';
         document.body.appendChild(wf);
       }
     };
