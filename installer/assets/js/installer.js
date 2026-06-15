@@ -50,7 +50,7 @@
       id:'j1', name:'Dana & Marcus Levin', type:'Install', status:'Scheduled',
       addr:'18 Oak Hollow Dr, Westchester', window:'8:30 – 9:30 AM',
       distance:'2.4 mi', eta:'9 min', phone:'(914) 555-0182',
-      lat:41.0421, lng:-73.7629, img:'unit-front.jpg',
+      lat:41.0421, lng:-73.7629, img:'unit-angle.jpg',
       tasks:[
         {t:'Confirm under-sink space & shutoff valve', done:false},
         {t:'Mount Better Tap unit & faucet', done:false},
@@ -104,7 +104,7 @@
       id:'j5', name:'Grace Okafor', type:'Install', status:'Scheduled',
       addr:'231 Lakeview Ter, Dobbs Ferry', window:'3:30 – 4:30 PM',
       distance:'3.8 mi', eta:'13 min', phone:'(914) 555-0529',
-      lat:41.0140, lng:-73.8729, img:'unit-front.jpg',
+      lat:41.0140, lng:-73.8729, img:'unit-angle.jpg',
       tasks:[
         {t:'Verify counter clearance & power', done:false},
         {t:'Install unit, faucet & drain saddle', done:false},
@@ -116,7 +116,7 @@
   ];
 
   /* preset sample install photos shown on a couple of jobs */
-  var SAMPLE_PHOTOS = ['unit-front.jpg','control-panel.jpg','dispense.jpg'];
+  var SAMPLE_PHOTOS = ['unit-angle.jpg','control-panel.jpg','dispense.jpg'];
 
   function ensureState(){
     if(!load('jobs')){
