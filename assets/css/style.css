@@ -860,3 +860,13 @@ input,textarea,select{font-size:max(16px,1em)}
 .acc-stage{display:inline-flex;align-items:center;gap:12px;text-align:left}
 .acc-stage .ic{width:24px;height:24px;color:var(--blue);flex:none}
 .acc__a .iconchips{margin-top:14px}
+
+/* Technology pros/cons — image-anchored comparison */
+.proscons{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(24px,4vw,56px);align-items:center;max-width:1120px;margin-inline:auto}
+.proscons__title{display:flex;align-items:center;gap:10px;font-size:var(--step-1);margin-bottom:10px}
+.proscons__title svg{width:30px;height:30px;flex:none}
+.pclist li{display:flex;gap:11px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line-soft);color:var(--ink-60);font-size:var(--step--1)}
+.pclist li::before{content:"✓";color:var(--blue);font-weight:800;flex:none;line-height:1.4}
+.pclist--con li::before{content:"–";color:var(--ink-40)}
+.proscons__media img{width:min(240px,26vw);filter:drop-shadow(0 26px 40px rgba(20,25,55,.22))}
+@media (max-width:860px){.proscons{grid-template-columns:1fr;gap:8px}.proscons__media{order:-1;text-align:center;margin-bottom:18px}.proscons__media img{width:min(60vw,220px);margin-inline:auto}}
