@@ -833,3 +833,13 @@ input,textarea,select{font-size:max(16px,1em)}
   .phero__img{transform:none!important}
 }
 
+
+/* product hero — two-machine pairing (front + side profile) */
+.phero__stage--pair{display:flex;align-items:center;justify-content:center;gap:clamp(4px,1.5vw,28px)}
+.phero__stage--pair .phero__img{height:min(50vh,540px)}
+.phero__img--side{height:min(40vh,420px);opacity:.97;filter:drop-shadow(0 30px 46px rgba(20,25,55,.2))}
+@media (max-width:760px){
+  .phero__stage--pair{gap:2px}
+  .phero__stage--pair .phero__img{height:auto;width:min(50vw,260px)}
+  .phero__img--side{height:auto;width:min(46vw,240px)}
+}
