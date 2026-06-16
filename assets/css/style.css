@@ -876,7 +876,7 @@ input,textarea,select{font-size:max(16px,1em)}
 .cmptab{padding:10px 22px;border-radius:100px;font-weight:600;font-size:var(--step--1);color:var(--ink-60);transition:.25s}
 .cmptab.active{background:#fff;color:var(--navy);box-shadow:var(--shadow-sm)}
 .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.table-scroll .compare-table{min-width:880px}
+.table-scroll .compare-table{min-width:620px}
 .table-scroll[hidden]{display:none}
 
 /* price reassurance line */
