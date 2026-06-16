@@ -16,7 +16,7 @@
   /* ---------- CONFIG — fill these two ---------- */
   var SHOPIFY = {
     domain: 'dqz0fm-jv.myshopify.com',           // ✅ your *.myshopify.com domain (confirmed)
-    token:  'YOUR_STOREFRONT_API_TOKEN'          // ⬅ PASTE Storefront API access token here (see SHOPIFY-SETUP.md). Publishable & safe to ship.
+    token:  '71b65eca82761a181ff873015953c182'  // Storefront API public token (publishable, safe to ship)
   };
 
   /* ---------- Product → variant map (GIDs from your store) ---------- */
@@ -214,28 +214,4 @@
       '.bt-cart.open .bt-cart__scrim{opacity:1;}'+
       '.bt-cart__panel{position:absolute;top:0;right:0;height:100%;width:min(420px,92vw);background:#fff;display:flex;flex-direction:column;transform:translateX(100%);transition:.32s cubic-bezier(.4,0,.2,1);box-shadow:-10px 0 40px rgba(10,16,32,.18);}'+
       '.bt-cart.open .bt-cart__panel{transform:none;}'+
-      '.bt-cart__head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #eef0f4;font-size:18px;}'+
-      '.bt-cart__x{font-size:26px;line-height:1;background:none;border:0;cursor:pointer;color:#141937;}'+
-      '.bt-cart__items{flex:1;overflow:auto;padding:8px 20px;}'+
-      '.bt-cart__empty{color:#6b7280;padding:40px 0;text-align:center;}'+
-      '.bt-cart__row{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:start;padding:16px 0;border-bottom:1px solid #f1f2f6;}'+
-      '.bt-cart__row img,.bt-cart__ph{width:56px;height:56px;border-radius:10px;object-fit:cover;background:#f4f4f4;display:block;}'+
-      '.bt-cart__meta strong{display:block;font-size:14px;color:#141937;}'+
-      '.bt-cart__meta small{color:#8a90a0;}'+
-      '.bt-cart__qty{display:flex;align-items:center;gap:8px;margin-top:8px;}'+
-      '.bt-cart__qty button{width:26px;height:26px;border:1px solid #d8dbe4;border-radius:7px;background:#fff;cursor:pointer;font-size:15px;}'+
-      '.bt-cart__rm{width:auto!important;border:0!important;color:#009CA7;font-size:12px;margin-left:4px;}'+
-      '.bt-cart__price{font-weight:600;color:#141937;font-variant-numeric:tabular-nums;}'+
-      '.bt-cart__foot{padding:18px 20px;border-top:1px solid #eef0f4;}'+
-      '.bt-cart__sub{display:flex;justify-content:space-between;font-weight:700;color:#141937;margin-bottom:12px;font-variant-numeric:tabular-nums;}'+
-      '.bt-cart__note{color:#8a90a0;font-size:12px;text-align:center;margin-top:8px;}'+
-      'body.bt-cart-open{overflow:hidden;}';
-    document.head.appendChild(css);
-  }
-
-  /* ---------- load SDK then boot ---------- */
-  if (window.ShopifyBuy) boot();
-  else { var s=document.createElement('script'); s.src=SDK; s.onload=boot;
-    s.onerror=function(){ console.error('[BetterTap] could not load Shopify Buy SDK'); };
-    document.head.appendChild(s); }
-})();
+      '.bt-cart__head{
