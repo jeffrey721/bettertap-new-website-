@@ -333,7 +333,7 @@
     <div class="wrap">
       <p class="eyebrow" data-rise>Refills &amp; Add-ons</p>
       <h2 data-rise>Keep it running at its best.</h2>
-      <p class="lede mt-s" data-rise style="max-width:54ch">Genuine MAZE filtration and UV protection — purchase standalone or save with the bundle.</p>
+      <p class="lede mt-s" data-rise style="max-width:54ch">Genuine MAZE filtration and UV protection — buy standalone, or pair them in the bundle.</p>
       <div class="fgrid fgrid--3 mt-l">
         <article class="mcard" data-rise data-rise-d="1">
           <div class="mcard__img"><img src="assets/img/maze-poster.jpg" alt="MAZE water filter cartridge" loading="lazy"></div>
@@ -356,7 +356,7 @@
           <div class="mcard__body">
             <h3>Filter + UV Bundle</h3>
             <p>One year of clean: a MAZE filter and a UV lamp together — everything your BetterTap needs, for less.</p>
-            <div class="prod-buy"><span class="prod-price">$129 <small>save $19</small></span><button class="btn btn--primary" data-add-cart><span>Add to cart</span></button></div>
+            <div class="prod-buy"><span class="prod-price">$129 <small><s>$148</s></small></span><button class="btn btn--primary" data-add-cart><span>Add to cart</span></button></div>
           </div>
         </article>
       </div>
@@ -472,7 +472,7 @@
       var total = INSTALL_BASE*(1+sur);
       var monthly = total/term;
       priceEl.textContent = usd(monthly); unitEl.textContent = '/mo';
-      noteEl.innerHTML = term+' monthly payments'+(sur>0?(' · +'+Math.round(sur*100)+'%'):'')+' · total '+usd(total)+'.';
+      noteEl.innerHTML = term+' monthly payments · total '+usd(total)+'.';
     } else { // lease
       terms.hidden = true;                        // no months selector for lease
       priceEl.textContent = usd0(LEASE_MO); unitEl.textContent = '/mo';
