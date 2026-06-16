@@ -1113,3 +1113,6 @@ input,textarea,select{font-size:max(16px,1em)}
 .footer__admin{background:var(--blue-050);color:var(--navy)}
 .footer__admin:hover{background:var(--blue);color:#fff}
 .footer :focus-visible{outline-color:var(--blue)}
+
+/* raise the filter-stages infographic ~20% inside any cropped box */
+img[src*="filter-stages"]{object-position:center 70%}
