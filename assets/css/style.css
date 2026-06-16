@@ -1116,3 +1116,9 @@ input,textarea,select{font-size:max(16px,1em)}
 
 /* raise the filter-stages infographic ~20% inside any cropped box */
 img[src*="filter-stages"]{object-position:center 70%}
+
+/* checkout: billing-same-as-delivery checkbox + reveal block */
+.co-check{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:var(--step--1);color:var(--navy);font-weight:600;margin-top:2px}
+.co-check input{width:18px;height:18px;accent-color:var(--blue);flex:none;cursor:pointer}
+#billingFields{display:flex;flex-direction:column;gap:9px}
+#billingFields[hidden]{display:none}
