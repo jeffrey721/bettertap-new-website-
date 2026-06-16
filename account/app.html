@@ -109,7 +109,7 @@
 
         <div class="machine">
           <div class="machine__photo">
-            <img src="../assets/img/unit-angle.jpg" alt="BetterTap Edge unit" loading="lazy" />
+            <img id="myUnitImg" src="../assets/img/unit-angle-white.jpg" alt="BetterTap Edge unit" loading="lazy" />
           </div>
 
           <div>
@@ -442,6 +442,16 @@
 
 <div class="toast" id="toast"></div>
 
+<script>
+/* show the unit in the color the customer ordered (?color=black|white, remembered) */
+(function(){
+  var img=document.getElementById('myUnitImg'); if(!img) return;
+  var p=new URLSearchParams(location.search);
+  var color=(p.get('color')||localStorage.getItem('bt_color')||'white').toLowerCase();
+  if(color==='black'){localStorage.setItem('bt_color','black');img.src='../assets/img/unit-angle-black.jpg';}
+  else{if(p.get('color'))localStorage.setItem('bt_color','white');img.src='../assets/img/unit-angle-white.jpg';}
+})();
+</script>
 <script src="assets/js/account.js"></script>
 </body>
 </html>
