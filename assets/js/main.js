@@ -37,7 +37,7 @@
     var addEls = function () {
       if (!document.querySelector('.buybar')) {
         var buy = document.createElement('a');
-        buy.href = 'shop.html'; buy.className = 'buybar'; buy.setAttribute('aria-label', 'Get BetterTap');
+        buy.href = 'checkout.html?plan=lease'; buy.className = 'buybar'; buy.setAttribute('aria-label', 'Buy BetterTap');
         buy.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M6 7h12l-1 13H7L6 7Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 7a3 3 0 0 1 6 0" stroke="currentColor" stroke-width="1.8"/></svg> Get BetterTap <b>from $25/mo</b>';
         document.body.appendChild(buy);
       }

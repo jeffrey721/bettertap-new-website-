@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Checkout — Better Tap</title>
+<meta name="description" content="Secure express checkout for BetterTap." />
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#141937" />
+<link rel="icon" type="image/png" href="assets/img/bmark-white.png" />
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="co-body">
+
+<!-- minimal secure header -->
+<header class="co-head">
+  <a href="shop.html" class="nav__brand"><img src="assets/img/bmark-white.png" alt="" /> Bettertap<sup class="brand-tm">&trade;</sup></a>
+  <span class="co-secure"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7"/></svg> Secure checkout</span>
+</header>
+
+<main class="co-wrap">
+  <!-- LEFT: express + form -->
+  <section class="co-pay">
+    <a href="shop.html" class="co-back">← Back to product</a>
+    <h1 class="co-title">Express checkout</h1>
+    <p class="co-sub">One tap to pay — no account needed.</p>
+
+    <!-- express wallets -->
+    <div class="co-express" id="express">
+      <button class="co-wallet co-wallet--apple" data-pay="Apple Pay"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 3c.2 1.3 1.1 2.4 2.4 2.6-.2 1.3-1.1 2.4-2.4 2.4-.2-1.3.9-2.6 2.4-2.6-.2 0 0 0 0 0Z"/><path d="M12.8 16.6c-.5.7-1 1.4-1.8 1.4-.8 0-1-.5-1.9-.5s-1.2.5-1.9.5c-.8 0-1.4-.8-1.9-1.5-1-1.5-1.8-4.2-.7-6 .5-.9 1.5-1.5 2.5-1.5.8 0 1.5.5 1.9.5.4 0 1.3-.6 2.2-.5.4 0 1.4.1 2.1 1.1-1.8 1.1-1.5 3.6.4 4.5-.3.7-.6 1-1 1.5Z"/></svg> Pay</button>
+      <button class="co-wallet co-wallet--gpay" data-pay="Google Pay"><b style="color:#4285F4">G</b>&nbsp;Pay</button>
+      <button class="co-wallet co-wallet--shop" data-pay="Shop Pay">shop<span>Pay</span></button>
+      <button class="co-wallet co-wallet--paypal" data-pay="PayPal"><i>Pay</i><i>Pal</i></button>
+    </div>
+
+    <div class="co-or"><span>or pay with card</span></div>
+
+    <!-- minimal card form -->
+    <form class="co-form" id="coForm" autocomplete="on" novalidate>
+      <label class="co-field"><span>Email</span><input type="email" name="email" placeholder="you@email.com" required inputmode="email" autocomplete="email" /></label>
+      <label class="co-field"><span>Card number</span><input type="text" name="card" placeholder="1234 1234 1234 1234" required inputmode="numeric" autocomplete="cc-number" maxlength="19" data-card /></label>
+      <div class="co-row">
+        <label class="co-field"><span>Expiry</span><input type="text" name="exp" placeholder="MM / YY" required inputmode="numeric" autocomplete="cc-exp" maxlength="7" /></label>
+        <label class="co-field"><span>CVC</span><input type="text" name="cvc" placeholder="123" required inputmode="numeric" autocomplete="cc-csc" maxlength="4" /></label>
+      </div>
+      <label class="co-field"><span>Name on card</span><input type="text" name="name" placeholder="Full name" required autocomplete="cc-name" /></label>
+      <label class="co-field"><span>Delivery ZIP code</span><input type="text" name="zip" placeholder="10001" required inputmode="numeric" autocomplete="postal-code" maxlength="5" /></label>
+      <button type="submit" class="btn btn--primary btn--lg btn--block co-place" id="placeBtn">Pay <span data-total>$1,280</span></button>
+      <p class="co-trust"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 12l2.2 2.2 4.8-5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> 256-bit secure · Free shipping · 3-year warranty · 30-day guarantee</p>
+      <p class="co-demo">Demo checkout — no real payment is taken. Connect Shopify/Stripe to process live orders.</p>
+    </form>
+  </section>
+
+  <!-- RIGHT: order summary -->
+  <aside class="co-summary">
+    <div class="co-card">
+      <div class="co-prod">
+        <img src="assets/img/gallery-edge-white-front.webp" alt="BetterTap Edge" />
+        <div>
+          <b>BetterTap Edge</b>
+          <small data-plan-label>Pay in full · 3-year service &amp; warranty</small>
+        </div>
+        <span class="co-prod__price" data-line>$1,280</span>
+      </div>
+      <div class="co-incl">
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4 10-10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Professional installation</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4 10-10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Maintenance &amp; service included</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4 10-10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Free shipping</span>
+      </div>
+      <div class="co-totals">
+        <div><span>Subtotal</span><span data-sub>$1,280</span></div>
+        <div><span>Shipping</span><span>Free</span></div>
+        <div class="co-total"><span>Total today</span><span data-total>$1,280</span></div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<!-- success overlay -->
+<div class="co-done" id="coDone" hidden>
+  <div class="co-done__card">
+    <div class="co-done__tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4 10-10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h2>Order confirmed</h2>
+    <p>Thanks! We've emailed your receipt and our team will reach out to schedule your installation.</p>
+    <a href="index.html" class="btn btn--primary btn--lg">Back to home</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  var q=new URLSearchParams(location.search);
+  var plan=(q.get('plan')||'cash'), term=parseInt(q.get('term')||'12',10);
+  var INSTALL_MO={12:110,24:60,36:45};
+  var usd=function(n){return '$'+n.toLocaleString('en-US');};
+  var total='$1,280', sub='$1,280', label='Pay in full · 3-year service & warranty', line='$1,280';
+  if(plan==='installments'){var mo=INSTALL_MO[term]||110;total=usd(mo)+'/mo';sub=usd(mo*term);line=usd(mo)+'/mo';label=term+' monthly payments · total '+usd(mo*term);}
+  else if(plan==='lease'){total='$500 today';sub='$500';line='$500 + $25/mo';label='Lease · $500 upfront, then $25/mo';}
+  document.querySelectorAll('[data-total]').forEach(function(e){e.textContent=total;});
+  document.querySelectorAll('[data-sub]').forEach(function(e){e.textContent=sub;});
+  var ll=document.querySelector('[data-plan-label]'); if(ll)ll.textContent=label;
+  var dl=document.querySelector('[data-line]'); if(dl)dl.textContent=line;
+  var btn=document.getElementById('placeBtn'); if(btn)btn.innerHTML='Pay <span data-total>'+total+'</span>';
+
+  function done(){var d=document.getElementById('coDone');d.hidden=false;document.body.style.overflow='hidden';}
+  // express wallets — one tap
+  document.querySelectorAll('[data-pay]').forEach(function(b){b.addEventListener('click',function(){done();});});
+  // card form
+  var card=document.querySelector('[data-card]');
+  if(card)card.addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,16);this.value=v.replace(/(.{4})/g,'$1 ').trim();});
+  document.getElementById('coForm').addEventListener('submit',function(e){e.preventDefault();
+    if(!this.checkValidity()){this.reportValidity();return;} done();});
+})();
+</script>
+</body>
+</html>
