@@ -310,26 +310,32 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:700;line-height:1.08;letter-s
    REFER & EARN
    ================================================================= */
 /* $50 visual badge */
+/* glass-of-water badge with the $50 centered */
 .fifty-badge{
-  flex:none;display:flex;align-items:baseline;justify-content:center;gap:1px;position:relative;
-  width:148px;height:148px;border-radius:50%;
-  background:linear-gradient(150deg,var(--blue) 0%,var(--navy) 130%);
-  color:#fff;box-shadow:0 18px 40px -16px rgba(77,151,219,.9);
-  font-family:var(--display);font-weight:700;
+  flex:none;display:flex;align-items:center;justify-content:center;gap:1px;position:relative;
+  width:124px;height:150px;color:#fff;font-family:var(--display);font-weight:700;
+  background:linear-gradient(180deg,#dcefff 0%,#a6cff6 24%,#4d97db 64%,#2f6cc0 100%);
+  clip-path:polygon(13% 2%,87% 2%,79% 100%,21% 100%);
+  filter:drop-shadow(0 16px 26px rgba(77,151,219,.5));
 }
-.fifty-badge::after{
-  content:"";position:absolute;inset:7px;border-radius:50%;border:2px dashed rgba(255,255,255,.45);
+.fifty-badge::before{ /* water surface / rim */
+  content:"";position:absolute;top:5px;left:13%;right:13%;height:11px;border-radius:50%;
+  background:rgba(255,255,255,.55);
 }
-.fifty-badge__cur{font-size:1.5rem;line-height:1;transform:translateY(-10px)}
-.fifty-badge__num{font-size:3.4rem;line-height:1;letter-spacing:-.03em}
+.fifty-badge::after{ /* glass shine */
+  content:"";position:absolute;top:14%;left:25%;width:7px;height:60%;border-radius:6px;
+  background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,0));transform:rotate(3deg)
+}
+.fifty-badge__cur{font-size:1.4rem;line-height:1;transform:translateY(-.55em)}
+.fifty-badge__num{font-size:3rem;line-height:1;letter-spacing:-.03em}
 .fifty-badge__label{
-  position:absolute;bottom:24px;left:0;right:0;text-align:center;
-  font-family:var(--sans);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--yellow)
+  position:absolute;bottom:16px;left:0;right:0;text-align:center;
+  font-family:var(--sans);font-weight:700;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:#fff
 }
-.fifty-badge--sm{width:96px;height:96px}
-.fifty-badge--sm .fifty-badge__cur{font-size:1rem;transform:translateY(-6px)}
-.fifty-badge--sm .fifty-badge__num{font-size:2.2rem}
+.fifty-badge--sm{width:84px;height:106px}
+.fifty-badge--sm .fifty-badge__cur{font-size:.9rem}
+.fifty-badge--sm .fifty-badge__num{font-size:2rem}
 
 .refer-promo{display:flex;align-items:center;gap:24px;justify-content:space-between;
   background:linear-gradient(120deg,#fff 0%,var(--blue-050) 130%)}
