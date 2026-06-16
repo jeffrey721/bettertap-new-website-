@@ -15,8 +15,8 @@
 
   /* ---------- CONFIG — fill these two ---------- */
   var SHOPIFY = {
-    domain: 'drinkbettertap.myshopify.com',      // TODO confirm your *.myshopify.com domain
-    token:  'YOUR_STOREFRONT_API_TOKEN'          // TODO paste Storefront API access token
+    domain: 'dqz0fm-jv.myshopify.com',           // ✅ your *.myshopify.com domain (confirmed)
+    token:  'YOUR_STOREFRONT_API_TOKEN'          // ⬅ PASTE Storefront API access token here (see SHOPIFY-SETUP.md). Publishable & safe to ship.
   };
 
   /* ---------- Product → variant map (GIDs from your store) ---------- */
