@@ -870,3 +870,11 @@ input,textarea,select{font-size:max(16px,1em)}
 .pclist--con li::before{content:"–";color:var(--ink-40)}
 .proscons__media img{width:min(240px,26vw);filter:drop-shadow(0 26px 40px rgba(20,25,55,.22))}
 @media (max-width:860px){.proscons{grid-template-columns:1fr;gap:8px}.proscons__media{order:-1;text-align:center;margin-bottom:18px}.proscons__media img{width:min(60vw,220px);margin-inline:auto}}
+
+/* Tabbed full comparison */
+.cmptabs{display:inline-flex;background:var(--grey);border-radius:100px;padding:4px;gap:4px}
+.cmptab{padding:10px 22px;border-radius:100px;font-weight:600;font-size:var(--step--1);color:var(--ink-60);transition:.25s}
+.cmptab.active{background:#fff;color:var(--navy);box-shadow:var(--shadow-sm)}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table-scroll .compare-table{min-width:880px}
+.table-scroll[hidden]{display:none}
