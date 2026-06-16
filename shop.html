@@ -442,13 +442,12 @@
 <script>
 /* BetterTap — pricing models
    1) Cash: $1,280 one-time (3 yrs full service & warranty)
-   2) Installments on $1,280 base: +surcharge, then / months
-        12mo: +0.00  ·  24mo: +0.05  ·  36mo: +0.10 surcharge (per spec)
+   2) Installments: fixed monthly by term
+        12mo: $110/mo ($1,320)  ·  24mo: $60/mo ($1,440)  ·  36mo: $45/mo ($1,620)
    3) Lease: $500 upfront, then $25/mo for life (service & warranty incl.)  */
 (function(){
   var CASH = 1280;                              // pay-in-full, one-time (no term)
-  var INSTALL_BASE = 1320;                      // installments: total of the 12-month plan
-  var SURCHARGE = { 12:0, 24:0.05, 36:0.10 };   // +0.05 surcharge per additional 12 months
+  var INSTALL_MO = { 12:110, 24:60, 36:45 };    // installments: monthly payment by term
   var LEASE_UP = 500, LEASE_MO = 25;            // lease: $500 upfront + $25/mo
   var root = document.querySelector('[data-plans]');
   if(!root) return;
@@ -467,9 +466,8 @@
       noteEl.innerHTML = 'One-time payment — <strong>3 years</strong> full service &amp; warranty included.';
     } else if(plan==='installments'){
       terms.hidden = false;                       // months selector appears ONLY for Installments
-      var sur = SURCHARGE[term];
-      var total = INSTALL_BASE*(1+sur);
-      var monthly = total/term;
+      var monthly = INSTALL_MO[term];
+      var total = monthly*term;
       priceEl.textContent = usd(monthly); unitEl.textContent = '/mo';
       noteEl.innerHTML = term+' monthly payments · total '+usd(total)+'.';
     } else { // lease
