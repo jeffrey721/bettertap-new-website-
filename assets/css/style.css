@@ -1073,3 +1073,7 @@ input,textarea,select{font-size:max(16px,1em)}
 .co-prod{padding-bottom:12px}
 .co-incl{padding:12px 0;gap:6px}
 .co-totals{padding-top:12px;gap:7px}
+
+/* center icontile grids incl. the orphan last row (flex-wrap centered) */
+.icontiles--center{display:flex;flex-wrap:wrap;justify-content:center;gap:18px}
+.icontiles--center .icontile{flex:1 1 190px;max-width:240px}
