@@ -1038,3 +1038,16 @@ input,textarea,select{font-size:max(16px,1em)}
 .maze-3__side figcaption{margin-top:10px;font-size:var(--step--1);color:var(--ink-60);text-align:center}
 @media(min-width:861px){.maze-3{grid-template-columns:1.05fr 1fr .9fr}}
 @media(max-width:860px){.maze-3__side{display:none}}
+
+/* ===== batch 2: membership 3-mid-3 layout, larger eyebrow, cubes one-row ===== */
+.membership-grid{display:grid;grid-template-columns:1fr;gap:22px;align-items:center}
+.membership-col{display:flex;flex-direction:column;gap:16px}
+.membership-mid{padding:6px 0}
+.eyebrow--xl{font-size:clamp(1rem,2.4vw,1.6rem);letter-spacing:.16em;line-height:1.2}
+@media(min-width:901px){
+  .membership-grid{grid-template-columns:1fr 1.05fr 1fr;gap:clamp(24px,3vw,46px)}
+  .membership-col--l{grid-column:1;grid-row:1}
+  .membership-mid{grid-column:2;grid-row:1}
+  .membership-col--r{grid-column:3;grid-row:1}
+  .replaces__old{grid-template-columns:repeat(5,1fr)}
+}
