@@ -57,6 +57,17 @@
         <label class="co-field"><span>State</span><input type="text" name="state" id="addrState" placeholder="ST" required autocomplete="address-level1" maxlength="2" style="text-transform:uppercase" /></label>
         <label class="co-field"><span>ZIP</span><input type="text" name="zip" id="addrZip" placeholder="10001" required inputmode="numeric" autocomplete="postal-code" maxlength="5" /></label>
       </div>
+      <label class="co-check"><input type="checkbox" id="sameBilling" checked /><span>Billing address same as delivery address</span></label>
+      <div id="billingFields" hidden>
+        <label class="co-field co-addr"><span>Billing address</span>
+          <input type="text" name="billing_address" id="billAddr" placeholder="Street address" autocomplete="billing street-address" />
+        </label>
+        <div class="co-row co-row-3">
+          <label class="co-field"><span>City</span><input type="text" name="billing_city" placeholder="City" autocomplete="billing address-level2" /></label>
+          <label class="co-field"><span>State</span><input type="text" name="billing_state" placeholder="ST" maxlength="2" style="text-transform:uppercase" autocomplete="billing address-level1" /></label>
+          <label class="co-field"><span>ZIP</span><input type="text" name="billing_zip" placeholder="10001" inputmode="numeric" maxlength="5" autocomplete="billing postal-code" /></label>
+        </div>
+      </div>
       <button type="submit" class="btn btn--primary btn--lg btn--block co-place" id="placeBtn">Pay <span data-total>$1,280</span></button>
       <p class="co-trust"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 12l2.2 2.2 4.8-5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> 256-bit secure · Free shipping · 3-year warranty · 30-day guarantee</p>
       <p class="co-demo">Demo checkout — no real payment is taken. Connect Shopify/Stripe to process live orders.</p>
@@ -142,6 +153,18 @@
       DOMAINS.filter(function(d){return d.indexOf(part)===0;}).forEach(function(d){opts+='<option value="'+local+'@'+d+'">';}); }
     dlist.innerHTML=opts;
   });
+  // billing address: reveal fields only when "same as delivery" is unchecked
+  var sameBilling=document.getElementById('sameBilling'), billingFields=document.getElementById('billingFields');
+  if(sameBilling&&billingFields){
+    var billingInputs=billingFields.querySelectorAll('input');
+    function toggleBilling(){
+      var hide=sameBilling.checked;
+      billingFields.hidden=hide;
+      billingInputs.forEach(function(i){i.required=!hide;});
+    }
+    sameBilling.addEventListener('change',toggleBilling);
+    toggleBilling();
+  }
   document.getElementById('coForm').addEventListener('submit',function(e){e.preventDefault();
     if(!this.checkValidity()){this.reportValidity();return;} done();});
 
