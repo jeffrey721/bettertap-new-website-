@@ -1051,3 +1051,7 @@ input,textarea,select{font-size:max(16px,1em)}
   .membership-col--r{grid-column:3;grid-row:1}
   .replaces__old{grid-template-columns:repeat(5,1fr)}
 }
+
+/* smaller FAQ questions in the "Why we do subscriptions" section only */
+#why-subscribe .acc__q{font-size:var(--step-0);padding:18px 0}
+#why-subscribe .acc__q .pm{width:22px;height:22px}
