@@ -1093,3 +1093,23 @@ input,textarea,select{font-size:max(16px,1em)}
 #confidence .icontile h3{font-size:var(--step--1)}
 #confidence .icontile p{font-size:var(--step--2)}
 @media (max-width:560px){#confidence .icontiles{grid-template-columns:1fr}}
+
+/* ===== footer restyle: light blue->white gradient, dominant logo, bigger socials ===== */
+.footer{background:linear-gradient(180deg,#c4d9fb 0%,#e7f1ff 48%,#ffffff 100%);color:var(--navy)}
+.footer a{color:var(--ink-60)}
+.footer a:hover{color:var(--navy)}
+.footer__brand .name{font-size:1.95rem;color:var(--navy);gap:12px}
+.footer__brand img{width:56px;margin-bottom:16px}
+.footer__brand p{color:var(--ink-60)}
+.footer__col h4,.footer__news h4{color:var(--navy)}
+.footer__news p{color:var(--ink-60)}
+.footer__news .subscribe input{border:1px solid var(--line)}
+.footer__social{gap:14px;margin-top:20px}
+.footer__social a{width:50px;height:50px;background:var(--blue);color:#fff}
+.footer__social a:hover{background:var(--blue-600,#2f5fd0)}
+.footer__social a svg{width:24px;height:24px}
+.footer__bottom{border-top-color:var(--line)}
+.footer__bottom span,.footer__bottom a{color:var(--ink-60)}
+.footer__admin{background:var(--blue-050);color:var(--navy)}
+.footer__admin:hover{background:var(--blue);color:#fff}
+.footer :focus-visible{outline-color:var(--blue)}
