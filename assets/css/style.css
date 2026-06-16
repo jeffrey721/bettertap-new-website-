@@ -1080,3 +1080,16 @@ input,textarea,select{font-size:max(16px,1em)}
 
 /* "One system. Replaces all this." — larger, clearer item labels */
 .replaces .repl-item{font-size:var(--step--1);color:var(--navy);font-weight:600}
+
+/* "Confidence in every glass" — ~40% more compact + 3 tiles in one row */
+#confidence.section{padding-block:clamp(22px,3.2vw,46px)}
+#confidence h2{font-size:clamp(1.5rem,3vw,2.05rem)}
+#confidence .lede{font-size:var(--step--1);margin-top:8px}
+#confidence .figure img{max-height:300px;width:100%;object-fit:cover}
+#confidence .icontiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+#confidence .icontile{padding:13px 11px;gap:7px}
+#confidence .icontile__ic{width:36px;height:36px;border-radius:11px}
+#confidence .icontile__ic .ic{width:19px;height:19px}
+#confidence .icontile h3{font-size:var(--step--1)}
+#confidence .icontile p{font-size:var(--step--2)}
+@media (max-width:560px){#confidence .icontiles{grid-template-columns:1fr}}
