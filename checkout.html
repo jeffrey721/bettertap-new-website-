@@ -41,8 +41,8 @@
 
     <!-- minimal card form -->
     <form class="co-form" id="coForm" autocomplete="on" novalidate>
-      <label class="co-field"><span>Email</span><input type="email" name="email" placeholder="you@email.com" required inputmode="email" autocomplete="email" /></label>
-      <label class="co-field"><span>Card number</span><input type="text" name="card" placeholder="1234 1234 1234 1234" required inputmode="numeric" autocomplete="cc-number" maxlength="19" data-card /></label>
+      <label class="co-field"><span>Email</span><input type="email" name="email" id="coEmail" placeholder="you@email.com" required inputmode="email" autocomplete="email" list="emailDomains" /><datalist id="emailDomains"></datalist></label>
+      <label class="co-field"><span>Card number</span><input type="text" name="card" placeholder="1234 1234 1234 1234" required inputmode="numeric" pattern="[0-9 ]*" autocomplete="cc-number" maxlength="19" data-card /></label>
       <div class="co-row">
         <label class="co-field"><span>Expiry</span><input type="text" name="exp" placeholder="MM / YY" required inputmode="numeric" autocomplete="cc-exp" maxlength="7" /></label>
         <label class="co-field"><span>CVC</span><input type="text" name="cvc" placeholder="123" required inputmode="numeric" autocomplete="cc-csc" maxlength="4" /></label>
@@ -132,6 +132,16 @@
   // card form
   var card=document.querySelector('[data-card]');
   if(card)card.addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,16);this.value=v.replace(/(.{4})/g,'$1 ').trim();});
+  // email domain autocomplete (suggest @gmail.com etc.)
+  var emailEl=document.getElementById('coEmail'), dlist=document.getElementById('emailDomains');
+  var DOMAINS=['gmail.com','yahoo.com','outlook.com','hotmail.com','icloud.com','aol.com','live.com','proton.me'];
+  if(emailEl&&dlist)emailEl.addEventListener('input',function(){
+    var v=this.value.trim(), at=v.indexOf('@'), opts='';
+    if(at===-1){ if(v)DOMAINS.forEach(function(d){opts+='<option value="'+v+'@'+d+'">';}); }
+    else { var local=v.slice(0,at), part=v.slice(at+1).toLowerCase();
+      DOMAINS.filter(function(d){return d.indexOf(part)===0;}).forEach(function(d){opts+='<option value="'+local+'@'+d+'">';}); }
+    dlist.innerHTML=opts;
+  });
   document.getElementById('coForm').addEventListener('submit',function(e){e.preventDefault();
     if(!this.checkValidity()){this.reportValidity();return;} done();});
 
