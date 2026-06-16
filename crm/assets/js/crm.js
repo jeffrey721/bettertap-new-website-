@@ -43,9 +43,25 @@
   var AGENT = (function () {
     var a = null;
     try { a = JSON.parse(localStorage.getItem('bt_crm_agent')); } catch (e) { a = null; }
-    if (!a || !a.name) a = { name: 'Jeffrey C.', email: 'jeffrey@bettertap.com', shiftNote: '', shiftFocus: 'Mixed queue', shiftStart: new Date().toISOString() };
+    if (!a || !a.name) a = { name: 'Jeffrey Cohen', email: 'jeffrey@drinkbettertap.com', shiftNote: '', shiftFocus: 'Mixed queue', shiftStart: new Date().toISOString() };
+    // owner identity
+    if (/jeffrey/i.test(a.email || a.name || '')) { a.name = 'Jeffrey Cohen'; a.email = 'jeffrey@drinkbettertap.com'; }
     return a;
   })();
+  /* ---------- roles & permissions (demo RBAC; real RBAC must be server-side) ---------- */
+  var OWNER_EMAIL = 'jeffrey@drinkbettertap.com';
+  var ROLE_DEFS = {
+    Owner:     { label: 'Owner / Admin', views: ['dashboard','myday','pipeline','tasks','customers','orders','inventory','inbox','campaigns','social','calendar','reports','settings'], inventoryEdit: true },
+    Manager:   { label: 'Operations Manager', views: ['dashboard','myday','tasks','customers','orders','inventory','inbox','calendar','reports','settings'], inventoryEdit: true },
+    Marketing: { label: 'Marketing', views: ['dashboard','pipeline','campaigns','social','reports','settings'], inventoryEdit: false },
+    Agent:     { label: 'Customer Service Agent', views: ['dashboard','myday','tasks','customers','inbox','calendar','settings'], inventoryEdit: false }
+  };
+  function ownerRole(){ return (AGENT.email === OWNER_EMAIL) ? 'Owner' : (localStorage.getItem('bt_crm_role') || 'Agent'); }
+  var ROLE = localStorage.getItem('bt_crm_viewrole') || ownerRole();      // active (preview) role
+  function roleDef(){ return ROLE_DEFS[ROLE] || ROLE_DEFS.Agent; }
+  function can(view){ return roleDef().views.indexOf(view) > -1; }
+  function canEditInventory(){ return !!roleDef().inventoryEdit; }
+  function setRole(r){ ROLE = ROLE_DEFS[r] ? r : 'Agent'; localStorage.setItem('bt_crm_viewrole', ROLE); applyRolePermissions(); }
   var $  = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
   var el = function (tag, cls, html) { var n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; };
@@ -227,8 +243,9 @@
   }
 
   /* ================== NAVIGATION ================== */
-  var TITLES = { dashboard: 'Dashboard', myday: 'My Day', pipeline: 'Leads / Pipeline', tasks: 'Tasks', customers: 'Customers', orders: 'Orders', calendar: 'Calendar', reports: 'Reports', settings: 'Settings' };
+  var TITLES = { dashboard: 'Dashboard', myday: 'My Day', pipeline: 'Leads / Pipeline', tasks: 'Tasks', customers: 'Customers', orders: 'Orders', inventory: 'Inventory', inbox: 'Inbox', campaigns: 'Campaigns', social: 'Social', calendar: 'Calendar', reports: 'Reports', settings: 'Settings' };
   function go(view) {
+    if (!can(view)) { toast('Your role doesn’t have access to ' + (TITLES[view] || view)); view = 'dashboard'; }
     $$('.view').forEach(function (v) { v.classList.remove('active'); });
     var node = $('#view-' + view); if (!node) return;
     node.classList.add('active');
@@ -241,9 +258,13 @@
     if (view === 'tasks') renderTasks();
     if (view === 'customers') renderCustomers();
     if (view === 'orders') renderOrders();
+    if (view === 'inventory') renderInventory();
+    if (view === 'inbox') renderInbox();
+    if (view === 'campaigns') renderCampaigns();
+    if (view === 'social') renderSocial();
     if (view === 'calendar') renderCalendar();
     if (view === 'reports') renderReports();
-    if (view === 'settings') renderTeam();
+    if (view === 'settings') { renderTeam(); renderRoles(); }
     document.querySelector('.view-area').scrollTop = 0;
   }
   $$('.nav-item[data-view]').forEach(function (b) { b.addEventListener('click', function () { go(b.dataset.view); }); });
@@ -1021,7 +1042,16 @@
         '<div class="ce-snip">' + esc(ix.text) + '</div>' + transcriptLink + '</div></div>';
     }).join('') : '<div class="empty">No communications logged yet. Use the buttons above to start.</div>';
 
-    return '<div class="drawer__sec"><h4>Communications hub</h4><div class="comm-actions">' + actions + '</div></div>' +
+    var first = (c.name || '').split(/\s+/)[0];
+    var waNum = (c.phone || '').replace(/\D/g, ''); if (waNum.length === 10) waNum = '1' + waNum;
+    var waHref = 'https://wa.me/' + waNum + '?text=' + encodeURIComponent('Hi ' + first + ', it’s Better Tap — ');
+    var gmailHref = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(c.email || '') + '&su=' + encodeURIComponent('Better Tap') + '&body=' + encodeURIComponent('Hi ' + first + ',\n\n');
+    var direct = '<div class="drawer__sec"><h4>Reach out directly</h4><div class="direct-actions">' +
+      '<a class="direct-btn wa" href="' + waHref + '" target="_blank" rel="noopener"><span class="ci" style="background:#25D366"><svg viewBox="0 0 24 24" fill="none">' + CHANNELS.whatsapp.ic + '</svg></span>WhatsApp ' + esc(c.phone || '') + '</a>' +
+      '<a class="direct-btn gm" href="' + gmailHref + '" target="_blank" rel="noopener"><span class="ci" style="background:#d97706"><svg viewBox="0 0 24 24" fill="none">' + CHANNELS.email.ic + '</svg></span>Email via Gmail</a>' +
+      '</div><div class="direct-note">Opens WhatsApp / Gmail with the customer prefilled — sends from your own account.</div></div>';
+    return direct +
+      '<div class="drawer__sec"><h4>Communications hub</h4><div class="comm-actions">' + actions + '</div></div>' +
       '<div class="drawer__sec"><div class="ai-panel">' +
       '<div class="ai-panel__head"><span class="spark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Z" fill="currentColor"/></svg></span><span class="ttl">AI Status Summary</span><span class="sim">Simulated</span></div>' +
       '<div class="ai-summary">' + esc(ai.summary) +
@@ -1101,7 +1131,7 @@
   function renderTeam() {
     var team = [['Maya R.', 'Inventory Lead', 'maya@bettertap.com'], ['Devon K.', 'Sales', 'devon@bettertap.com'], ['Sara L.', 'Support', 'sara@bettertap.com'], ['Tom B.', 'Product Engineer', 'tom@bettertap.com'], ['Priya N.', 'Marketing', 'priya@bettertap.com']];
     // show the currently signed-in agent first, marked as "You"
-    var rows = '<div class="row-line">' + avatar(AGENT.name) + '<div class="gx" style="margin-left:4px"><div class="t">' + esc(AGENT.name) + ' <span class="tag" style="background:#e6f0ff;color:#1659c4">You · on shift</span></div><div class="d">' + esc(AGENT.email) + '</div></div><span class="tag">Customer Service Agent</span></div>';
+    var rows = '<div class="row-line">' + avatar(AGENT.name) + '<div class="gx" style="margin-left:4px"><div class="t">' + esc(AGENT.name) + ' <span class="tag" style="background:#e6f0ff;color:#1659c4">You · ' + (AGENT.email === OWNER_EMAIL ? 'Owner' : 'on shift') + '</span></div><div class="d">' + esc(AGENT.email) + '</div></div><span class="tag">' + esc(AGENT.email === OWNER_EMAIL ? 'Owner / Admin' : roleDef().label) + '</span></div>';
     rows += team.filter(function (m) { return m[2] !== AGENT.email; }).map(function (m) {
       return '<div class="row-line">' + avatar(m[0]) + '<div class="gx" style="margin-left:4px"><div class="t">' + esc(m[0]) + '</div><div class="d">' + esc(m[2]) + '</div></div><span class="tag">' + esc(m[1]) + '</span></div>';
     }).join('');
@@ -1161,8 +1191,211 @@
     if (dh) dh.innerHTML = 'Good day, ' + esc(AGENT.name.split(/\s+/)[0]) + ' 👋';
   }
 
+  /* ================== INVENTORY (auto-decrements from sales) ================== */
+  function getInventory() {
+    if (!DB.inventory) {
+      DB.inventory = {
+        edgeWhite: { name: 'BetterTap Edge — White', onHand: 140, kind: 'machine', reorder: 40 },
+        edgeBlack: { name: 'BetterTap Edge — Black', onHand: 80, kind: 'machine', reorder: 40 },
+        maze: { name: 'MAZE Cartridge', onHand: 620, kind: 'part', reorder: 120 },
+        uv: { name: 'UV Lamp', onHand: 300, kind: 'part', reorder: 80 }
+      };
+      save();
+    }
+    return DB.inventory;
+  }
+  // Units sold per SKU, derived from non-refunded orders (machines split by color for the demo).
+  function soldCounts() {
+    var s = { edgeWhite: 0, edgeBlack: 0, maze: 0, uv: 0 };
+    DB.orders.forEach(function (o, i) {
+      if (o.status === 'Refunded') return;
+      var p = (o.product || '').toLowerCase();
+      var isMachine = p.indexOf('bettertap') > -1;
+      if (isMachine) { if (i % 3 === 2) s.edgeBlack++; else s.edgeWhite++; }
+      if (p.indexOf('filter') > -1 || p.indexOf('maze') > -1) s.maze += 2; // 2-packs
+    });
+    return s;
+  }
+  function renderInventory() {
+    var inv = getInventory(), sold = soldCounts();
+    var canEdit = canEditInventory();
+    $('#invLock').textContent = canEdit ? '' : '🔒 View-only — only an Owner or Manager can update stock.';
+    var rb = $('#restockBtn'); if (rb) { rb.style.display = canEdit ? '' : 'none'; }
+    var keys = Object.keys(inv);
+    var machAvail = keys.filter(function (k) { return inv[k].kind === 'machine'; }).reduce(function (a, k) { return a + Math.max(0, inv[k].onHand - sold[k]); }, 0);
+    var machSold = sold.edgeWhite + sold.edgeBlack;
+    var low = keys.filter(function (k) { return (inv[k].onHand - sold[k]) <= inv[k].reorder; }).length;
+    var kpis = [
+      { lab: 'Machines available', val: machAvail, bg: '#e6f0ff', fg: '#1E6BE6' },
+      { lab: 'Machines sold', val: machSold, bg: '#e6f7ee', fg: '#0e8a52' },
+      { lab: 'Parts in stock', val: (inv.maze.onHand - sold.maze) + (inv.uv.onHand - sold.uv), bg: '#fff1e6', fg: '#d97706' },
+      { lab: 'Low-stock items', val: low, bg: low ? '#fdecec' : '#eef2ff', fg: low ? '#dc2626' : '#5b5bd6' }
+    ];
+    $('#invKpis').innerHTML = kpis.map(function (k) { return '<div class="kpi"><div class="lab">' + k.lab + '</div><div class="val" style="color:' + k.fg + '">' + k.val + '</div></div>'; }).join('');
+    var rows = keys.map(function (k) {
+      var it = inv[k], sd = sold[k] || 0, avail = Math.max(0, it.onHand - sd), isLow = avail <= it.reorder;
+      return '<tr><td><div class="nmcell"><span class="sku-dot ' + it.kind + '"></span><b>' + esc(it.name) + '</b></div></td>' +
+        '<td>' + it.onHand + '</td><td>' + sd + '</td>' +
+        '<td><span class="cell-strong" style="color:' + (isLow ? 'var(--danger,#dc2626)' : 'var(--ink-1,#1a1e36)') + '">' + avail + '</span>' + (isLow ? ' <span class="pill pill--lost" style="margin-left:6px"><span class="dot"></span>Reorder</span>' : '') + '</td>' +
+        '<td>' + (canEdit ? '<button class="btn btn--subtle inv-edit" data-sku="' + k + '">Update</button>' : '<span style="color:var(--ink-3,#8a91ad)">—</span>') + '</td></tr>';
+    }).join('');
+    $('#invTable').innerHTML = '<table class="tbl"><thead><tr><th>Item</th><th>On hand</th><th>Sold</th><th>Available</th><th></th></tr></thead><tbody>' + rows + '</tbody></table>';
+    $$('#invTable .inv-edit').forEach(function (b) { b.addEventListener('click', function () { openStockModal(b.dataset.sku); }); });
+  }
+  function openStockModal(key) {
+    if (!canEditInventory()) { toast('Only an Owner or Manager can update stock'); return; }
+    var it = getInventory()[key]; if (!it) return;
+    openModal('Update stock — ' + it.name,
+      '<div class="field"><label>On-hand quantity</label><input class="input" type="number" id="inv_qty" value="' + it.onHand + '" min="0" /></div>' +
+      '<div class="field"><label>Add restock (optional)</label><input class="input" type="number" id="inv_add" value="0" min="0" /></div>' +
+      '<p class="auth-foot" style="text-align:left">Available stock auto-decrements as orders are placed — set the true on-hand count here after a delivery or audit.</p>',
+      'Save stock', function () {
+        var q = parseInt($('#inv_qty').value, 10); if (isNaN(q) || q < 0) { $('#inv_qty').focus(); return false; }
+        var add = parseInt($('#inv_add').value, 10) || 0;
+        it.onHand = q + add; save(); renderInventory(); toast('Stock updated'); return true;
+      });
+  }
+
+  /* ================== CONNECTIONS (ad / social accounts) ================== */
+  function getConns() { try { return JSON.parse(localStorage.getItem('bt_crm_conn')) || {}; } catch (e) { return {}; } }
+  function setConn(id, v) { var c = getConns(); c[id] = v; localStorage.setItem('bt_crm_conn', JSON.stringify(c)); }
+  function connectCard(id, name, color, glyph) {
+    var on = !!getConns()[id];
+    return '<div class="conn-card"><span class="conn-ic" style="background:' + color + '">' + glyph + '</span>' +
+      '<div class="conn-meta"><div class="nm">' + esc(name) + '</div><div class="st ' + (on ? 'on' : '') + '">' + (on ? 'Connected' : 'Not connected') + '</div></div>' +
+      '<button class="btn ' + (on ? 'btn--ghost' : 'btn--primary') + ' conn-btn" data-conn="' + id + '">' + (on ? 'Disconnect' : 'Connect') + '</button></div>';
+  }
+  function wireConns(scope, after) {
+    $$(scope + ' .conn-btn').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var id = b.dataset.conn, on = !!getConns()[id];
+        setConn(id, !on); toast((on ? 'Disconnected ' : 'Connected ') + id + ' (demo)'); after();
+      });
+    });
+  }
+  /* ================== CAMPAIGNS ================== */
+  function renderCampaigns() {
+    $('#campConnect').innerHTML =
+      connectCard('meta', 'Meta Ads', '#1877F2', '<b style="color:#fff;font-family:sans-serif">f</b>') +
+      connectCard('google', 'Google Ads', '#34A853', '<b style="color:#fff;font-family:sans-serif">G</b>') +
+      connectCard('tiktok', 'TikTok Ads', '#000', '<b style="color:#fff;font-family:sans-serif">t</b>');
+    wireConns('#campConnect', renderCampaigns);
+    var conns = getConns();
+    var camps = [
+      ['meta', 'Meta', 'Summer Hydration — Conversions', 'Active', 2480, 184000, 2.4, 41],
+      ['meta', 'Meta', 'Retargeting — Cart Abandoners', 'Active', 940, 52000, 3.1, 28],
+      ['google', 'Google', 'Search — "countertop water purifier"', 'Active', 3120, 96000, 4.0, 63],
+      ['google', 'Google', 'Performance Max — US', 'Paused', 1750, 121000, 1.9, 22],
+      ['tiktok', 'TikTok', 'UGC — Pour Test', 'Active', 1290, 312000, 1.6, 19]
+    ].filter(function (c) { return conns[c[0]]; });
+    if (!camps.length) {
+      $('#campTable').innerHTML = '<div class="empty">Connect an ad account above to see its running campaigns. <b>(Demo)</b></div>';
+      return;
+    }
+    var rows = camps.map(function (c) {
+      var st = c[3] === 'Active' ? 'active' : 'churned';
+      return '<tr><td><span class="cell-strong">' + esc(c[2]) + '</span></td><td>' + esc(c[1]) + '</td>' +
+        '<td><span class="pill pill--' + st + '"><span class="dot"></span>' + c[3] + '</span></td>' +
+        '<td class="cell-strong">' + money(c[4]) + '</td><td>' + c[5].toLocaleString() + '</td><td>' + c[6] + '%</td><td>' + c[7] + '</td></tr>';
+    }).join('');
+    $('#campTable').innerHTML = '<table class="tbl"><thead><tr><th>Campaign</th><th>Platform</th><th>Status</th><th>Spend</th><th>Impressions</th><th>CTR</th><th>Conv.</th></tr></thead><tbody>' + rows + '</tbody></table>';
+  }
+  /* ================== SOCIAL ================== */
+  function renderSocial() {
+    var plats = [['instagram', 'Instagram', '#E1306C', 'IG'], ['tiktok', 'TikTok', '#000', 'TT'], ['youtube', 'YouTube', '#FF0000', 'YT'], ['linkedin', 'LinkedIn', '#0A66C2', 'in'], ['facebook', 'Facebook', '#1877F2', 'f']];
+    $('#socConnect').innerHTML = plats.map(function (p) { return connectCard(p[0], p[1], p[2], '<b style="color:#fff;font-family:sans-serif;font-size:11px">' + p[3] + '</b>'); }).join('');
+    wireConns('#socConnect', renderSocial);
+    var conns = getConns();
+    var posts = [
+      ['instagram', '#E1306C', 'IG', 'Hard water vs. purified — what’s really in your glass? 💧', '1,204 likes', '2d'],
+      ['tiktok', '#000', 'TT', 'POV: your tap water before & after MAZE 🔬', '38.4k views', '3d'],
+      ['youtube', '#FF0000', 'YT', 'BetterTap install in under 30 minutes (full walkthrough)', '6,910 views', '5d'],
+      ['linkedin', '#0A66C2', 'in', 'Why we built mineral-retention into every cartridge.', '212 reactions', '1w'],
+      ['facebook', '#1877F2', 'f', 'Refer a friend — you both get $50. ♻️', '88 reactions', '1w']
+    ].filter(function (p) { return conns[p[0]]; });
+    $('#socFeed').innerHTML = posts.length ? posts.map(function (p) {
+      return '<div class="card social-card"><div class="social-card__head"><span class="conn-ic sm" style="background:' + p[1] + '"><b style="color:#fff;font-size:10px">' + p[2] + '</b></span><span class="tm">' + p[5] + '</span></div>' +
+        '<div class="social-card__body">' + esc(p[3]) + '</div><div class="social-card__foot">' + esc(p[4]) + '</div></div>';
+    }).join('') : '<div class="empty" style="grid-column:1/-1">Connect a social profile above to pull in its recent posts. <b>(Demo)</b></div>';
+  }
+  /* ================== INBOX (website live chat) ================== */
+  function getChats() {
+    if (!DB.chats) {
+      function ago(m) { var d = new Date(); d.setMinutes(d.getMinutes() - m); return d.toISOString(); }
+      DB.chats = [
+        { id: uid('ch'), name: 'Visitor · Austin, TX', unread: 1, msgs: [{ f: 'them', t: 'Hi! Does the Edge fit under a standard cabinet?', w: ago(6) }] },
+        { id: uid('ch'), name: 'Olivia Bennett', unread: 0, msgs: [{ f: 'them', t: 'Is financing available on the Pro?', w: ago(90) }, { f: 'me', t: 'Yes — 12 and 24-month plans. Want the breakdown?', w: ago(88) }, { f: 'them', t: 'Yes please!', w: ago(40) }] },
+        { id: uid('ch'), name: 'Visitor · Denver, CO', unread: 2, msgs: [{ f: 'them', t: 'How often do filters need changing?', w: ago(20) }, { f: 'them', t: 'and is install included?', w: ago(19) }] }
+      ];
+      save();
+    }
+    return DB.chats;
+  }
+  var activeChat = null;
+  function renderInbox() {
+    var chats = getChats();
+    if (!activeChat || !chats.find(function (c) { return c.id === activeChat; })) activeChat = chats[0] && chats[0].id;
+    var list = chats.map(function (c) {
+      var last = c.msgs[c.msgs.length - 1];
+      return '<button class="chat-li' + (c.id === activeChat ? ' active' : '') + '" data-cid="' + c.id + '">' + avatar(c.name, 'avatar--sm') +
+        '<div class="ci"><div class="nm">' + esc(c.name) + (c.unread ? '<span class="unread">' + c.unread + '</span>' : '') + '</div><div class="snip">' + esc(last ? last.t : '') + '</div></div></button>';
+    }).join('');
+    var cur = chats.find(function (c) { return c.id === activeChat; });
+    var thread = cur ? cur.msgs.map(function (m) { return '<div class="cmsg ' + (m.f === 'me' ? 'me' : 'them') + '"><div class="bub">' + esc(m.t) + '</div><div class="cw">' + relTime(m.w) + '</div></div>'; }).join('') : '';
+    $('#inbox').innerHTML =
+      '<div class="inbox__list">' + list + '</div>' +
+      '<div class="inbox__thread">' + (cur ?
+        '<div class="inbox__head">' + avatar(cur.name, 'avatar--sm') + '<b>' + esc(cur.name) + '</b><span class="tag" style="margin-left:auto">Website chat</span></div>' +
+        '<div class="inbox__msgs" id="inboxMsgs">' + thread + '</div>' +
+        '<div class="inbox__reply"><input class="input" id="chatReply" placeholder="Reply as ' + esc(AGENT.name.split(/\s+/)[0]) + '…" /><button class="btn btn--primary" id="chatSend">Send</button></div>'
+        : '<div class="empty">No conversations.</div>') + '</div>';
+    $$('#inbox .chat-li').forEach(function (b) { b.addEventListener('click', function () { var c = getChats().find(function (x) { return x.id === b.dataset.cid; }); if (c) c.unread = 0; activeChat = b.dataset.cid; save(); renderInbox(); updateInboxCount(); }); });
+    var send = $('#chatSend'), inp = $('#chatReply');
+    function doSend() { var v = inp.value.trim(); if (!v || !cur) return; cur.msgs.push({ f: 'me', t: v, w: new Date().toISOString() }); inp.value = ''; save(); renderInbox(); }
+    if (send) send.addEventListener('click', doSend);
+    if (inp) inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') doSend(); });
+    var m = $('#inboxMsgs'); if (m) m.scrollTop = m.scrollHeight;
+    updateInboxCount();
+  }
+  function updateInboxCount() {
+    if (!$('#navInboxCount')) return;
+    var n = (DB.chats || []).reduce(function (a, c) { return a + (c.unread || 0); }, 0);
+    $('#navInboxCount').textContent = n;
+  }
+
+  /* ================== ROLES / PERMISSIONS UI ================== */
+  function renderRoles() {
+    var sel = $('#roleSwitch'); if (sel) {
+      sel.innerHTML = Object.keys(ROLE_DEFS).map(function (r) { return '<option value="' + r + '"' + (r === ROLE ? ' selected' : '') + '>' + esc(ROLE_DEFS[r].label) + '</option>'; }).join('');
+      sel.onchange = function () { setRole(this.value); renderRoles(); toast('Viewing as ' + ROLE_DEFS[ROLE].label); };
+    }
+    var mtx = $('#permMatrix'); if (!mtx) return;
+    var views = ['dashboard', 'pipeline', 'tasks', 'customers', 'orders', 'inventory', 'inbox', 'campaigns', 'social', 'reports'];
+    var roles = Object.keys(ROLE_DEFS);
+    var head = '<tr><th>Area</th>' + roles.map(function (r) { return '<th>' + esc(ROLE_DEFS[r].label.split(' ')[0]) + '</th>'; }).join('') + '</tr>';
+    var body = views.map(function (v) {
+      return '<tr><td>' + (TITLES[v] || v) + '</td>' + roles.map(function (r) {
+        var ok = ROLE_DEFS[r].views.indexOf(v) > -1;
+        return '<td style="text-align:center;color:' + (ok ? '#16a34a' : '#cbd2e0') + '">' + (ok ? '✓' : '—') + '</td>';
+      }).join('') + '</tr>';
+    }).join('');
+    var invRow = '<tr><td>Edit inventory</td>' + roles.map(function (r) { var ok = ROLE_DEFS[r].inventoryEdit; return '<td style="text-align:center;color:' + (ok ? '#16a34a' : '#cbd2e0') + '">' + (ok ? '✓' : '—') + '</td>'; }).join('') + '</tr>';
+    mtx.innerHTML = '<table class="tbl perm-tbl" style="margin-top:14px"><thead>' + head + '</thead><tbody>' + body + invRow + '</tbody></table>';
+  }
+  function applyRolePermissions() {
+    $$('.nav-item[data-view]').forEach(function (b) { b.style.display = can(b.dataset.view) ? '' : 'none'; });
+    var opsVisible = can('inventory') || can('inbox');
+    var mktVisible = can('campaigns') || can('social');
+    if ($('#navlblOps')) $('#navlblOps').style.display = opsVisible ? '' : 'none';
+    if ($('#navlblMkt')) $('#navlblMkt').style.display = mktVisible ? '' : 'none';
+    if ($('#sbRole')) $('#sbRole').textContent = roleDef().label;
+    var active = $('.view.active'); if (active && !can(active.id.replace('view-', '')) && active.id !== 'view-settings') go('dashboard');
+  }
+
   /* ================== INIT ================== */
   applyAgent();
+  applyRolePermissions();
+  getInventory(); getChats(); updateInboxCount();
   renderDashboard();
   renderMyDay();      // populates the My Day nav badge count
 })();
