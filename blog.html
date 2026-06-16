@@ -4,8 +4,16 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Blog — Better Tap</title>
-<meta name="description" content="Stories, tips and science on better water and better living — from the team behind BetterTap." />
+<meta name="description" content="Clear, original water education from Better Tap — what's in your tap, lead and PFAS, why minerals matter, UV-C freshness, and caring for your MAZE cartridge." />
 <meta name="theme-color" content="#141937" />
+<meta property="og:title" content="Blog — Better Tap" />
+<meta property="og:description" content="Clear, original water education from Better Tap — what's in your tap, lead and PFAS, why minerals matter, UV-C freshness, and caring for your MAZE cartridge." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="assets/img/edge-poster.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Blog — Better Tap" />
+<meta name="twitter:description" content="Clear, original water education from Better Tap — what's in your tap, lead and PFAS, why minerals matter, UV-C freshness, and caring for your MAZE cartridge." />
+<meta name="twitter:image" content="assets/img/edge-poster.jpg" />
 <link rel="icon" type="image/png" href="assets/img/bmark-white.png" />
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -56,36 +64,125 @@
     </div>
   </section>
 
-  <!-- ===== FEATURED ARTICLE ===== -->
+  <!-- ===== FILTER + GRID ===== -->
   <section class="section sec-cream" style="padding-top:0">
     <div class="wrap">
-      <article class="maxw-prose" style="margin-inline:auto;background:#fff;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow)">
-        <img src="assets/img/family-counter.jpg" alt="Pouring a glass of filtered water at the kitchen counter" style="width:100%;height:clamp(220px,32vw,360px);object-fit:cover;display:block" />
-        <div style="padding:clamp(24px,4vw,48px)">
-          <p class="eyebrow" data-rise>Water 101 · 5 min read</p>
-          <h2 class="mt-s" data-rise>What's really in your tap water — and what to do about it</h2>
-          <p class="lede mt-s" data-rise>Most tap water in the U.S. is treated to be safe to drink. But "safe to drink" and "what you'd choose to drink" aren't always the same thing. Here's a clear, no-scare-tactics look at what can travel through your pipes — and how a good filter changes the glass in your hand.</p>
 
-          <h3 class="mt-l" data-rise style="font-size:var(--step-1)">Treated at the plant isn't the same as clean at the tap</h3>
-          <p class="mt-s" data-rise style="color:var(--ink-60)">Your local utility treats water before it leaves the facility. The catch is the journey afterward: water can pick up traces of metals like lead from older service lines and home plumbing, plus chlorine and other byproducts left over from disinfection. None of that shows up by looking at the glass.</p>
+      <!-- Category filter chips -->
+      <div class="blogfilters" data-rise>
+        <button class="blogfilter is-active" data-cat="All">All</button>
+        <button class="blogfilter" data-cat="Water 101">Water 101</button>
+        <button class="blogfilter" data-cat="Health">Health</button>
+        <button class="blogfilter" data-cat="Sustainability">Sustainability</button>
+        <button class="blogfilter" data-cat="Technology">Technology</button>
+        <button class="blogfilter" data-cat="Home">Home</button>
+        <button class="blogfilter" data-cat="Guides">Guides</button>
+      </div>
 
-          <h3 class="mt-l" data-rise style="font-size:var(--step-1)">The contaminants worth knowing</h3>
-          <p class="mt-s" data-rise style="color:var(--ink-60)">A handful come up again and again in water reports: lead, chlorine and its byproducts, PFAS ("forever chemicals"), microplastics, and trace pharmaceuticals and hormones. They're usually present at low levels — but many people would rather not drink them at all, especially with kids in the house.</p>
+      <!-- Post grid -->
+      <div class="bloggrid mt-l" id="blogGrid">
 
-          <h3 class="mt-l" data-rise style="font-size:var(--step-1)">Why we keep the minerals</h3>
-          <p class="mt-s" data-rise style="color:var(--ink-60)">Here's where filtration gets interesting. Reverse-osmosis systems strip nearly everything out — including the calcium, magnesium and potassium that make water taste good and do your body good. BetterTap's MAZE filtration is built to do the opposite: remove what's harmful while keeping the healthy minerals in. Cleaner water that still tastes like water.</p>
-
-          <h3 class="mt-l" data-rise style="font-size:var(--step-1)">A simple next step</h3>
-          <p class="mt-s" data-rise style="color:var(--ink-60)">Start by reading your local water-quality report — then decide what you want out of your glass. If "remove the bad, keep the good, and skip the bottled-water runs" sounds right, that's exactly what BetterTap is for.</p>
-
-          <div class="mt-l" data-rise style="display:flex;gap:12px;flex-wrap:wrap">
-            <a href="science.html#water-report" class="btn btn--primary">Check your tap water</a>
-            <a href="shop.html" class="btn btn--ghost">Shop BetterTap</a>
+        <article class="postcard" data-cat="Water 101" data-rise>
+          <a class="postcard__media" href="blog-whats-in-your-tap-water.html">
+            <img src="assets/img/family-counter.jpg" alt="Filling a glass with water at the kitchen counter" loading="lazy" />
+            <span class="postcard__tag">Water 101</span>
+          </a>
+          <div class="postcard__body">
+            <h2 class="postcard__title"><a href="blog-whats-in-your-tap-water.html">What's really in your city tap water</a></h2>
+            <p class="postcard__excerpt">"Safe to drink" and "what you'd choose to drink" aren't always the same glass.</p>
+            <a class="postcard__more" href="blog-whats-in-your-tap-water.html">Read more</a>
           </div>
-        </div>
-      </article>
+        </article>
 
-      <p class="center mt-l" data-rise style="color:var(--ink-40)">More stories on the way — subscribe below and we'll send the next one straight to your inbox.</p>
+        <article class="postcard" data-cat="Water 101" data-rise>
+          <a class="postcard__media" href="blog-lead-and-older-pipes.html">
+            <img src="assets/img/filter-stages.jpg" alt="Close-up of water purification stages" loading="lazy" />
+            <span class="postcard__tag">Water 101</span>
+          </a>
+          <div class="postcard__body">
+            <h2 class="postcard__title"><a href="blog-lead-and-older-pipes.html">Lead and older pipes: what every homeowner should know</a></h2>
+            <p class="postcard__excerpt">Lead rarely starts at the plant — it joins the journey through older service lines.</p>
+            <a class="postcard__more" href="blog-lead-and-older-pipes.html">Read more</a>
+          </div>
+        </article>
+
+        <article class="postcard" data-cat="Water 101" data-rise>
+          <a class="postcard__media" href="blog-pfas-explained.html">
+            <img src="assets/img/glass-fill.jpg" alt="A clear glass being filled with water" loading="lazy" />
+            <span class="postcard__tag">Water 101</span>
+          </a>
+          <div class="postcard__body">
+            <h2 class="postcard__title"><a href="blog-pfas-explained.html">PFAS, explained: the 'forever chemicals' in everyday water</a></h2>
+            <p class="postcard__excerpt">Why a family of man-made chemicals earned the nickname that won't wash off.</p>
+            <a class="postcard__more" href="blog-pfas-explained.html">Read more</a>
+          </div>
+        </article>
+
+        <article class="postcard" data-cat="Health" data-rise>
+          <a class="postcard__media" href="blog-why-minerals-belong-in-water.html">
+            <img src="assets/img/mineral-ca.jpg" alt="Calcium mineral illustration" loading="lazy" />
+            <span class="postcard__tag">Health</span>
+          </a>
+          <div class="postcard__body">
+            <h2 class="postcard__title"><a href="blog-why-minerals-belong-in-water.html">Why minerals belong in your water</a></h2>
+            <p class="postcard__excerpt">Calcium, magnesium and potassium are the reason good water tastes like water.</p>
+            <a class="postcard__more" href="blog-why-minerals-belong-in-water.html">Read more</a>
+          </div>
+        </article>
+
+        <article class="postcard" data-cat="Sustainability" data-rise>
+          <a class="postcard__media" href="blog-real-cost-of-bottled-water.html">
+            <img src="assets/img/bottles-stack.jpg" alt="A stack of single-use plastic water bottles" loading="lazy" />
+            <span class="postcard__tag">Sustainability</span>
+          </a>
+          <div class="postcard__body">
+            <h2 class="postcard__title"><a href="blog-real-cost-of-bottled-water.html">The real cost of bottled water</a></h2>
+            <p class="postcard__excerpt">Add up the cases, the cents-per-ounce and the plastic — the math is surprising.</p>
+            <a class="postcard__more" href="blog-real-cost-of-bottled-water.html">Read more</a>
+          </div>
+        </article>
+
+        <article class="postcard" data-cat="Technology" data-rise>
+          <a class="postcard__media" href="blog-how-uv-c-keeps-water-fresh.html">
+            <img src="assets/img/uv-poster.jpg" alt="UV-C light guarding purified water" loading="lazy" />
+            <span class="postcard__tag">Technology</span>
+          </a>
+          <div class="postcard__body">
+            <h2 class="postcard__title"><a href="blog-how-uv-c-keeps-water-fresh.html">How UV-C keeps purified water fresh</a></h2>
+            <p class="postcard__excerpt">A short burst of invisible light, working quietly between every pour.</p>
+            <a class="postcard__more" href="blog-how-uv-c-keeps-water-fresh.html">Read more</a>
+          </div>
+        </article>
+
+        <article class="postcard" data-cat="Home" data-rise>
+          <a class="postcard__media" href="blog-hard-water-vs-purified-water.html">
+            <img src="assets/img/kettle-bottle.png" alt="A kettle beside a reusable bottle on the counter" loading="lazy" />
+            <span class="postcard__tag">Home</span>
+          </a>
+          <div class="postcard__body">
+            <h2 class="postcard__title"><a href="blog-hard-water-vs-purified-water.html">Hard water vs. purified water at home</a></h2>
+            <p class="postcard__excerpt">Limescale, cloudy ice and dull tea — what hard water does, and what changes.</p>
+            <a class="postcard__more" href="blog-hard-water-vs-purified-water.html">Read more</a>
+          </div>
+        </article>
+
+        <article class="postcard" data-cat="Guides" data-rise>
+          <a class="postcard__media" href="blog-caring-for-your-maze-cartridge.html">
+            <img src="assets/img/dispense.jpg" alt="Dispensing purified water from BetterTap" loading="lazy" />
+            <span class="postcard__tag">Guides</span>
+          </a>
+          <div class="postcard__body">
+            <h2 class="postcard__title"><a href="blog-caring-for-your-maze-cartridge.html">Caring for your MAZE cartridge</a></h2>
+            <p class="postcard__excerpt">A few simple habits keep every pour clean for the full six months.</p>
+            <a class="postcard__more" href="blog-caring-for-your-maze-cartridge.html">Read more</a>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Pagination -->
+      <nav class="blogpager" id="blogPager" aria-label="Blog pages"></nav>
+
     </div>
   </section>
 
@@ -126,5 +223,78 @@
 </footer>
 
 <script src="assets/js/main.js"></script>
+<!-- ===== Blog: category filter + 6-per-page pagination (vanilla, self-contained) ===== -->
+<script>
+(function(){
+  var grid = document.getElementById('blogGrid');
+  var pager = document.getElementById('blogPager');
+  if(!grid || !pager) return;
+
+  var PER_PAGE = 6;
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.blogfilter'));
+  var cards = Array.prototype.slice.call(grid.querySelectorAll('.postcard'));
+  var currentCat = 'All';
+  var currentPage = 1;
+
+  function matches(card){
+    return currentCat === 'All' || card.getAttribute('data-cat') === currentCat;
+  }
+
+  function render(){
+    var visible = cards.filter(matches);
+    var pages = Math.max(1, Math.ceil(visible.length / PER_PAGE));
+    if(currentPage > pages) currentPage = pages;
+    var start = (currentPage - 1) * PER_PAGE;
+    var end = start + PER_PAGE;
+
+    // show/hide cards by filtered + paged position
+    cards.forEach(function(card){ card.style.display = 'none'; });
+    visible.forEach(function(card, i){
+      card.style.display = (i >= start && i < end) ? '' : 'none';
+    });
+
+    buildPager(pages);
+  }
+
+  function buildPager(pages){
+    pager.innerHTML = '';
+    if(pages <= 1) return;
+
+    var prev = document.createElement('button');
+    prev.textContent = 'Prev';
+    prev.disabled = currentPage === 1;
+    prev.addEventListener('click', function(){ if(currentPage > 1){ currentPage--; render(); } });
+    pager.appendChild(prev);
+
+    for(var p = 1; p <= pages; p++){
+      (function(n){
+        var b = document.createElement('button');
+        b.textContent = String(n);
+        if(n === currentPage) b.className = 'is-active';
+        b.addEventListener('click', function(){ currentPage = n; render(); });
+        pager.appendChild(b);
+      })(p);
+    }
+
+    var next = document.createElement('button');
+    next.textContent = 'Next';
+    next.disabled = currentPage === pages;
+    next.addEventListener('click', function(){ if(currentPage < pages){ currentPage++; render(); } });
+    pager.appendChild(next);
+  }
+
+  chips.forEach(function(chip){
+    chip.addEventListener('click', function(){
+      chips.forEach(function(c){ c.classList.remove('is-active'); });
+      chip.classList.add('is-active');
+      currentCat = chip.getAttribute('data-cat');
+      currentPage = 1;
+      render();
+    });
+  });
+
+  render();
+})();
+</script>
 </body>
 </html>
