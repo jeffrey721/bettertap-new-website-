@@ -994,3 +994,23 @@ input,textarea,select{font-size:max(16px,1em)}
 .sched-win small{font-weight:500;color:var(--ink-40);font-size:var(--step--2)}
 .sched-win.active{border-color:var(--blue);background:var(--blue-050);color:var(--blue-600)}
 @media (max-width:440px){.co-row-3{grid-template-columns:1fr}}
+
+/* MAZE 'how it works' — 70% content / 30% image */
+.maze-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,3fr);gap:clamp(24px,3vw,52px);align-items:center}
+.maze-grid__media img{width:100%;border-radius:18px;background:#fff;box-shadow:var(--shadow);display:block}
+.steps-row.maze-steps{grid-template-columns:repeat(3,1fr)}
+@media (max-width:900px){.maze-grid{grid-template-columns:1fr}.maze-grid__media{max-width:340px;margin-inline:auto}.steps-row.maze-steps{grid-template-columns:repeat(2,1fr)}}
+
+/* hero: continuous pour illusion on the front machine */
+.phero__machine{position:relative;display:inline-flex}
+.phero__pour{position:absolute;left:49.5%;top:39%;transform:translateX(-50%);width:5px;height:15%;z-index:2;pointer-events:none;
+  border-radius:3px;overflow:hidden;opacity:.8;filter:blur(.4px);
+  background:linear-gradient(180deg,rgba(175,214,247,.95),rgba(130,190,238,.55));
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent)}
+.phero__pour::after{content:"";position:absolute;inset:-6px 0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.7) 0 2px,transparent 2px 7px);animation:pourFlow .45s linear infinite}
+.phero__splash{position:absolute;left:49.5%;top:52%;transform:translateX(-50%);width:13%;height:3.4%;z-index:2;pointer-events:none;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.75),rgba(175,214,247,.2) 55%,transparent 72%);animation:pourSplash 1.5s ease-in-out infinite}
+@keyframes pourFlow{to{transform:translateY(7px)}}
+@keyframes pourSplash{0%,100%{transform:translateX(-50%) scale(.85);opacity:.45}50%{transform:translateX(-50%) scale(1.12);opacity:.85}}
+@media (max-width:760px){.phero__pour,.phero__splash{display:none}}
+@media (prefers-reduced-motion:reduce){.phero__pour::after,.phero__splash{animation:none}}
