@@ -515,13 +515,19 @@ section.sec-dark{background:linear-gradient(180deg,rgba(20,25,55,0) 0%,var(--nav
 /* =================================================================
    Persistent "Buy" button (every page, always visible)
    ================================================================= */
+/* shaped like the BetterTap unit: domed top, tapered base, blue gradient + white gloss */
 .buybar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:700;
-  display:inline-flex;align-items:center;gap:10px;background:var(--blue);color:#fff;font-weight:700;
-  padding:13px 22px;border-radius:100px;box-shadow:0 16px 40px -14px rgba(30,107,230,.8);
-  transition:transform .3s var(--ease),background .3s;font-size:var(--step--1)}
-.buybar:hover{transform:translateX(-50%) translateY(-3px);background:var(--blue-600);color:#fff}
-.buybar svg{width:17px;height:17px}
-.buybar b{background:rgba(255,255,255,.22);padding:2px 9px;border-radius:100px;font-size:var(--step--2)}
+  display:inline-flex;align-items:center;gap:11px;color:#fff;font-weight:700;
+  padding:14px 24px 12px;border-radius:26px 26px 12px 12px;
+  background:linear-gradient(158deg,var(--blue-bright) 0%,var(--blue) 52%,var(--blue-600) 100%);
+  box-shadow:0 18px 44px -14px rgba(30,107,230,.85),inset 0 2px 0 rgba(255,255,255,.6),inset 0 -3px 8px rgba(20,25,55,.2);
+  transition:transform .3s var(--ease),box-shadow .3s,filter .3s;font-size:var(--step--1);overflow:hidden}
+.buybar::before{content:"";position:absolute;top:0;left:8%;right:8%;height:34%;border-radius:0 0 60% 60%;
+  background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,0));pointer-events:none}
+.buybar>*{position:relative;z-index:1}
+.buybar:hover{transform:translateX(-50%) translateY(-3px);filter:brightness(1.05);box-shadow:0 22px 50px -14px rgba(30,107,230,.9),inset 0 2px 0 rgba(255,255,255,.6)}
+.buybar svg{width:18px;height:20px}
+.buybar b{background:rgba(255,255,255,.26);padding:3px 10px;border-radius:100px;font-size:var(--step--2);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
 @media (max-width:560px){.buybar{left:12px;right:12px;transform:none;justify-content:center}.buybar:hover{transform:translateY(-3px)}}
 
 /* =================================================================
@@ -958,3 +964,15 @@ input,textarea,select{font-size:max(16px,1em)}
 
 /* tighter vertical rhythm where sections should sit closer (keeps gradient flow) */
 .section--snug{padding-top:clamp(30px,4vw,56px);padding-bottom:clamp(30px,4vw,56px)}
+
+/* 6 icon tiles: one row on desktop, two rows (3-up) on tablet/mobile */
+.icontiles--6{grid-template-columns:repeat(6,1fr)}
+@media (max-width:1100px){.icontiles--6{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:560px){
+  .icontiles--6{grid-template-columns:repeat(3,1fr);gap:10px}
+  .icontiles--6 .icontile{padding:14px 10px;gap:8px}
+  .icontiles--6 .icontile h3{font-size:var(--step--1)}
+  .icontiles--6 .icontile p{font-size:var(--step--2)}
+  .icontiles--6 .icontile__ic{width:40px;height:40px}
+  .icontiles--6 .icontile__ic .ic{width:22px;height:22px}
+}
