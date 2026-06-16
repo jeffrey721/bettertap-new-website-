@@ -87,32 +87,6 @@
     });
   }
 
-  /* ---- Magnetic custom cursor (desktop, fine pointer, motion-allowed) ---- */
-  if (!isApp && !reduce && matchMedia('(pointer:fine)').matches && innerWidth > 1100) {
-    var cur = document.createElement('div'); cur.className = 'cursor'; cur.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(cur); document.body.classList.add('cursor-on');
-    var cmx = innerWidth / 2, cmy = innerHeight / 2, ccx = cmx, ccy = cmy;
-    addEventListener('mousemove', function (e) { cmx = e.clientX; cmy = e.clientY; }, { passive: true });
-    addEventListener('mousedown', function () { cur.classList.add('is-down'); });
-    addEventListener('mouseup', function () { cur.classList.remove('is-down'); });
-    (function cloop() {
-      ccx += (cmx - ccx) * 0.2; ccy += (cmy - ccy) * 0.2;
-      cur.style.transform = 'translate(' + ccx + 'px,' + ccy + 'px) translate(-50%,-50%)';
-      requestAnimationFrame(cloop);
-    })();
-    document.querySelectorAll('a,button,.btn,.iconchip,.acc__q,.swatch,.plan-tab,.term,[data-thumb],.blogfilter,input,textarea,select').forEach(function (el) {
-      el.addEventListener('mouseenter', function () { cur.classList.add('is-hover'); });
-      el.addEventListener('mouseleave', function () { cur.classList.remove('is-hover'); });
-    });
-    document.querySelectorAll('.btn').forEach(function (b) {
-      b.addEventListener('mousemove', function (e) {
-        var r = b.getBoundingClientRect();
-        b.style.transform = 'translate(' + ((e.clientX - (r.left + r.width / 2)) * 0.16) + 'px,' + ((e.clientY - (r.top + r.height / 2)) * 0.22) + 'px)';
-      });
-      b.addEventListener('mouseleave', function () { b.style.transform = ''; });
-    });
-  }
-
   /* ---- Button ripple (droplet on click) ---- */
   if (!reduce) {
     document.querySelectorAll('.btn').forEach(function (b) {

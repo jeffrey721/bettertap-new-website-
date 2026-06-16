@@ -833,15 +833,13 @@ input,textarea,select{font-size:max(16px,1em)}
   .phero__img{transform:none!important}
 }
 
-/* --- Magnetic custom cursor (desktop, fine pointer, motion-allowed) --- */
-.cursor{position:fixed;top:0;left:0;width:34px;height:34px;border:1.6px solid var(--blue);border-radius:50%;
-  pointer-events:none;z-index:1200;will-change:transform,width,height;
-  transition:width .25s var(--ease),height .25s var(--ease),background .25s,border-color .25s,opacity .3s}
-.cursor::after{content:"";position:absolute;inset:50% auto auto 50%;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:var(--blue)}
-.cursor.is-hover{width:56px;height:56px;background:rgba(77,151,219,.12)}
-.cursor.is-down{width:26px;height:26px}
-body.cursor-on{cursor:none}
-body.cursor-on a,body.cursor-on button,body.cursor-on .btn{cursor:none}
-body.cursor-on input,body.cursor-on textarea,body.cursor-on select,body.cursor-on [contenteditable]{cursor:auto}
-@media (max-width:1100px),(pointer:coarse){.cursor{display:none!important}body.cursor-on{cursor:auto}}
-@media (prefers-reduced-motion:reduce){.cursor{display:none!important}body.cursor-on{cursor:auto}}
+
+/* product hero — two-machine pairing (front + side profile) */
+.phero__stage--pair{display:flex;align-items:center;justify-content:center;gap:clamp(4px,1.5vw,28px)}
+.phero__stage--pair .phero__img{height:min(50vh,540px)}
+.phero__img--side{height:min(40vh,420px);opacity:.97;filter:drop-shadow(0 30px 46px rgba(20,25,55,.2))}
+@media (max-width:760px){
+  .phero__stage--pair{gap:2px}
+  .phero__stage--pair .phero__img{height:auto;width:min(50vw,260px)}
+  .phero__img--side{height:auto;width:min(46vw,240px)}
+}
