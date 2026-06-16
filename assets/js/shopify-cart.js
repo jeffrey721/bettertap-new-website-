@@ -37,10 +37,35 @@
     'warranty':      'gid://shopify/ProductVariant/48528551641337'  // 5-Year Warranty $199
   };
 
-  var ENABLED = SHOPIFY.token !== 'YOUR_STOREFRONT_API_TOKEN' && !!SHOPIFY.domain;
+  var ENABLED = SHOPIFY.token !== 'YOUR_STOREFRONT_API_TOKEN' && !!SHOPIFY.token && !!SHOPIFY.domain;
   if (!ENABLED) {
-    console.info('[BetterTap] Shopify checkout not yet configured — using demo cart. See SHOPIFY-SETUP.md.');
-    return; // leave main.js demo behavior intact
+    /* No Storefront token yet → checkout is STILL LIVE via Shopify cart permalinks
+       (real hosted checkout, real orders, native inventory decrement — no token needed).
+       Add a Storefront token above to upgrade to the in-page cart drawer. */
+    var STORE = 'drinkbettertap.com';
+    var numId = function (gid) { return String(gid).split('/').pop(); };
+    var permalink = function (gid, q) { return 'https://' + STORE + '/cart/' + numId(gid) + ':' + (q || 1); };
+    var machineColorP = function () {
+      var sw = document.querySelector('[data-swatches] .swatch.active');
+      var name = (sw && (sw.getAttribute('data-name') || '')).toLowerCase();
+      return name.indexOf('black') !== -1 ? 'black' : 'white';
+    };
+    var keyFor = function (b) {
+      var key = b.getAttribute('data-bt-variant');
+      if (key === 'machine') key = 'machine-' + machineColorP();
+      if (key === 'bundle') key = 'bundle-' + machineColorP();
+      return PRODUCTS[key] || null;
+    };
+    document.querySelectorAll('[data-buy-now]').forEach(function (b) {
+      var go = function () { return permalink(PRODUCTS['machine-' + machineColorP()], 1); };
+      b.setAttribute('href', go());
+      b.addEventListener('click', function (e) { e.preventDefault(); e.stopImmediatePropagation(); window.location.href = go(); }, true);
+    });
+    document.querySelectorAll('[data-add-cart]').forEach(function (b) {
+      b.addEventListener('click', function (e) { var v = keyFor(b); if (!v) return; e.preventDefault(); e.stopImmediatePropagation(); window.location.href = permalink(v, 1); }, true);
+    });
+    console.info('[BetterTap] Checkout LIVE via Shopify cart permalinks. Add a Storefront token in shopify-cart.js for the in-page cart drawer.');
+    return;
   }
 
   var SDK = 'https://sdks.shopifycdn.com/js-buy-sdk/v2/latest/index.umd.min.js';
