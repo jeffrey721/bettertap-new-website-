@@ -882,3 +882,18 @@ input,textarea,select{font-size:max(16px,1em)}
 /* price reassurance line */
 .price-incl{display:inline-flex;align-items:center;gap:9px;margin:14px 0 4px;font-weight:600;color:var(--navy);font-size:var(--step--1);background:var(--blue-050);border:1px solid var(--blue-100);border-radius:100px;padding:9px 16px}
 .price-incl svg{width:20px;height:20px;color:var(--blue);flex:none}
+
+/* Shop "reduce" benefits band */
+.reduce-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,44px)}
+.reduce{display:flex;flex-direction:column;align-items:center;gap:16px}
+.reduce__ic{width:64px;height:64px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(255,255,255,.22);color:#fff}
+.reduce__ic svg,.reduce__ic .ic{width:32px;height:32px;color:#fff}
+.reduce h3{color:#fff;font-size:var(--step-1)}
+@media (max-width:760px){.reduce-grid{grid-template-columns:1fr 1fr;gap:30px 16px}}
+
+/* Specifications table inside the dropdown */
+.spectable{display:grid;gap:0}
+.specrow{display:flex;justify-content:space-between;gap:20px;padding:13px 2px;border-bottom:1px solid var(--line-soft);font-size:var(--step--1)}
+.specrow:last-child{border-bottom:0}
+.specrow span{color:var(--ink-60)}
+.specrow b{color:var(--navy);text-align:right;font-weight:600}
