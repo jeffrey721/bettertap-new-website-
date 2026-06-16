@@ -48,7 +48,15 @@
         <label class="co-field"><span>CVC</span><input type="text" name="cvc" placeholder="123" required inputmode="numeric" autocomplete="cc-csc" maxlength="4" /></label>
       </div>
       <label class="co-field"><span>Name on card</span><input type="text" name="name" placeholder="Full name" required autocomplete="cc-name" /></label>
-      <label class="co-field"><span>Delivery ZIP code</span><input type="text" name="zip" placeholder="10001" required inputmode="numeric" autocomplete="postal-code" maxlength="5" /></label>
+      <label class="co-field co-addr"><span>Delivery address</span>
+        <input type="text" name="address" id="addrInput" placeholder="Start typing your address…" required autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="addrList" />
+        <ul class="co-suggest" id="addrList" role="listbox" hidden></ul>
+      </label>
+      <div class="co-row co-row-3">
+        <label class="co-field"><span>City</span><input type="text" name="city" id="addrCity" placeholder="City" required autocomplete="address-level2" /></label>
+        <label class="co-field"><span>State</span><input type="text" name="state" id="addrState" placeholder="ST" required autocomplete="address-level1" maxlength="2" style="text-transform:uppercase" /></label>
+        <label class="co-field"><span>ZIP</span><input type="text" name="zip" id="addrZip" placeholder="10001" required inputmode="numeric" autocomplete="postal-code" maxlength="5" /></label>
+      </div>
       <button type="submit" class="btn btn--primary btn--lg btn--block co-place" id="placeBtn">Pay <span data-total>$1,280</span></button>
       <p class="co-trust"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 12l2.2 2.2 4.8-5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> 256-bit secure · Free shipping · 3-year warranty · 30-day guarantee</p>
       <p class="co-demo">Demo checkout — no real payment is taken. Connect Shopify/Stripe to process live orders.</p>
@@ -84,9 +92,22 @@
 <div class="co-done" id="coDone" hidden>
   <div class="co-done__card">
     <div class="co-done__tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4 10-10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <h2>Order confirmed</h2>
-    <p>Thanks! We've emailed your receipt and our team will reach out to schedule your installation.</p>
-    <a href="index.html" class="btn btn--primary btn--lg">Back to home</a>
+    <h2 id="coDoneTitle">Your BetterTap water is coming to you.</h2>
+    <p id="coDoneMsg">Thanks! We've emailed your receipt. Now pick a time that works and we'll handle the professional install.</p>
+    <div id="schedWrap">
+      <button type="button" class="btn btn--primary btn--lg btn--block" id="schedOpen">Choose installation date &amp; time</button>
+      <div id="schedForm" hidden style="margin-top:16px;text-align:left">
+        <label class="co-field"><span>Preferred date</span><input type="date" id="schedDate" required /></label>
+        <p style="font-weight:600;color:var(--navy);font-size:var(--step--1);margin:16px 0 8px">Time window</p>
+        <div class="sched-windows" id="schedWindows">
+          <button type="button" class="sched-win" data-win="Morning · 8am–12pm">Morning<small>8am–12pm</small></button>
+          <button type="button" class="sched-win" data-win="Afternoon · 12pm–4pm">Afternoon<small>12–4pm</small></button>
+          <button type="button" class="sched-win" data-win="Evening · 4pm–8pm">Evening<small>4–8pm</small></button>
+        </div>
+        <button type="button" class="btn btn--primary btn--lg btn--block" id="schedConfirm" style="margin-top:18px">Confirm installation</button>
+      </div>
+    </div>
+    <a href="index.html" class="btn btn--ghost btn--lg btn--block" style="margin-top:12px">Back to home</a>
   </div>
 </div>
 
