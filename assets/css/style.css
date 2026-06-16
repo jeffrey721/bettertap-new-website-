@@ -976,3 +976,9 @@ input,textarea,select{font-size:max(16px,1em)}
   .icontiles--6 .icontile__ic{width:40px;height:40px}
   .icontiles--6 .icontile__ic .ic{width:22px;height:22px}
 }
+
+/* MAZE step: number + descriptive icon side by side */
+.pstep__top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.pstep__top .n{margin-bottom:0}
+.pstep__ic{width:34px;height:34px;border-radius:9px;background:var(--blue-050);display:grid;place-items:center;flex:none}
+.pstep__ic .ic{width:20px;height:20px;color:var(--blue)}
