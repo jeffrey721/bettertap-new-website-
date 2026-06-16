@@ -943,6 +943,7 @@ input,textarea,select{font-size:max(16px,1em)}
 .co-totals>div{display:flex;justify-content:space-between;font-size:var(--step--1);color:var(--ink-60)}
 .co-total{font-size:var(--step-0)!important;font-weight:700;color:var(--navy)!important;padding-top:10px;border-top:1px solid var(--line-soft)}
 /* success */
+.co-done[hidden]{display:none}
 .co-done{position:fixed;inset:0;z-index:1200;display:grid;place-items:center;padding:20px;background:rgba(20,25,55,.6);backdrop-filter:blur(8px)}
 .co-done__card{background:#fff;border-radius:var(--radius-lg);padding:clamp(30px,5vw,52px);text-align:center;max-width:440px;box-shadow:0 40px 90px -30px rgba(20,25,55,.6);animation:promoPop .5s var(--ease)}
 .co-done__tick{width:72px;height:72px;border-radius:50%;background:var(--blue-050);color:var(--blue);display:grid;place-items:center;margin:0 auto 18px}
@@ -954,3 +955,6 @@ input,textarea,select{font-size:max(16px,1em)}
 }
 @media (max-width:440px){.co-express{grid-template-columns:1fr}.co-row{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.co-wallet:hover{transform:none}.co-done__card{animation:none}}
+
+/* tighter vertical rhythm where sections should sit closer (keeps gradient flow) */
+.section--snug{padding-top:clamp(30px,4vw,56px);padding-bottom:clamp(30px,4vw,56px)}

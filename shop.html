@@ -125,8 +125,8 @@
           </div>
 
           <div class="pdp__buy">
-            <button class="btn btn--primary btn--lg" data-add-cart>Add to cart</button>
-            <a href="#" class="btn btn--navy btn--lg">Buy now</a>
+            <a href="checkout.html" class="btn btn--primary btn--lg" data-buy-now>Buy now</a>
+            <button class="btn btn--ghost btn--lg" data-add-cart>Add to cart</button>
           </div>
 
           <p class="pdp__fine">Free shipping · Professional installation · 3-year warranty</p>
@@ -637,6 +637,8 @@
       priceEl.textContent = usd0(LEASE_MO); unitEl.textContent = '/mo';
       noteEl.innerHTML = '<strong>'+usd0(LEASE_UP)+'</strong> upfront, then <strong>'+usd0(LEASE_MO)+'/mo</strong> — service &amp; warranty included, for as long as you lease.';
     }
+    var qp = plan==='installments' ? ('?plan=installments&term='+term) : ('?plan='+plan);
+    document.querySelectorAll('[data-buy-now]').forEach(function(a){ a.setAttribute('href','checkout.html'+qp); });
   }
   root.querySelectorAll('.plan-tab').forEach(function(b){
     b.addEventListener('click', function(){
