@@ -1077,3 +1077,6 @@ input,textarea,select{font-size:max(16px,1em)}
 /* center icontile grids incl. the orphan last row (flex-wrap centered) */
 .icontiles--center{display:flex;flex-wrap:wrap;justify-content:center;gap:18px}
 .icontiles--center .icontile{flex:1 1 190px;max-width:240px}
+
+/* "One system. Replaces all this." — larger, clearer item labels */
+.replaces .repl-item{font-size:var(--step--1);color:var(--navy);font-weight:600}
