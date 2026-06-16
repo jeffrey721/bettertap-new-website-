@@ -444,12 +444,12 @@
 /* BetterTap — pricing models
    1) Cash: $1,280 one-time (3 yrs full service & warranty)
    2) Installments on $1,280 base: +surcharge, then / months
-        12mo: +5%  ·  24mo: +10%  ·  36mo: no surcharge (per spec)
+        12mo: +0.00  ·  24mo: +0.05  ·  36mo: +0.10 surcharge (per spec)
    3) Lease: $500 upfront, then $25/mo for life (service & warranty incl.)  */
 (function(){
   var CASH = 1280;                              // pay-in-full, one-time (no term)
   var INSTALL_BASE = 1320;                      // installments: total of the 12-month plan
-  var SURCHARGE = { 12:0, 24:0.05, 36:0.10 };   // +5% for every additional 12 months
+  var SURCHARGE = { 12:0, 24:0.05, 36:0.10 };   // +0.05 surcharge per additional 12 months
   var LEASE_UP = 500, LEASE_MO = 25;            // lease: $500 upfront + $25/mo
   var root = document.querySelector('[data-plans]');
   if(!root) return;
