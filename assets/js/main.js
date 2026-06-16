@@ -195,6 +195,26 @@
         s.querySelectorAll('.swatch').forEach(function(x){x.classList.remove('active');});
         sw.classList.add('active');
         var lbl=document.querySelector('[data-swatch-label]'); if(lbl&&sw.dataset.name)lbl.textContent=sw.dataset.name;
+        // swap the product gallery to this colorway's images
+        var imgs=(sw.dataset.imgs||'').split(',').filter(Boolean);
+        var g=document.querySelector('[data-gallery]');
+        if(imgs.length && g){
+          var main=g.querySelector('[data-gallery-main] img');
+          if(main) main.src=imgs[0];
+          var thumbs=g.querySelector('.pdp__thumbs');
+          if(thumbs){
+            thumbs.innerHTML=imgs.map(function(src,i){
+              return '<button class="'+(i===0?'active':'')+'" data-thumb="'+src+'" aria-label="View '+(i+1)+'"><img src="'+src+'" alt="" loading="lazy"></button>';
+            }).join('');
+            thumbs.querySelectorAll('[data-thumb]').forEach(function(t){
+              t.addEventListener('click', function(){
+                thumbs.querySelectorAll('[data-thumb]').forEach(function(x){x.classList.remove('active');});
+                t.classList.add('active');
+                if(main) main.src=t.getAttribute('data-thumb');
+              });
+            });
+          }
+        }
       });
     });
   });
