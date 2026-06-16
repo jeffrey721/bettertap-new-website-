@@ -632,3 +632,54 @@ table.tbl td .nmcell b{color:var(--ink);font-weight:600}
   .page-head .right{width:100%}
   .comm-actions{grid-template-columns:repeat(3,1fr)}
 }
+
+/* ============ added: inventory / campaigns / social / inbox / roles ============ */
+.sku-dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:9px;flex:none}
+.sku-dot.machine{background:var(--blue)} .sku-dot.part{background:var(--warn)}
+
+/* connect cards (ad + social accounts) */
+.connect-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:18px}
+.conn-card{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow-sm)}
+.conn-ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;flex:none}
+.conn-ic.sm{width:26px;height:26px;border-radius:7px}
+.conn-meta{flex:1;min-width:0}.conn-meta .nm{font-weight:600;color:var(--ink)}
+.conn-meta .st{font-size:12px;color:var(--ink-3)}.conn-meta .st.on{color:var(--ok)}
+.conn-btn{flex:none;padding:7px 14px;font-size:13px}
+
+/* social feed */
+.social-feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.social-card{padding:0;overflow:hidden}
+.social-card__head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line-soft)}
+.social-card__head .tm{margin-left:auto;color:var(--ink-3);font-size:12px}
+.social-card__body{padding:16px;color:var(--ink);font-size:14px;line-height:1.45;min-height:74px}
+.social-card__foot{padding:10px 16px;border-top:1px solid var(--line-soft);color:var(--ink-2);font-size:13px;font-weight:600}
+
+/* direct contact (customer drawer) */
+.direct-actions{display:flex;gap:10px;flex-wrap:wrap}
+.direct-btn{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:11px;padding:9px 13px;font-weight:600;font-size:13px;color:var(--ink);background:var(--panel)}
+.direct-btn:hover{border-color:var(--blue);box-shadow:var(--shadow-sm)}
+.direct-btn .ci{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;flex:none}
+.direct-btn .ci svg{width:15px;height:15px;color:#fff}
+.direct-note{font-size:12px;color:var(--ink-3);margin-top:8px}
+
+/* inbox */
+.inbox{display:grid;grid-template-columns:300px 1fr;gap:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md);min-height:460px}
+.inbox__list{border-right:1px solid var(--line);overflow-y:auto;max-height:600px}
+.chat-li{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line-soft);padding:13px 14px;cursor:pointer}
+.chat-li:hover{background:var(--bg)} .chat-li.active{background:#eef4ff}
+.chat-li .ci{min-width:0;flex:1}.chat-li .nm{font-weight:600;color:var(--ink);font-size:14px;display:flex;align-items:center;gap:6px}
+.chat-li .snip{color:var(--ink-3);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chat-li .unread{background:var(--blue);color:#fff;font-size:11px;border-radius:10px;padding:0 6px;line-height:16px;min-width:16px;text-align:center}
+.inbox__thread{display:flex;flex-direction:column}
+.inbox__head{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);font-weight:600;color:var(--ink)}
+.inbox__msgs{flex:1;overflow-y:auto;max-height:430px;padding:18px;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
+.cmsg{max-width:74%;display:flex;flex-direction:column;gap:3px}
+.cmsg.them{align-self:flex-start} .cmsg.me{align-self:flex-end;align-items:flex-end}
+.cmsg .bub{padding:9px 13px;border-radius:14px;font-size:14px;line-height:1.4}
+.cmsg.them .bub{background:#fff;border:1px solid var(--line);color:var(--ink);border-bottom-left-radius:4px}
+.cmsg.me .bub{background:var(--blue);color:#fff;border-bottom-right-radius:4px}
+.cmsg .cw{font-size:11px;color:var(--ink-3)}
+.inbox__reply{display:flex;gap:10px;padding:14px 16px;border-top:1px solid var(--line)}
+.inbox__reply .input{flex:1}
+.perm-tbl td,.perm-tbl th{font-size:13px}
+@media (max-width:720px){.inbox{grid-template-columns:1fr}.inbox__list{max-height:180px}}
