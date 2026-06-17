@@ -1216,3 +1216,24 @@ img[src*="filter-stages"]{object-position:center 70%}
 @media (max-width:760px){.footer__by{margin:-6px auto 14px;text-align:center}}
 
 [data-parallax]{will-change:transform}
+
+/* ===== MOBILE DENSITY — balanced rows, no orphan "single under", less scroll ===== */
+@media (max-width:760px){
+  .icontiles, .fgrid--3, .fgrid--4, .fgrid--5{ grid-template-columns:repeat(2,1fr)!important; gap:12px; }
+  .icontiles--6{ grid-template-columns:repeat(3,1fr)!important; gap:10px; }
+  /* a lone last item centers instead of sitting alone on the left */
+  .icontiles:not(.icontiles--6) > :last-child:nth-child(odd),
+  .fgrid--3 > :last-child:nth-child(odd),
+  .fgrid--5 > :last-child:nth-child(odd){ grid-column:1 / -1; max-width:calc(50% - 6px); margin-inline:auto; }
+  /* chip rows pack into one/few rows (kills the 3-then-1 wrap) */
+  .iconchips, .pills, .chiprow{ display:flex; flex-wrap:wrap; justify-content:center; gap:7px; }
+  .iconchip, .pill, .chip{ font-size:var(--step--2); padding:7px 10px; }
+  .iconchip .ic, .pill svg{ width:15px; height:15px; }
+  /* compact tile internals so 2-up isn't cramped */
+  .icontile{ padding:14px 12px; gap:8px; }
+  .icontile h3{ font-size:var(--step--1); }
+  .icontile p{ font-size:var(--step--2); }
+  .fcard{ padding:18px 14px; }
+}
+/* nav becomes more translucent once you scroll */
+.nav.scrolled{ background:rgba(255,255,255,.58); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); }
