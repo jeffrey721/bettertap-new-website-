@@ -44,7 +44,7 @@
   if (!ENABLED) {
     /* Checkout LIVE via Shopify cart permalinks — real hosted checkout, real orders,
        native inventory decrement. drinkbettertap.com stays on Shopify (subdomain split). */
-    var STORE = 'drinkbettertap.com';
+    var STORE = 'dqz0fm-jv.myshopify.com';
     var numId = function (gid) { return String(gid).split('/').pop(); };
     var permalink = function (gid, q) { return 'https://' + STORE + '/cart/' + numId(gid) + ':' + (q || 1); };
     var machineColorP = function () {
@@ -231,13 +231,4 @@
       '.bt-cart__foot{padding:18px 20px;border-top:1px solid #eef0f4;}'+
       '.bt-cart__sub{display:flex;justify-content:space-between;font-weight:700;color:#141937;margin-bottom:12px;font-variant-numeric:tabular-nums;}'+
       '.bt-cart__note{color:#8a90a0;font-size:12px;text-align:center;margin-top:8px;}'+
-      'body.bt-cart-open{overflow:hidden;}';
-    document.head.appendChild(css);
-  }
-
-  /* ---------- load SDK then boot ---------- */
-  if (window.ShopifyBuy) boot();
-  else { var s=document.createElement('script'); s.src=SDK; s.onload=boot;
-    s.onerror=function(){ console.error('[BetterTap] could not load Shopify Buy SDK'); };
-    document.head.appendChild(s); }
-})();
+      'body.bt-cart-open{overflow:hi
