@@ -1185,3 +1185,22 @@ img[src*="filter-stages"]{object-position:center 70%}
   .hero h1{font-size:clamp(1.7rem,7.2vw,2.5rem);line-height:1.08}
   .hero .lede{margin-inline:auto}
 }
+
+/* ===== MOBILE: hide "Backed by Science" + clean single-column footer (≤760px) ===== */
+@media (max-width:760px){
+  /* remove the Backed by Science / Built for Trust band on phones */
+  #certified{display:none}
+
+  /* footer: single centered column, properly aligned */
+  .footer__top{grid-template-columns:1fr!important;text-align:center;gap:26px}
+  .footer__news{grid-column:auto!important}
+  .footer__brand{display:flex;flex-direction:column;align-items:center}
+  .footer__brand .name{justify-content:center}
+  .footer__brand p{max-width:32ch;margin-inline:auto;text-align:center}
+  .footer__social{justify-content:center;margin-top:14px}
+  .footer__col,.footer__col h4,.footer__col a{text-align:center}
+  .footer__news,.footer__news h4,.footer__news p{text-align:center}
+  .footer__news .subscribe{max-width:360px;margin-inline:auto;justify-content:center}
+  .footer__bottom{flex-direction:column;text-align:center;align-items:center;gap:10px}
+  .footer__legal{justify-content:center;flex-wrap:wrap}
+}
