@@ -249,3 +249,28 @@
     });
   });
 })();
+
+/* ===== mobile parallax (home) — drifts [data-parallax] elements on scroll ===== */
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var els = [].slice.call(document.querySelectorAll('[data-parallax]'));
+  if (!els.length) return;
+  var mq = window.matchMedia('(max-width: 760px)'), on = false, ticking = false;
+  function update() {
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    els.forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      if (r.bottom < -80 || r.top > vh + 80) return;
+      var speed = parseFloat(el.getAttribute('data-parallax')) || 0.12;
+      var off = (r.top + r.height / 2) - vh / 2;
+      el.style.transform = 'translate3d(0,' + (-off * speed).toFixed(1) + 'px,0)';
+    });
+    ticking = false;
+  }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  function enable() { if (on) return; on = true; window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', update); update(); }
+  function disable() { on = false; window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', update); els.forEach(function (el) { el.style.transform = ''; }); }
+  function apply() { mq.matches ? enable() : disable(); }
+  apply();
+  mq.addEventListener ? mq.addEventListener('change', apply) : mq.addListener(apply);
+})();
