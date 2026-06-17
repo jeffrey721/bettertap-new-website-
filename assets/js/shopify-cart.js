@@ -16,7 +16,7 @@
   /* ---------- CONFIG — fill these two ---------- */
   var SHOPIFY = {
     domain: 'dqz0fm-jv.myshopify.com',           // ✅ your *.myshopify.com domain (confirmed)
-    token:  'YOUR_STOREFRONT_API_TOKEN'          // ⬅ PASTE Storefront API access token here (see SHOPIFY-SETUP.md). Publishable & safe to ship.
+    token:  '71b65eca82761a181ff873015953c182'  // Storefront API public token (publishable)
   };
 
   /* ---------- Product → variant map (GIDs from your store) ---------- */
@@ -42,7 +42,7 @@
     /* No Storefront token yet → checkout is STILL LIVE via Shopify cart permalinks
        (real hosted checkout, real orders, native inventory decrement — no token needed).
        Add a Storefront token above to upgrade to the in-page cart drawer. */
-    var STORE = 'drinkbettertap.com';
+    var STORE = 'dqz0fm-jv.myshopify.com';
     var numId = function (gid) { return String(gid).split('/').pop(); };
     var permalink = function (gid, q) { return 'https://' + STORE + '/cart/' + numId(gid) + ':' + (q || 1); };
     var machineColorP = function () {
