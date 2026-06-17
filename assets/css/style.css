@@ -1169,3 +1169,19 @@ img[src*="filter-stages"]{object-position:center 70%}
   .footer,.footer__col,.footer__col *,.footer__news,.footer__news *,.footer__brand,
   .crumb,.topbar,.nav,.nav *{text-align:left}
 }
+
+/* ===== MOBILE: kill horizontal overflow + fix heroes (≤760px) ===== */
+@media (max-width:760px){
+  html,body{overflow-x:clip;max-width:100%}
+  h1,h2,h3,.phero__title{overflow-wrap:break-word;word-break:normal}
+  /* home hero (phero): one centered machine, title that fits */
+  .phero__title{font-size:clamp(1.7rem,7.4vw,2.5rem);line-height:1.06}
+  .phero__stage--pair{justify-content:center;gap:0}
+  .phero__img--side{display:none}
+  .phero__stage--pair .phero__img{width:min(72vw,300px);height:auto}
+  .phero__lede{font-size:var(--step-0);margin-inline:auto}
+  .phero__actions{width:100%;justify-content:center}
+  /* navy hero headline fits the screen */
+  .hero h1{font-size:clamp(1.7rem,7.2vw,2.5rem);line-height:1.08}
+  .hero .lede{margin-inline:auto}
+}
