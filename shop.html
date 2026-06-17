@@ -97,7 +97,7 @@
             <p class="plan-note" data-price-note>One-time payment — 3 years full service &amp; warranty included.</p>
           </div>
           <p class="price-incl"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.7"/><path d="M8.5 12l2.2 2.2 4.8-5.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg> Installation, maintenance &amp; service included</p>
-          <a href="checkout.html" class="btn btn--primary btn--lg btn--block" data-buy-now style="margin:16px 0 6px">Buy now — express checkout →</a>
+          <a href="https://dqz0fm-jv.myshopify.com/cart/48528551149817:1" class="btn btn--primary btn--lg btn--block" data-buy-now style="margin:16px 0 6px">Buy now — express checkout →</a>
           <p style="margin:14px 0;color:var(--ink-60)">Purified water on demand — every temperature, every day.</p>
 
           <div class="iconchips" style="margin:18px 0">
@@ -126,8 +126,8 @@
           </div>
 
           <div class="pdp__buy">
-            <a href="checkout.html" class="btn btn--primary btn--lg" data-buy-now>Buy now</a>
-            <button class="btn btn--ghost btn--lg" data-add-cart>Add to cart</button>
+            <a href="https://dqz0fm-jv.myshopify.com/cart/48528551149817:1" class="btn btn--primary btn--lg" data-buy-now>Buy now</a>
+            <button class="btn btn--ghost btn--lg" data-add-cart data-bt-variant="machine">Add to cart</button>
           </div>
 
           <p class="pdp__fine">Free shipping · Professional installation · 3-year warranty</p>
@@ -519,7 +519,7 @@
           <div class="mcard__body">
             <h3>MAZE Water Filter</h3>
             <p>Replacement cartridge. Removes 20+ contaminants while keeping healthy minerals. Lasts ~6 months · dishwasher-safe.</p>
-            <div class="prod-buy"><span class="prod-price">$89</span><button class="btn btn--primary" data-add-cart><span>Add to cart</span></button></div>
+            <div class="prod-buy"><span class="prod-price">$89</span><button class="btn btn--primary" data-add-cart data-bt-variant="filter"><span>Add to cart</span></button></div>
           </div>
         </article>
         <article class="mcard" data-rise data-rise-d="2">
@@ -527,7 +527,7 @@
           <div class="mcard__body">
             <h3>UV Lamp</h3>
             <p>Keeps your water safe and fresh between pours. Recommended replacement once a year.</p>
-            <div class="prod-buy"><span class="prod-price">$59</span><button class="btn btn--primary" data-add-cart><span>Add to cart</span></button></div>
+            <div class="prod-buy"><span class="prod-price">$59</span><button class="btn btn--primary" data-add-cart data-bt-variant="uv"><span>Add to cart</span></button></div>
           </div>
         </article>
         <article class="mcard" data-rise data-rise-d="3">
@@ -535,7 +535,7 @@
           <div class="mcard__body">
             <h3>Filter + UV Bundle</h3>
             <p>One year of clean: a MAZE filter and a UV lamp together — everything your BetterTap needs, for less.</p>
-            <div class="prod-buy"><span class="prod-price">$129 <small><s>$148</s></small></span><button class="btn btn--primary" data-add-cart><span>Add to cart</span></button></div>
+            <div class="prod-buy"><span class="prod-price">$129 <small><s>$148</s></small></span><button class="btn btn--primary" data-add-cart data-bt-variant="bundle-fu"><span>Add to cart</span></button></div>
           </div>
         </article>
       </div>
@@ -656,7 +656,7 @@
       noteEl.innerHTML = '<strong>'+usd0(LEASE_UP)+'</strong> upfront, then <strong>'+usd0(LEASE_MO)+'/mo</strong> — service &amp; warranty included, for as long as you lease.';
     }
     var qp = plan==='installments' ? ('?plan=installments&term='+term) : ('?plan='+plan);
-    document.querySelectorAll('[data-buy-now]').forEach(function(a){ a.setAttribute('href','checkout.html'+qp); });
+    /* buy-now -> Shopify checkout (wired below); demo checkout.html no longer used */
   }
   root.querySelectorAll('.plan-tab').forEach(function(b){
     b.addEventListener('click', function(){
@@ -698,5 +698,20 @@
 </script>
 <!-- Shopify real cart + hosted checkout (self-disables until token is set in shopify-cart.js) -->
 <script src="assets/js/shopify-cart.js"></script>
+<!-- Reliable Shopify checkout wiring (cart permalinks, colour-aware) -->
+<script>
+(function(){
+  var STORE="dqz0fm-jv.myshopify.com";
+  var V={white:"48528551117049",black:"48528551149817",filter:"48538309886201",uv:"48538309918969","bundle-fu":"48538309951737"};
+  function color(){var s=document.querySelector("[data-swatches] .swatch.active");var n=(s&&(s.getAttribute("data-name")||"")).toLowerCase();return n.indexOf("white")>-1?"white":"black";}
+  function cart(id){return "https://"+STORE+"/cart/"+id+":1";}
+  function machineUrl(){return cart(V[color()]);}
+  function sync(){document.querySelectorAll("[data-buy-now]").forEach(function(a){a.setAttribute("href",machineUrl());});}
+  document.querySelectorAll("[data-buy-now]").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();window.location.href=machineUrl();});});
+  document.querySelectorAll("[data-add-cart]").forEach(function(b){b.addEventListener("click",function(e){var k=b.getAttribute("data-bt-variant");var id=(k==="machine")?V[color()]:(V[k]||null);if(!id)return;e.preventDefault();window.location.href=cart(id);});});
+  var sw=document.querySelector("[data-swatches]");if(sw){sw.querySelectorAll(".swatch").forEach(function(s){s.addEventListener("click",sync);});}
+  sync();
+})();
+</script>
 </body>
 </html>
