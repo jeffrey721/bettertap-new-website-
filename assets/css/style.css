@@ -1122,3 +1122,50 @@ img[src*="filter-stages"]{object-position:center 70%}
 .co-check input{width:18px;height:18px;accent-color:var(--blue);flex:none;cursor:pointer}
 #billingFields{display:flex;flex-direction:column;gap:9px}
 #billingFields[hidden]{display:none}
+
+/* =================================================================
+   MOBILE ALIGNMENT PASS — center & simplify on phones (≤760px)
+   ================================================================= */
+@media (max-width:760px){
+  /* --- center marketing text --- */
+  .section h1,.section h2,.eyebrow,.lede{text-align:center}
+  .lede,.maxw-prose{margin-inline:auto}
+  .grid-2>div,.split>div,.maze-grid__main,.proscons__col,
+  .membership-mid,.membership-col,.mineral,.fcard,.icontile,
+  .pstep,.repl-item,.review,.mcard__body,.stat,.feature,
+  .pdp>div{text-align:center}
+
+  /* --- center images, figures & media --- */
+  figure,.figure{text-align:center}
+  figure img,.figure img,.grid-2 img,.split img,.mineral img,
+  .maze-grid__media img,.proscons__media img,.pdp__main img,
+  .mcard__img img,.replaces__new img,.feature img{margin-inline:auto}
+  .pdp__main img{width:auto;max-width:100%;max-height:62vh}
+  .maze-grid__media,.proscons__media{max-width:360px;margin-inline:auto}
+
+  /* --- center chip rows, badges, buttons, swatches --- */
+  .iconchips,.badges,.chiprow,.pills,.pdp__swatches,.pdp__thumbs,
+  .iconchips--center,.replaces,.price-incl{justify-content:center}
+  .iconchips,.badges,.chiprow,.pills{display:flex;flex-wrap:wrap}
+  .pdp__list{display:inline-block;text-align:left;margin-inline:auto}
+  .btn--block{width:100%}
+
+  /* --- minimise oversized text on phones --- */
+  h1,.hero h1{font-size:clamp(2rem,8.4vw,2.7rem);line-height:1.06}
+  h2{font-size:clamp(1.55rem,6.4vw,2.05rem);line-height:1.14}
+  h3{font-size:var(--step-1)}
+  .lede{font-size:var(--step-0);line-height:1.5}
+  .eyebrow{font-size:var(--step--2);letter-spacing:.14em}
+
+  /* --- tighter vertical rhythm --- */
+  .section{padding:clamp(34px,8vw,54px) 0}
+  .mt-l{margin-top:36px}.mt-m{margin-top:24px}
+
+  /* --- KEEP these left-aligned / functional (readability) --- */
+  .postbody,.postbody h1,.postbody h2,.postbody h3,.postbody h4,.postbody p,.postbody li,.postbody blockquote,
+  .tbl,.tbl th,.tbl td,.compare-table,.compare-table th,.compare-table td,
+  .acc__q,.acc__a,.acc__a p,.acc__a li,
+  form,.form-grid,.form-grid *,.card-form,.card-form *,.co-form,.co-field,.co-field *,
+  .footer,.footer__col,.footer__col *,.footer__news,.footer__news *,.footer__brand,
+  .crumb,.topbar,.nav,.nav *{text-align:left}
+}
