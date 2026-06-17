@@ -1204,3 +1204,9 @@ img[src*="filter-stages"]{object-position:center 70%}
   .footer__bottom{flex-direction:column;text-align:center;align-items:center;gap:10px}
   .footer__legal{justify-content:center;flex-wrap:wrap}
 }
+
+/* ===== nav "Log in" link (Shopify hosted accounts) — on-brand navy pill ===== */
+.nav__login{width:auto;height:auto;display:inline-flex;align-items:center;gap:7px;padding:8px 15px;border-radius:999px;color:var(--navy);font-family:var(--sans);font-weight:600;font-size:var(--step--1);border:1.5px solid var(--line);background:transparent;transition:background .2s,border-color .2s,color .2s}
+.nav__login svg{width:18px;height:18px}
+.nav__login:hover{border-color:var(--navy);background:var(--navy);color:#fff}
+@media (max-width:760px){.nav__login{padding:9px;gap:0}.nav__login-txt{display:none}}
