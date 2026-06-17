@@ -37,12 +37,14 @@
     'warranty':      'gid://shopify/ProductVariant/48528551641337'  // 5-Year Warranty $199
   };
 
-  var ENABLED = SHOPIFY.token !== 'YOUR_STOREFRONT_API_TOKEN' && !!SHOPIFY.token && !!SHOPIFY.domain;
+  /* The legacy Buy SDK checkout API (checkoutCreate) is removed from the current Storefront API,
+     so we use robust Shopify CART PERMALINKS → real hosted checkout on the Shopify apex domain.
+     (Token is kept above for a future Cart-API in-page drawer.) */
+  var ENABLED = false;
   if (!ENABLED) {
-    /* No Storefront token yet → checkout is STILL LIVE via Shopify cart permalinks
-       (real hosted checkout, real orders, native inventory decrement — no token needed).
-       Add a Storefront token above to upgrade to the in-page cart drawer. */
-    var STORE = 'dqz0fm-jv.myshopify.com';
+    /* Checkout LIVE via Shopify cart permalinks — real hosted checkout, real orders,
+       native inventory decrement. drinkbettertap.com stays on Shopify (subdomain split). */
+    var STORE = 'drinkbettertap.com';
     var numId = function (gid) { return String(gid).split('/').pop(); };
     var permalink = function (gid, q) { return 'https://' + STORE + '/cart/' + numId(gid) + ':' + (q || 1); };
     var machineColorP = function () {
