@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Better Tap — Workspace</title>
+  <link rel="stylesheet" href="assets/css/crm.css">
+</head>
+<body>
+  <div id="boot" class="center-state">
+    <div><div class="spinner"></div>Loading your workspace…</div>
+  </div>
+
+  <div class="app" id="app" style="display:none">
+    <aside class="side" id="side">
+      <div class="side__logo"><img src="../assets/img/bmark-white.png" alt="">Better Tap</div>
+      <nav class="side__nav" id="nav"></nav>
+      <div class="side__user">
+        <div class="name" id="uName">—</div>
+        <div class="role" id="uRole">—</div>
+        <button class="signout" id="signout">Sign out →</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="main__head">
+        <div>
+          <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+          <h1 id="secTitle">Overview</h1>
+          <div class="sub" id="secSub"></div>
+        </div>
+      </div>
+      <div id="content"></div>
+    </main>
+  </div>
+
+  <!-- role-assignment modal (CEO) -->
+  <div class="modal" id="modal">
+    <div class="modal__box">
+      <h3 id="modalTitle">Edit</h3>
+      <div id="modalBody"></div>
+      <div class="modal__row">
+        <button class="btn" id="modalSave">Save</button>
+        <button class="btn btn--ghost" id="modalCancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/crm.js"></script>
+</body>
+</html>

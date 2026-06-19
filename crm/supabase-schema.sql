@@ -71,13 +71,17 @@ create trigger profiles_protect_role
 -- ---- RLS policies for profiles ---------------------------------------------
 drop policy if exists "read own profile"   on public.profiles;
 drop policy if exists "ceo reads all"       on public.profiles;
+drop policy if exists "staff read profiles" on public.profiles;
 drop policy if exists "update own profile"  on public.profiles;
 drop policy if exists "ceo updates all"     on public.profiles;
 
-create policy "read own profile"  on public.profiles for select using (id = auth.uid());
-create policy "ceo reads all"     on public.profiles for select using (public.is_ceo());
-create policy "update own profile" on public.profiles for update using (id = auth.uid()) with check (id = auth.uid());
-create policy "ceo updates all"   on public.profiles for update using (public.is_ceo()) with check (public.is_ceo());
+-- Any signed-in staff member can read the team directory (names + roles).
+-- This is needed so Operations/CS can show "assigned to" names and assign jobs.
+-- It exposes only internal staff names/roles — no customer data lives here.
+-- Changing a role is still CEO-only (enforced by the protect_role trigger below).
+create policy "staff read profiles" on public.profiles for select using (auth.uid() is not null);
+create policy "update own profile"  on public.profiles for update using (id = auth.uid()) with check (id = auth.uid());
+create policy "ceo updates all"     on public.profiles for update using (public.is_ceo()) with check (public.is_ceo());
 
 -- ============================================================================
 -- Installations & Repairs jobs (real data for Morry + Ari)
