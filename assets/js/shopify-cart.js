@@ -45,6 +45,10 @@
     /* Checkout LIVE via Shopify cart permalinks — real hosted checkout, real orders,
        native inventory decrement. drinkbettertap.com stays on Shopify (subdomain split). */
     var STORE = 'dqz0fm-jv.myshopify.com';
+    /* Lease ($500 one-time setup + $25/mo subscription) — Storefront Cart API ids */
+    var LEASE_SETUP   = 'gid://shopify/ProductVariant/48550759825657'; // $500 one-time
+    var LEASE_MONTHLY = 'gid://shopify/ProductVariant/48550763102457'; // $25/mo
+    var LEASE_PLAN    = 'gid://shopify/SellingPlan/5801574649';         // "Deliver every month"
     var numId = function (gid) { return String(gid).split('/').pop(); };
     var permalink = function (gid, q) { return 'https://' + STORE + '/cart/' + numId(gid) + ':' + (q || 1); };
     var machineColorP = function () {
@@ -58,10 +62,43 @@
       if (key === 'bundle') key = 'bundle-' + machineColorP();
       return PRODUCTS[key] || null;
     };
+    /* which pricing plan is selected on the shop page (cash | installments | lease) */
+    var currentPlan = function () {
+      var t = document.querySelector('[data-plans] .plan-tab.active');
+      return (t && t.getAttribute('data-plan')) || 'cash';
+    };
+    /* Lease checkout: builds a mixed cart (one-time setup + monthly subscription)
+       via the Storefront Cart API, then redirects to the hosted checkout. */
+    var leaseCheckout = function () {
+      var q = 'mutation cc($lines:[CartLineInput!]!){cartCreate(input:{lines:$lines}){cart{checkoutUrl}userErrors{message}}}';
+      var vars = { lines: [
+        { quantity: 1, merchandiseId: LEASE_SETUP },
+        { quantity: 1, merchandiseId: LEASE_MONTHLY, sellingPlanId: LEASE_PLAN }
+      ]};
+      return fetch('https://' + STORE + '/api/2024-10/graphql.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Shopify-Storefront-Access-Token': SHOPIFY.token },
+        body: JSON.stringify({ query: q, variables: vars })
+      }).then(function (r) { return r.json(); }).then(function (d) {
+        var url = d && d.data && d.data.cartCreate && d.data.cartCreate.cart && d.data.cartCreate.cart.checkoutUrl;
+        if (url) { window.location.href = url; return true; }
+        console.error('[BetterTap] Lease checkout failed', d);
+        return false;
+      }).catch(function (err) { console.error('[BetterTap] Lease checkout error', err); return false; });
+    };
     document.querySelectorAll('[data-buy-now]').forEach(function (b) {
-      var go = function () { return permalink(PRODUCTS['machine-' + machineColorP()], 1); };
-      b.setAttribute('href', go());
-      b.addEventListener('click', function (e) { e.preventDefault(); e.stopImmediatePropagation(); window.location.href = go(); }, true);
+      /* Pay-in-full + Installments both use the one-time $1,280 machine checkout;
+         Shop Pay Installments / Affirm is offered at the payment step. */
+      var oneTime = function () { return permalink(PRODUCTS['machine-' + machineColorP()], 1); };
+      b.setAttribute('href', oneTime());
+      b.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopImmediatePropagation();
+        if (currentPlan() === 'lease') {
+          leaseCheckout().then(function (ok) { if (!ok) window.location.href = oneTime(); });
+        } else {
+          window.location.href = oneTime();
+        }
+      }, true);
     });
     document.querySelectorAll('[data-add-cart]').forEach(function (b) {
       b.addEventListener('click', function (e) { var v = keyFor(b); if (!v) return; e.preventDefault(); e.stopImmediatePropagation(); window.location.href = permalink(v, 1); }, true);
@@ -231,4 +268,12 @@
       '.bt-cart__foot{padding:18px 20px;border-top:1px solid #eef0f4;}'+
       '.bt-cart__sub{display:flex;justify-content:space-between;font-weight:700;color:#141937;margin-bottom:12px;font-variant-numeric:tabular-nums;}'+
       '.bt-cart__note{color:#8a90a0;font-size:12px;text-align:center;margin-top:8px;}'+
-      'body.bt-cart-open{overflow:hi
+      'body.bt-cart-open{overflow:hidden;}';
+    document.head.appendChild(css);
+  }
+
+  /* SDK path is only reached when ENABLED is true; with ENABLED=false the
+     cart-permalink / Storefront-cart logic above runs and returns early. */
+  if (window.ShopifyBuy) { boot(); }
+  else { var s = document.createElement('script'); s.src = SDK; s.onload = boot; document.head.appendChild(s); }
+})();
