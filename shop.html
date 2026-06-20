@@ -361,7 +361,7 @@
             <span class="iconchip"><svg class="ic"><use href="assets/img/icons.svg#instant"/></svg>Small initial commitment fee</span>
             <span class="iconchip"><svg class="ic"><use href="assets/img/icons.svg#shield"/></svg>Lifetime of service</span>
           </div>
-          <p class="mt-m" style="color:var(--ink-60);font-size:var(--step--1)">Spread the cost over 12, 24 or 36 months — see the lease terms in the pricing options above.</p>
+          <p class="mt-m" style="color:var(--ink-60);font-size:var(--step--1)">A small one-time setup fee, then a low monthly payment with service &amp; warranty included — see the lease terms in the pricing options above.</p>
         </div>
 
       </div>
@@ -623,8 +623,7 @@
 <script>
 /* BetterTap — pricing models
    1) Cash: $1,280 one-time (3 yrs full service & warranty)
-   2) Installments: fixed monthly by term
-        12mo: $110/mo ($1,320)  ·  24mo: $60/mo ($1,440)  ·  36mo: $45/mo ($1,620)
+   2) Installments: pay over time via Shop Pay Installments (Affirm); terms chosen at checkout
    3) Lease: $500 upfront, then $25/mo for life (service & warranty incl.)  */
 (function(){
   var CASH = 1280;                              // pay-in-full, one-time (no term)
@@ -646,11 +645,9 @@
       priceEl.textContent = usd0(CASH); unitEl.textContent = '';
       noteEl.innerHTML = 'One-time payment — <strong>3 years</strong> full service &amp; warranty included.';
     } else if(plan==='installments'){
-      terms.hidden = false;                       // months selector appears ONLY for Installments
-      var monthly = INSTALL_MO[term];
-      var total = monthly*term;
-      priceEl.textContent = usd(monthly); unitEl.textContent = '/mo';
-      noteEl.innerHTML = term+' monthly payments · total '+usd(total)+'.';
+      terms.hidden = true;                        // terms are chosen at checkout via Shop Pay
+      priceEl.textContent = usd0(CASH); unitEl.textContent = '';
+      noteEl.innerHTML = 'Pay over time with <strong>Shop Pay Installments</strong> — choose 4 interest-free payments or monthly terms at checkout. Subject to eligibility.';
     } else { // lease
       terms.hidden = true;                        // no months selector for lease
       priceEl.textContent = usd0(LEASE_MO); unitEl.textContent = '/mo';
