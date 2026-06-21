@@ -26,13 +26,13 @@
   --grey:#F4F4F4; --grey-200:#e9eaee; --black:#000;
   --white:#fff;
   /* Primary blue sampled directly from the handoff (#4D97DB) */
-  --blue:#4D97DB; --blue-600:#3B82C9; --blue-050:#EAF3FB; --blue-100:#D6E8F8;
+  --blue:#4D97DB; --blue-600:#3B82C9; --blue-700:#2C6EAE; --blue-050:#EAF3FB; --blue-100:#D6E8F8;
   --blue-bright:#5AA8E8; --blue-soft:#A9D3F2;
   --yellow:#FBF49B;
 
-  --ink:#141937;                 /* default text */
-  --ink-60:rgba(20,25,55,.62);
-  --ink-40:rgba(20,25,55,.42);
+  --ink:#141937;                 /* default text — headlines, where to look */
+  --ink-60:rgba(20,25,55,.70);   /* body — readable, clearly below headlines */
+  --ink-40:rgba(20,25,55,.50);   /* captions / tertiary */
   --line:rgba(20,25,55,.12);
   --line-soft:rgba(20,25,55,.07);
 
@@ -86,7 +86,7 @@ p{text-wrap:pretty}
 .section{padding:clamp(38px,5.5vw,76px) 0}
 .section--tight{padding:clamp(44px,6vw,80px) 0}
 .center{text-align:center}
-.eyebrow{font-family:var(--sans);font-weight:600;font-size:var(--step--1);letter-spacing:.16em;text-transform:uppercase;color:var(--blue)}
+.eyebrow{font-family:var(--sans);font-weight:600;font-size:var(--step--1);letter-spacing:.16em;text-transform:uppercase;color:var(--blue-600)}
 .lede{font-size:var(--step-1);color:var(--ink-60);line-height:1.45}
 .accent{color:var(--blue)}
 
@@ -151,8 +151,8 @@ body.menu-open .mobile-menu{transform:translateX(0)}
   position:relative;overflow:hidden;transition:transform .35s var(--ease),background .3s,color .3s,box-shadow .3s;white-space:nowrap}
 .btn>*{position:relative;z-index:2}
 .btn svg{width:18px;height:18px}
-.btn--primary{background:var(--blue);color:#fff;box-shadow:0 10px 26px -12px rgba(30,107,230,.7)}
-.btn--primary:hover{background:var(--blue-600);transform:translateY(-2px)}
+.btn--primary{background:var(--blue-600);color:#fff;box-shadow:0 12px 28px -12px rgba(30,107,230,.8)}
+.btn--primary:hover{background:var(--blue-700);transform:translateY(-2px)}
 .btn--navy{background:var(--navy);color:#fff}
 .btn--navy:hover{transform:translateY(-2px);background:var(--navy-600)}
 .btn--yellow{background:var(--yellow);color:var(--navy)}
@@ -439,7 +439,7 @@ html.io [data-rise].in{opacity:1;transform:none}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;transition-duration:.01ms!important}
-  html.io [data-rise]{opacity:1;transform:none}
+  html.io [data-rise],html.io [data-flow]{opacity:1;transform:none;clip-path:none}
   .marquee__t{animation:none}
 }
 
@@ -1237,3 +1237,22 @@ img[src*="filter-stages"]{object-position:center 70%}
 }
 /* nav becomes more translucent once you scroll */
 .nav.scrolled{ background:rgba(255,255,255,.58); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); }
+
+/* ============================================================================
+   MOTION WITH PURPOSE — animation that clarifies, guides & reinforces meaning
+   (home + technology). Decorative-free: each effect maps to what it shows.
+   ============================================================================ */
+/* Directional flow-reveal: filtration diagrams wipe left→right to read as
+   water FLOWING THROUGH the stages (in one side → out clean). */
+html.io [data-flow]{opacity:0;clip-path:inset(0 100% 0 0);
+  transition:opacity .5s var(--ease),clip-path 1.15s var(--ease)}
+html.io [data-flow].in{opacity:1;clip-path:inset(0 0 0 0)}
+
+/* Count-up numbers: keep digits from reflowing as they climb (reinforces
+   magnitude without the layout jittering). */
+.rstat__n,.amt{font-variant-numeric:tabular-nums}
+
+/* Sequential cascade: contaminant pills tick in one-by-one like a checklist
+   being cleared. Per-item delay is set inline by JS (data-seq). The eye is
+   guided down the list — "all of these, gone." */
+html.io [data-seq] [data-rise]{will-change:opacity,transform}

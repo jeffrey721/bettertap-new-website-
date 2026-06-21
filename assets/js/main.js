@@ -138,16 +138,26 @@
     var io = new IntersectionObserver(function(es){
       es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
     }, {threshold:.12, rootMargin:'0px 0px -8% 0px'});
-    document.querySelectorAll('[data-rise]').forEach(function(el){ io.observe(el); });
+    document.querySelectorAll('[data-rise],[data-flow]').forEach(function(el){ io.observe(el); });
   }
 
-  /* ---- Count-ups ---- */
+  /* ---- Sequential cascade: [data-seq] staggers its [data-rise] children one
+       after another so the eye is guided down a list (e.g. contaminants ticked
+       off). Inline delay overrides the generic data-rise-d steps. ---- */
+  document.querySelectorAll('[data-seq]').forEach(function(c){
+    var kids = c.querySelectorAll('[data-rise]');
+    for(var i=0;i<kids.length;i++){ kids[i].style.transitionDelay = Math.min(i*0.06, 0.9) + 's'; }
+  });
+
+  /* ---- Count-ups (supports one decimal place, e.g. 99.9) ---- */
   function countUp(el){
     if(el.dataset.done) return; el.dataset.done='1';
-    var to=parseFloat(el.getAttribute('data-count'))||0, suf=el.getAttribute('data-suffix')||'', pre=el.getAttribute('data-prefix')||'';
+    var raw=el.getAttribute('data-count'), to=parseFloat(raw)||0,
+        dec=(raw&&raw.indexOf('.')>=0)?1:0,
+        suf=el.getAttribute('data-suffix')||'', pre=el.getAttribute('data-prefix')||'';
     var t0=null, dur=1400;
-    function tick(ts){ if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1); var e=1-Math.pow(1-p,3);
-      el.textContent=pre+Math.round(to*e)+(p===1?suf:''); if(p<1)requestAnimationFrame(tick); }
+    function tick(ts){ if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1); var e=1-Math.pow(1-p,3); var v=to*e;
+      el.textContent=pre+(dec?v.toFixed(1):Math.round(v))+(p===1?suf:''); if(p<1)requestAnimationFrame(tick); }
     requestAnimationFrame(tick);
   }
   if('IntersectionObserver' in window){
