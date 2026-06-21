@@ -707,9 +707,4 @@
   function sync(){document.querySelectorAll("[data-buy-now]").forEach(function(a){a.setAttribute("href",machineUrl());});}
   document.querySelectorAll("[data-buy-now]").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();window.location.href=machineUrl();});});
   document.querySelectorAll("[data-add-cart]").forEach(function(b){b.addEventListener("click",function(e){var k=b.getAttribute("data-bt-variant");var id=(k==="machine")?V[color()]:(V[k]||null);if(!id)return;e.preventDefault();window.location.href=cart(id);});});
-  var sw=document.querySelector("[data-swatches]");if(sw){sw.querySelectorAll(".swatch").forEach(function(s){s.addEventListener("click",sync);});}
-  sync();
-})();
-</script>
-</body>
-</html>
+  var sw=document.querySelector("[data-swatches]");if(sw){sw.querySelectorAll(".swatch").forEach(function(s){s.addEventListener("click",sync)
