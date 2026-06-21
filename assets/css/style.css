@@ -1256,3 +1256,41 @@ html.io [data-flow].in{opacity:1;clip-path:inset(0 0 0 0)}
    being cleared. Per-item delay is set inline by JS (data-seq). The eye is
    guided down the list — "all of these, gone." */
 html.io [data-seq] [data-rise]{will-change:opacity,transform}
+
+/* =================================================================
+   DESIGN PRINCIPLES POLISH  (Marcelo Design X — 4 tenets)
+   The site already does the heavy lifting; this block sharpens the
+   four ideas without adding clutter (Simplicity = restraint).
+   1 Motion With Purpose · 2 Contrast Creates Clarity
+   3 Emotion Shapes Experience · 4 Simplicity Takes Discipline
+   ================================================================= */
+
+/* 1 — MOTION WITH PURPOSE: a click should answer back. Buttons lift on
+   hover (intent) and press down on :active (confirmation) — motion that
+   reinforces the action, not decorates it. */
+.btn{transition:transform .25s var(--ease),background .3s,color .3s,box-shadow .3s,filter .3s}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn--primary:active{box-shadow:0 6px 16px -10px rgba(30,107,230,.8)}
+
+/* 2 — CONTRAST CREATES CLARITY: the primary CTA is the one thing the eye
+   should land on. Give it a touch more presence on hover so "what to do"
+   is unmistakable, and keep focus rings high-contrast for keyboard users. */
+.btn--primary:hover{box-shadow:0 16px 34px -12px rgba(30,107,230,.9);filter:saturate(1.06)}
+:focus-visible{outline-width:3px}
+.btn--primary:focus-visible{outline-color:var(--navy);outline-offset:4px}
+
+/* 3 — EMOTION SHAPES EXPERIENCE: cards settle, they don't snap. A slightly
+   longer, eased lift on interactive cards reads as calm and considered —
+   the mood the brand wants around clean water. */
+.mcard:hover,.prod-card:hover{transform:translateY(-4px)}
+@media (hover:hover){
+  .mcard,.prod-card{transition:transform .45s var(--ease),box-shadow .45s,border-color .45s}
+}
+
+/* 4 — SIMPLICITY TAKES DISCIPLINE: when the reader has chosen to reduce
+   motion, honour it completely — strip every transform/animation added
+   above so only the essential content remains. */
+@media (prefers-reduced-motion:reduce){
+  .btn,.btn:active,.mcard,.prod-card,.mcard:hover,.prod-card:hover{
+    transition:none;transform:none}
+}

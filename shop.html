@@ -623,11 +623,12 @@
 <script>
 /* BetterTap — pricing models
    1) Cash: $1,280 one-time (3 yrs full service & warranty)
-   2) Installments: pay over time via Shop Pay Installments (Affirm); terms chosen at checkout
+   2) Installments: $1,499 total, paid over time via Shop Pay Installments; terms chosen at checkout
    3) Lease: $500 upfront, then $25/mo for life (service & warranty incl.)  */
 (function(){
   var CASH = 1280;                              // pay-in-full, one-time (no term)
-  var INSTALL_MO = { 12:110, 24:60, 36:45 };    // installments: monthly payment by term
+  var INSTALL_TOTAL = 1499;                     // installments: total price when financed
+  var INSTALL_MO = { 12:125, 24:63, 36:42 };    // installments: monthly payment by term (~$1,499)
   var LEASE_UP = 500, LEASE_MO = 25;            // lease: $500 upfront + $25/mo
   var root = document.querySelector('[data-plans]');
   if(!root) return;
@@ -646,8 +647,8 @@
       noteEl.innerHTML = 'One-time payment — <strong>3 years</strong> full service &amp; warranty included.';
     } else if(plan==='installments'){
       terms.hidden = true;                        // terms are chosen at checkout via Shop Pay
-      priceEl.textContent = usd0(CASH); unitEl.textContent = '';
-      noteEl.innerHTML = 'Pay over time with <strong>Shop Pay Installments</strong> — choose 4 interest-free payments or monthly terms at checkout. Subject to eligibility.';
+      priceEl.textContent = usd0(INSTALL_TOTAL); unitEl.textContent = '';
+      noteEl.innerHTML = '<strong>'+usd0(INSTALL_TOTAL)+'</strong> total — pay over time with <strong>Shop Pay Installments</strong>. Choose 4 interest-free payments or monthly terms at checkout. Subject to eligibility.';
     } else { // lease
       terms.hidden = true;                        // no months selector for lease
       priceEl.textContent = usd0(LEASE_MO); unitEl.textContent = '/mo';
