@@ -1233,4 +1233,26 @@ img[src*="filter-stages"]{object-position:center 70%}
   .icontile{ padding:14px 12px; gap:8px; }
   .icontile h3{ font-size:var(--step--1); }
   .icontile p{ font-size:var(--step--2); }
-  .fcard{ p
+  .fcard{ padding:18px 14px; }
+}
+/* nav becomes more translucent once you scroll */
+.nav.scrolled{ background:rgba(255,255,255,.58); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); }
+
+/* ============================================================================
+   MOTION WITH PURPOSE — animation that clarifies, guides & reinforces meaning
+   (home + technology). Decorative-free: each effect maps to what it shows.
+   ============================================================================ */
+/* Directional flow-reveal: filtration diagrams wipe left→right to read as
+   water FLOWING THROUGH the stages (in one side → out clean). */
+html.io [data-flow]{opacity:0;clip-path:inset(0 100% 0 0);
+  transition:opacity .5s var(--ease),clip-path 1.15s var(--ease)}
+html.io [data-flow].in{opacity:1;clip-path:inset(0 0 0 0)}
+
+/* Count-up numbers: keep digits from reflowing as they climb (reinforces
+   magnitude without the layout jittering). */
+.rstat__n,.amt{font-variant-numeric:tabular-nums}
+
+/* Sequential cascade: contaminant pills tick in one-by-one like a checklist
+   being cleared. Per-item delay is set inline by JS (data-seq). The eye is
+   guided down the list — "all of these, gone." */
+html.io [data-seq] [data-rise]{will-change:opacity,transform}
