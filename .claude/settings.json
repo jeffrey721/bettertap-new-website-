@@ -12,7 +12,12 @@
       "Bash(git rm *)",
       "Bash(perl -i -ne 'print unless m{class=\"pill\".*PFAS \\\\\\(PFOA/PFOS\\\\\\)</span>}' index.html technology.html)",
       "Bash(perl -i -ne 'print unless m{class=\"iconchip\".*>PFAS</span>}' shop.html)",
-      "Bash(perl -i -ne 'print unless m{<li>PFAS, the man-made}' blog-whats-in-your-tap-water.html)"
+      "Bash(perl -i -ne 'print unless m{<li>PFAS, the man-made}' blog-whats-in-your-tap-water.html)",
+      "Bash(perl -i -pe 's{<th>UV tech to stop bacteria &amp; parasites</th>}{<th>UV microbiological water treatment</th>}g' shop.html)",
+      "Bash(perl -i -pe 's{<h3>Companion app</h3><p>Set glass-size presets and check status right from your phone\\\\.</p>}{<h3>Smart water chip</h3><p>Tracks and calculates exactly how much water goes through the system.</p>}g' shop.html)",
+      "Bash(perl -i -pe 's{<h3>UV-C protection</h3>}{<h3>Smart UV protection</h3>}g' shop.html)",
+      "Bash(perl -0777 -i -pe 's{\\\\s*<!-- ===== FULL COMPARISON \\\\\\(tabbed\\\\\\) ===== -->\\\\s*<section class=\"section\" id=\"cmp\">[\\\\s\\\\S]*?</section>\\\\s*<script>[\\\\s\\\\S]*?</script>}{}g' shop.html)",
+      "Bash(echo \"exit=$?\")"
     ]
   }
 }
