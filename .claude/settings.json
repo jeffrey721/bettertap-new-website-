@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(perl -i -pe 's/20\\\\+/24/g; s/20-plus/24/g;' *.html)",
+      "Bash(perl -i -pe ' *)",
+      "Bash(perl -i -ne 'print unless \\(m{assets/img/mineral-\\(ca|mg|k\\)\\\\.png} || m{data-suffix=\" mg/L\"}\\)' index.html)",
+      "Bash(vercel whoami *)"
+    ]
+  }
+}
