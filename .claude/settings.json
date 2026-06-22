@@ -5,7 +5,14 @@
       "Bash(perl -i -pe ' *)",
       "Bash(perl -i -ne 'print unless \\(m{assets/img/mineral-\\(ca|mg|k\\)\\\\.png} || m{data-suffix=\" mg/L\"}\\)' index.html)",
       "Bash(vercel whoami *)",
-      "Bash(git commit -q -m 'Content pass: filtered language, claim accuracy & home-page edits *)"
+      "Bash(git commit -q -m 'Content pass: filtered language, claim accuracy & home-page edits *)",
+      "Bash(git merge *)",
+      "Bash(git stash *)",
+      "Bash(perl -0777 -i -pe 's{\\\\s*<article class=\"postcard\"[^>]*>\\(?:\\(?!</article>\\)[\\\\s\\\\S]\\)*?blog-pfas-explained\\\\.html\\(?:\\(?!</article>\\)[\\\\s\\\\S]\\)*?</article>}{}g' blog.html blog-carbon-block-vs-reverse-osmosis.html blog-how-uv-c-keeps-water-fresh.html blog-lead-and-older-pipes.html blog-nsf-ansi-certifications-explained.html blog-whats-in-your-tap-water.html blog-why-minerals-belong-in-water.html)",
+      "Bash(git rm *)",
+      "Bash(perl -i -ne 'print unless m{class=\"pill\".*PFAS \\\\\\(PFOA/PFOS\\\\\\)</span>}' index.html technology.html)",
+      "Bash(perl -i -ne 'print unless m{class=\"iconchip\".*>PFAS</span>}' shop.html)",
+      "Bash(perl -i -ne 'print unless m{<li>PFAS, the man-made}' blog-whats-in-your-tap-water.html)"
     ]
   }
 }
