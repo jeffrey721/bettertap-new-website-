@@ -35,12 +35,12 @@
       ]);
       save('bt_creds', { 'jeffrey@drinkbettertap.com': { id: ownerId, password: 'bettertap' } });
     }
-    if (!LS.getItem('bt_jobs')) {
+    if (!LS.getItem('bt_jobs_v2')) {
       var t = Date.now(), day = 86400000;
-      save('bt_jobs', [
-        { id: uid(), kind: 'installation', customer_name: 'Dana Levin', address: '12 Hayarkon St, Tel Aviv', phone: '+972 50-123-4567', scheduled_for: new Date(t + day).toISOString(), assigned_to: null, status: 'scheduled', notes: '', created_at: now() },
-        { id: uid(), kind: 'repair', customer_name: 'Avi Cohen', address: '4 Rothschild Blvd, Tel Aviv', phone: '+972 52-987-6543', scheduled_for: new Date(t + 2 * day).toISOString(), assigned_to: null, status: 'in_progress', notes: 'Leaking connector', created_at: now() },
-        { id: uid(), kind: 'installation', customer_name: 'Maya Bar', address: '9 Dizengoff St, Tel Aviv', phone: '', scheduled_for: new Date(t - day).toISOString(), assigned_to: null, status: 'done', notes: '', created_at: now() }
+      save('bt_jobs_v2', [
+        { id: uid(), kind: 'installation', customer_name: 'Dana Levin', address: '34 Main St, West Orange, NJ 07052', phone: '+1 (973) 555-0142', scheduled_for: new Date(t + day).toISOString(), assigned_to: null, status: 'scheduled', notes: '', created_at: now() },
+        { id: uid(), kind: 'repair', customer_name: 'Avi Cohen', address: '210 Engle St, Englewood, NJ 07631', phone: '+1 (201) 555-0178', scheduled_for: new Date(t + 2 * day).toISOString(), assigned_to: null, status: 'in_progress', notes: 'Leaking connector', created_at: now() },
+        { id: uid(), kind: 'installation', customer_name: 'Maya Bar', address: '55 Cedar Ln, Teaneck, NJ 07666', phone: '', scheduled_for: new Date(t - day).toISOString(), assigned_to: null, status: 'done', notes: '', created_at: now() }
       ]);
     }
   })();
@@ -87,7 +87,7 @@
   };
 
   /* ---------- query builder (mirrors supabase.from(table)...) ---------- */
-  function keyFor(table) { return table === 'profiles' ? 'bt_profiles' : 'bt_jobs'; }
+  function keyFor(table) { return table === 'profiles' ? 'bt_profiles' : 'bt_jobs_v2'; }
 
   function Query(table) {
     this.table = table;
