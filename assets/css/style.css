@@ -1294,3 +1294,9 @@ html.io [data-seq] [data-rise]{will-change:opacity,transform}
   .btn,.btn:active,.mcard,.prod-card,.mcard:hover,.prod-card:hover{
     transition:none;transform:none}
 }
+
+/* contaminant chem grid */
+.chemgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;max-width:1040px;margin-inline:auto;text-align:left}
+.chem{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid var(--line-soft,rgba(20,25,55,.07));border-radius:12px;padding:9px 13px}
+.chem__sym{flex:none;min-width:38px;height:38px;padding:0 6px;border-radius:9px;background:#eaf3fb;color:#2f6cc0;font-family:var(--display);font-weight:700;font-size:14px;display:grid;place-items:center;letter-spacing:-.02em}
+.chem__name{font-size:var(--step--1);font-weight:500;color:var(--navy);line-height:1.2}
