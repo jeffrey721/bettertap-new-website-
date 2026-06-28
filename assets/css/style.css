@@ -1363,3 +1363,11 @@ html.io [data-seq] [data-rise]{will-change:opacity,transform}
 @media(max-width:1024px){.fgrid--5{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:680px){.fgrid--5{grid-template-columns:1fr 1fr}}
 @media(max-width:440px){.fgrid--5{grid-template-columns:1fr}}
+
+/* dominant blue gradient section with waves + bubbles */
+.sec-pop{position:relative;overflow:hidden;background:linear-gradient(165deg,#c4e0fa 0%,#dcecfb 46%,#f3f9ff 100%)}
+.sec-pop>.wrap{position:relative;z-index:3}
+.sec-pop::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.8;background-image:radial-gradient(circle,rgba(255,255,255,.78) 4px,transparent 5px),radial-gradient(circle,rgba(255,255,255,.5) 6px,transparent 7px),radial-gradient(circle,rgba(126,209,214,.45) 3px,transparent 4px);background-size:150px 150px,215px 215px,95px 95px;background-position:10px 0,95px 120px,40px 60px;animation:bubdrift 22s linear infinite}
+.sec-pop::after{content:"";position:absolute;left:-50%;right:-50%;bottom:0;height:160px;z-index:2;pointer-events:none;background-repeat:repeat-x;background-size:1200px 120px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,55 C300,105 900,5 1200,55 L1200,120 L0,120 Z' fill='%23bcdcf5'/%3E%3C/svg%3E");opacity:.7;animation:wavemove 13s linear infinite}
+@keyframes bubdrift{from{background-position:10px 0,95px 120px,40px 60px}to{background-position:10px -460px,95px -360px,40px -500px}}
+@media (prefers-reduced-motion:reduce){.sec-pop::before,.sec-pop::after{animation:none}}
