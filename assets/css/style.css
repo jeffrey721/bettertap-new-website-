@@ -857,7 +857,7 @@ input,textarea,select{font-size:max(16px,1em)}
 /* "We Remove" efficacy stats */
 .removestats{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(22px,3vw,44px);max-width:1040px;margin-inline:auto}
 .rstat{text-align:center}
-.rstat__n{position:relative;font-family:var(--display);font-weight:700;color:var(--navy);font-size:clamp(1.9rem,3.4vw,2.6rem);line-height:1.05;letter-spacing:-.02em;white-space:nowrap}
+.rstat__n{position:relative;font-family:var(--display);font-weight:700;color:var(--navy);font-size:clamp(1.4rem,2.6vw,2rem);line-height:1.1;letter-spacing:-.02em;white-space:nowrap}
 .rstat__n small{position:absolute;bottom:100%;left:0;right:0;font-size:.26em;font-weight:600;color:var(--ink-40);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;white-space:nowrap}
 .rstat p{margin-top:12px;color:var(--ink-60);font-size:var(--step--1);max-width:24ch;margin-inline:auto}
 @media (max-width:760px){.removestats{grid-template-columns:1fr 1fr;gap:30px 16px}}
@@ -1300,3 +1300,11 @@ html.io [data-seq] [data-rise]{will-change:opacity,transform}
 .chem{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid var(--line-soft,rgba(20,25,55,.07));border-radius:12px;padding:9px 13px}
 .chem__sym{flex:none;min-width:38px;height:38px;padding:0 6px;border-radius:9px;background:#eaf3fb;color:#2f6cc0;font-family:var(--display);font-weight:700;font-size:14px;display:grid;place-items:center;letter-spacing:-.02em}
 .chem__name{font-size:var(--step--1);font-weight:500;color:var(--navy);line-height:1.2}
+
+/* contaminant dropdown (technology) */
+.chemdrop{max-width:1040px;margin:18px auto 0;border:1px solid var(--line-soft,rgba(20,25,55,.07));border-radius:14px;background:#fff;overflow:hidden}
+.chemdrop>summary{cursor:pointer;list-style:none;padding:15px 20px;font-family:var(--display);font-weight:600;font-size:var(--step-0);color:var(--navy);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.chemdrop>summary::-webkit-details-marker{display:none}
+.chemdrop>summary::after{content:"\25BE";color:var(--blue,#4D97DB);transition:transform .25s ease}
+.chemdrop[open]>summary::after{transform:rotate(180deg)}
+.chemdrop .chemgrid{padding:4px 16px 18px;margin-top:0}
