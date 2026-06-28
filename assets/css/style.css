@@ -1428,3 +1428,16 @@ html.io [data-seq] [data-rise]{will-change:opacity,transform}
 
 /* topbar 3-part message fits small screens */
 @media(max-width:600px){.topbar{font-size:10px;letter-spacing:.04em;padding:7px 10px;line-height:1.35}}
+
+/* === MOBILE OPTIMIZATION PASS === */
+/* clearance so the persistent Shop bar never covers footer/content */
+.footer{padding-bottom:104px}
+@media (max-width:760px){
+  /* images: always fit, centered, no overflow */
+  main img{max-width:100%;height:auto}
+  main figure{margin-inline:auto;text-align:center}
+  /* shorter, easier scroll */
+  .section{padding:clamp(28px,6.5vw,46px) 0}
+  /* buy bar full-width & thumb-friendly */
+  .buybar{padding:15px 20px 13px;font-size:var(--step-0)}
+}
