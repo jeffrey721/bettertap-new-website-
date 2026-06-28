@@ -1386,3 +1386,14 @@ html.io [data-seq] [data-rise]{will-change:opacity,transform}
 /* trust badges one row */
 .badges{flex-wrap:nowrap}
 @media(max-width:820px){.badges{flex-wrap:wrap}}
+
+/* responsive fixes (QA pass) */
+.iconchips--row{flex-wrap:nowrap}
+@media(max-width:640px){.iconchips--row{flex-wrap:wrap}}
+@media(max-width:600px){
+  .chemdrop>summary{white-space:normal;font-size:1.35rem;padding:14px 18px}
+  .chemdrop[open]{flex-direction:column}
+  .chemdrop[open] .ctree{width:100%}
+  .ctree__leaves{gap:6px}
+  .planpick__box b{font-size:1.3rem}
+}
