@@ -1397,3 +1397,14 @@ html.io [data-seq] [data-rise]{will-change:opacity,transform}
   .ctree__leaves{gap:6px}
   .planpick__box b{font-size:1.3rem}
 }
+
+/* contaminant symbols as glossy water-drop beads */
+.chem__sym{
+  flex:none;width:44px;height:44px;min-width:44px;padding:0;border-radius:50%;
+  background:radial-gradient(circle at 34% 28%,#fff 0%,#bfe0fb 26%,#4D97DB 78%,#3b82c9 100%);
+  color:#0c2c4d;font-weight:800;font-size:11px;line-height:1;text-align:center;letter-spacing:-.02em;
+  display:grid;place-items:center;
+  box-shadow:inset -3px -4px 7px rgba(35,85,135,.4),inset 2px 3px 6px rgba(255,255,255,.65),0 5px 10px rgba(77,151,219,.3);
+  text-shadow:0 1px 1px rgba(255,255,255,.55)
+}
+.chem{background:rgba(255,255,255,.7);backdrop-filter:blur(2px)}
