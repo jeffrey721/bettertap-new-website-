@@ -1408,3 +1408,20 @@ html.io [data-seq] [data-rise]{will-change:opacity,transform}
   text-shadow:0 1px 1px rgba(255,255,255,.55)
 }
 .chem{background:rgba(255,255,255,.7);backdrop-filter:blur(2px)}
+
+/* 4 large water-drop contaminant groups (home) */
+.dropgroups{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;max-width:1120px;margin-inline:auto}
+.dropgroup{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:262px;padding:34px 24px;color:#fff;
+  background:radial-gradient(130% 115% at 32% 16%, #93c6ef 0%, #4D97DB 44%, #2f64bb 100%);
+  border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+  box-shadow:0 20px 40px rgba(47,104,189,.34), inset 0 10px 22px rgba(255,255,255,.32), inset 0 -16px 30px rgba(18,52,108,.4)}
+.dropgroup::before{content:"";position:absolute;top:7%;left:16%;width:40%;height:24%;background:radial-gradient(closest-side, rgba(255,255,255,.75), rgba(255,255,255,0));border-radius:50%;pointer-events:none}
+.dropgroup__std{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:rgba(255,255,255,.22);color:#fff;padding:5px 12px;border-radius:999px;margin-bottom:12px}
+.dropgroup__title{font-size:clamp(1.05rem,.9rem+.6vw,1.3rem);font-weight:700;line-height:1.15;margin:0 0 10px}
+.dropgroup__items{font-size:var(--step--1);line-height:1.5;color:rgba(255,255,255,.92);margin:0;max-width:34ch}
+@media(max-width:900px){.dropgroups{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.dropgroups{grid-template-columns:1fr;max-width:360px}.dropgroup{min-height:220px}}
+
+/* home full-width family banner */
+.home-banner{display:block;margin:0}
+.home-banner img{display:block;width:100%;height:auto}
