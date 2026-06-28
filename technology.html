@@ -331,5 +331,25 @@
 </footer>
 
 <script src="assets/js/main.js"></script>
+<!-- intro bubble + mineral effect -->
+<style>
+#bubblefx{position:fixed;inset:0;z-index:200;pointer-events:none;overflow:hidden;transition:opacity 1.2s ease}
+#bubblefx .bub{position:absolute;bottom:-70px;border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.95),rgba(126,209,214,.40) 55%,rgba(77,151,219,.18));box-shadow:0 0 14px rgba(77,151,219,.22);display:grid;place-items:center;font-family:'General Sans',sans-serif;font-weight:700;color:#2f6cc0;animation:bubrise linear forwards}
+@keyframes bubrise{0%{transform:translateY(0) scale(.5);opacity:0}12%{opacity:.92}100%{transform:translateY(-112vh) scale(1);opacity:0}}
+</style>
+<script>
+(function(){try{if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)return;}catch(e){}
+var fx=document.createElement('div');fx.id='bubblefx';document.body.appendChild(fx);
+var mins=['Ca','Mg','K','','','','','','',''];
+for(var i=0;i<48;i++){var b=document.createElement('span');b.className='bub';
+var sz=8+Math.random()*44;b.style.width=sz+'px';b.style.height=sz+'px';
+b.style.left=(Math.random()*100)+'%';
+b.style.animationDuration=(4+Math.random()*5)+'s';b.style.animationDelay=(Math.random()*2.8)+'s';
+if(sz>28){var m=mins[Math.floor(Math.random()*mins.length)];if(m){b.textContent=m;b.style.fontSize=(sz*0.42)+'px';}}
+fx.appendChild(b);}
+setTimeout(function(){fx.style.opacity='0';setTimeout(function(){if(fx&&fx.remove)fx.remove();},1300);},6800);
+})();
+</script>
+
 </body>
 </html>
