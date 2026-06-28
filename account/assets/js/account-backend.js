@@ -39,7 +39,7 @@
           { id: 'BT-10428', date: 'May 2, 2026', item: 'BetterTap Edge — Matte Black', qty: 1, total: '$1,280.00', status: 'Delivered', tracking: '1Z999AA10120000001' }
         ],
         machine: {
-          model: 'BetterTap Edge', model_no: 'WDDC-E032', color: 'Matte Black',
+          model: 'BetterTap Edge', model_no: 'WDC-E-032', color: 'Matte Black',
           serial: 'BT-EDGE-2026-004821',
           photo: '../assets/img/gallery-edge-black-front.webp',
           install_date: 'May 8, 2026',
