@@ -1424,7 +1424,7 @@ html.io [data-seq] [data-rise]{will-change:opacity,transform}
 
 /* home full-width family banner */
 .home-banner{display:block;margin:0}
-.home-banner img{display:block;width:100%;height:auto}
+.home-banner img{display:block;width:100%;height:auto;max-height:clamp(280px,40vw,520px);object-fit:cover;object-position:center}
 
 /* topbar 3-part message fits small screens */
 @media(max-width:600px){.topbar{font-size:10px;letter-spacing:.04em;padding:7px 10px;line-height:1.35}}
