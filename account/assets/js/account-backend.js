@@ -23,9 +23,9 @@
 
   /* ---------- one-time seed ---------- */
   (function seed() {
-    if (!LS.getItem('bt_acct_customers_v1')) {
+    if (!LS.getItem('bt_acct_customers_v2')) {
       var id = 'cust-1';
-      save('bt_acct_customers_v1', [{
+      save('bt_acct_customers_v2', [{
         id: id,
         full_name: 'Jordan Bennett',
         email: SEED_EMAIL,
@@ -38,11 +38,24 @@
           { id: 'BT-10593', date: 'June 20, 2026', item: 'MAZE Water Filter', qty: 1, total: '$89.00', status: 'Shipped', tracking: '1Z999AA10123456784' },
           { id: 'BT-10428', date: 'May 2, 2026', item: 'BetterTap Edge — Matte Black', qty: 1, total: '$1,280.00', status: 'Delivered', tracking: '1Z999AA10120000001' }
         ],
+        machine: {
+          model: 'BetterTap Edge', model_no: 'WDDC-E032', color: 'Matte Black',
+          serial: 'BT-EDGE-2026-004821',
+          photo: '../assets/img/gallery-edge-black-front.webp',
+          install_date: 'May 8, 2026',
+          install_images: ['../assets/img/lifestyle-kitchen.jpg', '../assets/img/family-counter.jpg', '../assets/img/dispense.jpg'],
+          filter_install_date: 'May 8, 2026',
+          filter_swap_date: 'November 8, 2026',
+          uv_swap_date: 'May 8, 2027'
+        },
+        tickets: [
+          { id: 'SR-3001', subject: 'Question about filter indicator', message: 'The filter light is blinking amber — is that normal?', date: 'June 18, 2026', status: 'Resolved' }
+        ],
         created_at: now()
       }]);
-      save('bt_acct_creds_v1', {});
+      save('bt_acct_creds_v2', {});
       var creds = {}; creds[SEED_EMAIL] = { id: id, password: SEED_PW };
-      save('bt_acct_creds_v1', creds);
+      save('bt_acct_creds_v2', creds);
     }
   })();
 
@@ -55,7 +68,7 @@
     getSession: function () { return sessionGet(); },
     signIn: function (email, password) {
       email = String(email || '').trim().toLowerCase();
-      var creds = load('bt_acct_creds_v1', {});
+      var creds = load('bt_acct_creds_v2', {});
       var rec = creds[email];
       if (!rec || rec.password !== password) return { error: 'Invalid email or password.' };
       sessionSet({ id: rec.id, email: email });
@@ -63,18 +76,18 @@
     },
     signUp: function (name, email, password) {
       email = String(email || '').trim().toLowerCase();
-      var creds = load('bt_acct_creds_v1', {});
+      var creds = load('bt_acct_creds_v2', {});
       if (creds[email]) return { error: 'An account with this email already exists — sign in instead.' };
-      var custs = load('bt_acct_customers_v1', []);
+      var custs = load('bt_acct_customers_v2', []);
       var id = uid();
       custs.push({
         id: id, full_name: name || '', email: email, phone: '',
         address: { line1: '', line2: '', city: '', state: '', zip: '' },
         card: null, household: null, subscription: null, orders: [], created_at: now()
       });
-      save('bt_acct_customers_v1', custs);
+      save('bt_acct_customers_v2', custs);
       creds[email] = { id: id, password: password };
-      save('bt_acct_creds_v1', creds);
+      save('bt_acct_creds_v2', creds);
       sessionSet({ id: id, email: email });
       return { ok: true };
     },
@@ -83,14 +96,14 @@
 
   /* ---------- data ---------- */
   function getCustomer(id) {
-    var custs = load('bt_acct_customers_v1', []);
+    var custs = load('bt_acct_customers_v2', []);
     for (var i = 0; i < custs.length; i++) { if (custs[i].id === id) return custs[i]; }
     return null;
   }
   function saveCustomer(cust) {
-    var custs = load('bt_acct_customers_v1', []);
+    var custs = load('bt_acct_customers_v2', []);
     for (var i = 0; i < custs.length; i++) { if (custs[i].id === cust.id) { custs[i] = cust; break; } }
-    save('bt_acct_customers_v1', custs);
+    save('bt_acct_customers_v2', custs);
   }
 
   window.BT_ACCT = {

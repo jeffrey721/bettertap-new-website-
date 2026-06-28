@@ -3,18 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My account — Better Tap</title>
 <meta name="robots" content="noindex">
-<link rel="canonical" href="https://dqz0fm-jv.myshopify.com/account">
-<meta http-equiv="refresh" content="0; url=https://dqz0fm-jv.myshopify.com/account">
-<script>location.replace("https://dqz0fm-jv.myshopify.com/account");</script>
-<style>body{font-family:"General Sans",system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0;background:#141937;color:#fff;text-align:center;padding:24px}a{color:#7fd1d6;font-weight:600;text-decoration:none}</style>
+<title>My account — Better Tap</title>
+<link rel="icon" type="image/png" href="../assets/img/bmark-white.png">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/account.css">
 </head>
 <body>
-<div>
-<p style="font-size:18px;font-weight:600">Taking you to your account…</p>
-<p style="opacity:.8">Better Tap accounts are managed securely on Shopify.</p>
-<p><a href="https://dqz0fm-jv.myshopify.com/account">Continue to log in &rarr;</a></p>
-</div>
+  <!-- APP BAR -->
+  <header class="appbar">
+    <a href="https://www.drinkbettertap.com" class="appbar__brand"><img src="../assets/img/bmark-white.png" alt=""> Bettertap</a>
+    <span class="demo-badge">Demo portal</span>
+    <span class="appbar__spacer"></span>
+    <a href="https://www.drinkbettertap.com/shop.html" class="appbar__link">Shop</a>
+    <div class="user-menu" id="userMenu">
+      <button class="avatar" id="avatarBtn"><span class="circle" id="avatarInitials">—</span><span id="avatarName">Account</span></button>
+      <div class="menu">
+        <div class="who"><b id="menuName">—</b><span id="menuEmail">—</span></div>
+        <a href="https://www.drinkbettertap.com">Back to site</a>
+        <button id="signoutBtn">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE TABS -->
+  <nav class="mobile-tabs" id="mobileTabs" aria-label="Sections"></nav>
+
+  <div class="shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <p class="sb-title">My account</p>
+      <nav id="sidenav"></nav>
+    </aside>
+
+    <!-- CONTENT (panes built by account.js) -->
+    <main class="content" id="content"></main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="assets/js/account-backend.js"></script>
+  <script src="assets/js/account.js"></script>
 </body>
 </html>

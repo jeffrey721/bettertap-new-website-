@@ -3,18 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My account — Better Tap</title>
 <meta name="robots" content="noindex">
-<link rel="canonical" href="https://dqz0fm-jv.myshopify.com/account">
-<meta http-equiv="refresh" content="0; url=https://dqz0fm-jv.myshopify.com/account">
-<script>location.replace("https://dqz0fm-jv.myshopify.com/account");</script>
-<style>body{font-family:"General Sans",system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0;background:#141937;color:#fff;text-align:center;padding:24px}a{color:#7fd1d6;font-weight:600;text-decoration:none}</style>
+<title>Sign in — Better Tap</title>
+<link rel="icon" type="image/png" href="../assets/img/bmark-white.png">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/account.css">
 </head>
 <body>
-<div>
-<p style="font-size:18px;font-weight:600">Taking you to your account…</p>
-<p style="opacity:.8">Better Tap accounts are managed securely on Shopify.</p>
-<p><a href="https://dqz0fm-jv.myshopify.com/account">Continue to log in &rarr;</a></p>
-</div>
+  <div class="auth">
+    <!-- LEFT: brand -->
+    <aside class="auth__brand">
+      <a href="https://www.drinkbettertap.com" class="brand-row"><img src="../assets/img/bmark-white.png" alt=""> Bettertap</a>
+      <div class="auth__brandbody">
+        <span class="demo-badge">Demo portal</span>
+        <h1>Your water, your account.</h1>
+        <p class="sub">Track orders, manage your filter subscription, and keep your details up to date — all in one place.</p>
+        <ul class="auth__bullets">
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Order history &amp; tracking</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Filter subscription &amp; replacement reminders</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Profile, addresses &amp; payment</li>
+        </ul>
+      </div>
+      <a href="https://www.drinkbettertap.com" class="auth__back">&larr; Back to drinkbettertap.com</a>
+    </aside>
+
+    <!-- RIGHT: form -->
+    <section class="auth__panel">
+      <div class="auth__card">
+        <div class="topline">
+          <span class="demo-badge">Better Tap</span>
+        </div>
+        <h2 id="title">Welcome back</h2>
+        <p class="lede" id="subtitle">Sign in to your Better Tap account.</p>
+
+        <div class="demo-hint">Demo login — email <b>you@drinkbettertap.com</b>, password <b>bettertap</b>. Or create a new account.</div>
+
+        <form id="authForm" autocomplete="on" novalidate>
+          <div class="field" id="nameField" style="display:none">
+            <label for="fullName">Full name</label>
+            <input type="text" id="fullName" autocomplete="name" placeholder="Jordan Bennett">
+          </div>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input type="email" id="email" autocomplete="email" required placeholder="you@drinkbettertap.com">
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <input type="password" id="password" autocomplete="current-password" required minlength="6" placeholder="••••••••">
+              <button type="button" class="toggle" id="pwToggle" aria-label="Show password">Show</button>
+            </div>
+          </div>
+          <p class="err" id="err"></p>
+          <button type="submit" class="btn btn--primary btn--block" id="submitBtn">Sign in</button>
+        </form>
+
+        <p class="auth__alt"><span id="altText">New to Better Tap?</span> <a class="link" id="altLink">Create an account</a></p>
+      </div>
+    </section>
+  </div>
+
+  <script src="assets/js/account-backend.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    var mode = 'signin';
+    var el = function (id) { return document.getElementById(id); };
+    var errEl = el('err');
+    function showErr(m) { errEl.textContent = m || ''; }
+
+    // already signed in? go to dashboard
+    if (window.BT_ACCT.auth.getSession()) { location.replace('app.html'); return; }
+
+    el('pwToggle').addEventListener('click', function () {
+      var p = el('password');
+      var show = p.type === 'password';
+      p.type = show ? 'text' : 'password';
+      this.textContent = show ? 'Hide' : 'Show';
+    });
+
+    function setMode(m) {
+      mode = m; showErr('');
+      var signup = m === 'signup';
+      el('title').textContent = signup ? 'Create your account' : 'Welcome back';
+      el('subtitle').textContent = signup ? 'Set up your Better Tap account.' : 'Sign in to your Better Tap account.';
+      el('submitBtn').textContent = signup ? 'Create account' : 'Sign in';
+      el('nameField').style.display = signup ? '' : 'none';
+      el('password').setAttribute('autocomplete', signup ? 'new-password' : 'current-password');
+      el('altText').textContent = signup ? 'Already have an account?' : 'New to Better Tap?';
+      el('altLink').textContent = signup ? 'Sign in' : 'Create an account';
+    }
+    el('altLink').addEventListener('click', function () { setMode(mode === 'signin' ? 'signup' : 'signin'); });
+
+    el('authForm').addEventListener('submit', function (e) {
+      e.preventDefault(); showErr('');
+      var email = el('email').value.trim();
+      var password = el('password').value;
+      var name = el('fullName').value.trim();
+      if (!email || !password) { showErr('Please enter your email and password.'); return; }
+      if (password.length < 6) { showErr('Password must be at least 6 characters.'); return; }
+      var res = mode === 'signup'
+        ? window.BT_ACCT.auth.signUp(name, email, password)
+        : window.BT_ACCT.auth.signIn(email, password);
+      if (res.error) { showErr(res.error); return; }
+      location.href = 'app.html';
+    });
+  })();
+  </script>
 </body>
 </html>
