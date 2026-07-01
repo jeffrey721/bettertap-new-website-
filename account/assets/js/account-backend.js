@@ -83,7 +83,8 @@
       custs.push({
         id: id, full_name: name || '', email: email, phone: '',
         address: { line1: '', line2: '', city: '', state: '', zip: '' },
-        card: null, household: null, subscription: null, orders: [], created_at: now()
+        card: null, household: null, subscription: null, orders: [],
+        machine: null, tickets: [], created_at: now()
       });
       save('bt_acct_customers_v2', custs);
       creds[email] = { id: id, password: password };

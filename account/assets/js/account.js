@@ -356,7 +356,7 @@
     var pane = el('pane-guides');
     var guides = [
       { title: 'Installing your BetterTap', img: '../assets/img/family-counter.jpg', url: SITE + '/guides.html' },
-      { title: 'Swapping the MAZE filter', img: '../assets/img/filter-stages.jpg', url: SITE + '/guides.html#filter' },
+      { title: 'Swapping the MAZE filter', img: '../assets/img/filter-exploded.jpg', url: SITE + '/guides.html#filter' },
       { title: 'Changing the UV lamp', img: '../assets/img/uv-poster.jpg', url: SITE + '/guides.html#uv-lamp' },
       { title: 'Cleaning & daily care', img: '../assets/img/dispense.jpg', url: SITE + '/guides.html' }
     ];
