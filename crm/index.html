@@ -36,6 +36,11 @@
         <span id="toggleText">First time here?</span>
         <a id="toggleLink">Create your account</a>
       </div>
+
+      <div class="msg info show" style="margin-top:18px;font-size:.78rem;text-align:left">
+        <b>Demo logins</b> — password <code>bettertap</code>. Click a role to fill:
+        <div id="demoRoles" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
+      </div>
     </div>
   </div>
 
@@ -94,6 +99,26 @@
       }
     }
     toggleLink.addEventListener('click', function(){ setMode(mode === 'signin' ? 'signup' : 'signin'); });
+
+    // demo-login quick-fill buttons
+    var DEMO = [
+      ['CEO','jeffrey@drinkbettertap.com'], ['CS + Sales','ruchama@drinkbettertap.com'],
+      ['Customer Service','dana.cs@drinkbettertap.com'], ['Sales','noa@drinkbettertap.com'],
+      ['Marketing','tali@drinkbettertap.com'], ['Operations','eli@drinkbettertap.com'],
+      ['Installer','morry@drinkbettertap.com']
+    ];
+    var dr = document.getElementById('demoRoles');
+    if (dr) DEMO.forEach(function(d){
+      var b = document.createElement('button');
+      b.type = 'button'; b.textContent = d[0];
+      b.style.cssText = 'font-size:.74rem;font-weight:600;padding:5px 10px;border-radius:100px;border:1px solid var(--blue-100);background:#fff;color:#23577E;cursor:pointer';
+      b.addEventListener('click', function(){
+        setMode('signin');
+        document.getElementById('email').value = d[1];
+        pwd.value = 'bettertap';
+      });
+      dr.appendChild(b);
+    });
 
     document.getElementById('authForm').addEventListener('submit', function(e){
       e.preventDefault();

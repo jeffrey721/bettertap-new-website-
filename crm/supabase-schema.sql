@@ -9,6 +9,13 @@ do $$ begin
   create type public.app_role as enum ('ceo','operations','customer_service_sales','installer');
 exception when duplicate_object then null; end $$;
 
+-- Field-service roles added to the enum (safe to re-run).
+-- NOTE: run this file top-to-bottom. Policies below compare role via ::text so
+-- newly-added enum values are never used as literals in the same transaction.
+alter type public.app_role add value if not exists 'marketing';
+alter type public.app_role add value if not exists 'sales';
+alter type public.app_role add value if not exists 'customer_service';
+
 -- ---- Profiles: one row per signed-in user, holds their role -----------------
 create table if not exists public.profiles (
   id          uuid primary key references auth.users on delete cascade,
