@@ -348,7 +348,7 @@
           '</div></div>';
       }).join(''):ph('No machine registered','No installed asset on file yet.'); }
       function ordersPane(){ return orders.length? tableCard('<th>Order</th><th>Plan</th><th>Total</th><th>Paid</th><th>Balance</th><th>Stage</th>',
-        orders.map(function(o){ return '<tr><td>'+esc(o.shopify_order_id||o.id.slice(0,6))+'<br><span class="muted">'+fmtDay(o.order_date)+'</span></td><td>'+esc(o.plan)+'</td><td>'+money(o.amount_total)+'</td><td>'+money(o.amount_paid)+'</td><td>'+money(o.balance)+'</td><td>'+badge('',o.stage)+'</td></tr>'; }).join('')):ph('No orders','')); }
+        orders.map(function(o){ return '<tr><td>'+esc(o.shopify_order_id||o.id.slice(0,6))+'<br><span class="muted">'+fmtDay(o.order_date)+'</span></td><td>'+esc(o.plan)+'</td><td>'+money(o.amount_total)+'</td><td>'+money(o.amount_paid)+'</td><td>'+money(o.balance)+'</td><td>'+badge('',o.stage)+'</td></tr>'; }).join('')):ph('No orders',''); }
       function casesPane(){ return cases.length? casesTable(cases,db.customers):ph('No cases',''); }
       function timelinePane(){ return inter.length? '<div class="timeline">'+inter.map(function(t){
         return '<div class="tl"><div class="tl__dot"></div><div class="tl__body"><div class="tl__top"><b>'+esc(t.type)+'</b> <span class="muted">'+esc(t.direction)+' · '+fmtDate(t.timestamp)+(t.duration_sec?' · '+Math.round(t.duration_sec/60)+'m':'')+'</span></div><div>'+esc(t.subject||'')+'</div><div class="muted">'+esc(t.body||'')+'</div></div></div>';
