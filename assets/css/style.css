@@ -1441,3 +1441,35 @@ html.io [data-seq] [data-rise]{will-change:opacity,transform}
   /* buy bar full-width & thumb-friendly */
   .buybar{padding:15px 20px 13px;font-size:var(--step-0)}
 }
+
+
+/* ===== aggressive split hero (home) ===== */
+.phero--split{padding:clamp(24px,4.5vw,68px) 0 clamp(36px,6vw,90px);text-align:left;overflow:hidden}
+.phero--split .phero__grid{display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(16px,3.5vw,54px);align-items:center;position:relative;z-index:2}
+.phero__copy{text-align:left}
+.phero--split .phero__eyebrow{margin-bottom:14px}
+.phero__mega{font-family:var(--display);font-weight:700;text-transform:uppercase;line-height:.84;letter-spacing:-.035em;font-size:clamp(3.1rem,10.5vw,8.2rem);color:var(--navy);margin:0 0 clamp(16px,2vw,26px)}
+.phero__mega-accent{color:var(--blue);display:inline-block}
+.phero--split .phero__lede{margin:0 0 26px;max-width:44ch;font-size:var(--step-1);text-align:left}
+.phero--split .phero__actions{justify-content:flex-start}
+.phero__media{position:relative;display:grid;place-items:center;min-height:min(60vh,540px)}
+.phero__media .phero__machine{position:relative;z-index:1}
+.phero__media .phero__img{height:min(58vh,540px);width:auto}
+.pbadge{position:absolute;z-index:3;background:#fff;border:1px solid var(--line-soft);border-radius:100px;padding:9px 15px;font-size:.82rem;font-weight:600;color:var(--navy);box-shadow:0 14px 34px -14px rgba(20,25,55,.4);display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.pbadge::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--blue);flex:none}
+.pbadge--tr{top:5%;right:-2%}
+.pbadge--mr{top:46%;right:-6%}
+.pbadge--bl{bottom:9%;left:-2%}
+.pbadge--bl::before{background:#e0a80e}
+@media(max-width:820px){
+  .phero--split .phero__grid{grid-template-columns:1fr;gap:6px;text-align:center}
+  .phero__copy{text-align:center}
+  .phero__mega{font-size:clamp(2.9rem,15vw,5rem)}
+  .phero--split .phero__lede{margin-inline:auto;text-align:center}
+  .phero--split .phero__actions{justify-content:center}
+  .phero__media{min-height:auto;margin-top:16px}
+  .phero__media .phero__img{height:auto;width:min(72vw,320px)}
+  .pbadge{font-size:.72rem;padding:7px 11px}
+  .pbadge--tr{right:1%}.pbadge--mr{right:0}.pbadge--bl{left:0}
+}
+@media(max-width:480px){.pbadge--mr{display:none}}
