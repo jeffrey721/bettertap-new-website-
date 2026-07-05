@@ -1508,3 +1508,21 @@ html.io [data-seq] [data-rise]{will-change:opacity,transform}
 .pcard__cta{margin-top:auto}
 .pcard--pop .pcard__cta{background:#34c0a8;color:var(--navy)}
 .pcard--pop .pcard__cta:hover{background:#2bb39a}
+
+
+/* ===== pricing cards — reference-matched refinements ===== */
+.pcard__head{align-items:center}
+.pcard__flag{position:static;top:auto;left:auto;background:#34c0a8;color:#0c1836;font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:6px 12px;border-radius:100px}
+.pcard__tab{position:absolute;top:0;left:50%;transform:translate(-50%,-52%);background:#34c0a8;color:#0c1836;font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:7px 16px;border-radius:100px;white-space:nowrap;box-shadow:0 8px 18px -6px rgba(52,192,168,.75)}
+.pcard--lease{border:2px solid #34c0a8}
+.pcard__ic svg{width:19px;height:19px}
+.pcard__ic--green{background:#dff5e7}
+.pcard__ic--green svg{color:#1f9d55}
+.pcard__ic--gold{background:#fbeecb}
+.pcard__ic--gold svg{color:#d9a521}
+.pay-pill{font-size:.66rem;font-weight:800;letter-spacing:.02em;padding:5px 11px;border-radius:8px}
+.pay-pill--shop{background:#5A31F4;color:#fff}
+.pay-pill--klarna{background:#FFB3C7;color:#17120b}
+.pay-pill--amazon{background:#FF9900;color:#17120b}
+.pcard__cta--teal{background:#34c0a8;color:#0c1836}
+.pcard__cta--teal:hover{background:#2bb39a;color:#0c1836}
