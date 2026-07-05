@@ -109,7 +109,7 @@
           <h1>Better Tap Water Bar</h1>
           <p class="pdp__model" style="margin:4px 0 0;font-size:var(--step--1);color:var(--ink-40);letter-spacing:.04em">Model No. WDC-E-032</p>
           <div class="pdp__rating mt-s"><span class="stars">★★★★★</span> 4.9 <span style="color:var(--ink-40)">(1,248 reviews)</span></div>
-          <div class="plans" data-plans>
+          <div class="plans" id="plans" data-plans>
             <div class="plan-tabs" role="tablist" aria-label="Payment options">
               <button class="plan-tab active" data-plan="cash" role="tab">Pay in full</button>
               <button class="plan-tab" data-plan="installments" role="tab">Installments</button>
@@ -337,54 +337,56 @@
     <div class="wrap center">
       <p class="eyebrow" data-rise>What's included</p>
       <h2 class="mt-s" data-rise>Three ways to bring Better Tap home.</h2>
-      <p class="lede mt-s maxw-prose" data-rise style="margin-inline:auto">Own it outright, spread it over a monthly lease, or subscribe for fully managed clarity — every option arrives filtering from day one. Choose your terms in the pricing options above.</p>
-      <div class="planpick mt-l" data-rise>
-        <button class="planpick__box active" data-plan-tab="buy">
-          <span class="planpick__ic"><svg class="ic"><use href="assets/img/icons.svg#shield"/></svg></span>
-          <b>Buy</b><span>Own it outright</span>
-        </button>
-        <button class="planpick__box" data-plan-tab="subscribe">
-          <span class="planpick__ic"><svg class="ic"><use href="assets/img/icons.svg#calendar"/></svg></span>
-          <b>Subscribe</b><span>Fully managed</span>
-        </button>
-        <button class="planpick__box" data-plan-tab="lease">
-          <span class="planpick__ic"><svg class="ic"><use href="assets/img/icons.svg#instant"/></svg></span>
-          <b>Lease</b><span>Low monthly</span>
-        </button>
-      </div>
+      <p class="lede mt-s maxw-prose" data-rise style="margin-inline:auto">Own it outright, spread it over a monthly lease, or subscribe for fully managed clarity — every option arrives filtering from day one. Choose the plan that fits — every option arrives filtering from day one.</p>
+      <div class="pcards mt-l" data-rise>
+        <article class="pcard">
+          <div class="pcard__head"><span class="pcard__num">01 · Own outright</span><span class="pcard__ic"><svg class="ic"><use href="assets/img/icons.svg#shield"/></svg></span></div>
+          <div class="pcard__price">$1,280</div>
+          <div class="pcard__unit">One payment · Best value</div>
+          <h3 class="pcard__title">Pay it once. Own it forever.</h3>
+          <p class="pcard__desc">Hardware, professional install and a 3-year warranty — the lowest long-term cost.</p>
+          <ul class="pcard__list">
+            <li>Full unit ownership, day one</li>
+            <li>Professional installation included</li>
+            <li>First year of filters &amp; UV-C covered</li>
+            <li>3-year warranty — extendable for life</li>
+          </ul>
+          <a class="btn btn--ghost btn--lg btn--block pcard__cta" data-buy-now href="https://dqz0fm-jv.myshopify.com/cart/48528551149817:1">Buy Better Tap →</a>
+        </article>
 
-      <div class="planpanel" data-plan-panel="buy">
-        <p class="lede" style="max-width:62ch;margin:0 auto 24px">Pay once and the Better Tap system is yours to keep &mdash; no monthly commitment, full control from day one.</p>
-        <div class="planpanel__grid">
-          <div class="planfeat"><span class="planfeat__ic"><svg class="ic"><use href="assets/img/icons.svg#maze"/></svg></span><h4>MAZE filter</h4><p>High-performance filter for great taste and system performance. First year of cartridges covered.</p></div>
-          <div class="planfeat"><span class="planfeat__ic"><svg class="ic"><use href="assets/img/icons.svg#uv"/></svg></span><h4>UV-C lamp</h4><p>Microbiological treatment, certified to NSF 55 (Class B). First year of lamps covered.</p></div>
-          <div class="planfeat"><span class="planfeat__ic"><svg class="ic"><use href="assets/img/icons.svg#wrench"/></svg></span><h4>Professional installation</h4><p>A technician connects the system to your mains, usually within the hour.</p></div>
-          <div class="planfeat"><span class="planfeat__ic"><svg class="ic"><use href="assets/img/icons.svg#shield"/></svg></span><h4>3-year warranty</h4><p>Comprehensive cover for your system &mdash; extendable for life.</p></div>
-        </div>
-      </div>
+        <article class="pcard pcard--pop">
+          <span class="pcard__flag">★ Most popular</span>
+          <div class="pcard__head"><span class="pcard__num">02 · Split it</span></div>
+          <div class="pcard__price">$1,280<span class="pcard__sub"> total</span></div>
+          <div class="pcard__unit">Pay over time · no added cost</div>
+          <h3 class="pcard__title">Same total, spread out.</h3>
+          <p class="pcard__desc">Split your payment at checkout with Shop&nbsp;Pay, Klarna or Amazon&nbsp;Pay — same $1,280, no extra cost.</p>
+          <div class="pcard__pays"><span>Shop Pay</span><span>Klarna</span><span>Amazon Pay</span></div>
+          <ul class="pcard__list">
+            <li>$1,280 total — same as one-time</li>
+            <li>Pay over time, no added cost</li>
+            <li>Choose your plan at checkout</li>
+            <li>Hardware, install &amp; warranty included</li>
+          </ul>
+          <a class="btn btn--primary btn--lg btn--block pcard__cta" data-buy-now href="https://dqz0fm-jv.myshopify.com/cart/48528551149817:1">Pay over time →</a>
+        </article>
 
-      <div class="planpanel" data-plan-panel="subscribe" hidden>
-        <p class="lede" style="max-width:62ch;margin:0 auto 24px">A hands-off plan &mdash; replacements arrive automatically and our team keeps everything running at its best. No large upfront cost.</p>
-        <div class="planpanel__grid">
-          <div class="planfeat"><span class="planfeat__ic"><svg class="ic"><use href="assets/img/icons.svg#maze"/></svg></span><h4>Filters &mdash; included</h4><p>MAZE TE filter replacements every 6 months, included in your plan.</p></div>
-          <div class="planfeat"><span class="planfeat__ic"><svg class="ic"><use href="assets/img/icons.svg#uv"/></svg></span><h4>UV-C lamps &mdash; included</h4><p>UV-C lamp replacements about every 12 months, included.</p></div>
-          <div class="planfeat"><span class="planfeat__ic"><svg class="ic"><use href="assets/img/icons.svg#wrench"/></svg></span><h4>Call-out support</h4><p>A qualified technician visits to diagnose and resolve any issue.</p></div>
-          <div class="planfeat"><span class="planfeat__ic"><svg class="ic"><use href="assets/img/icons.svg#shield"/></svg></span><h4>Full warranty</h4><p>Comprehensive cover throughout your subscription.</p></div>
-        </div>
+        <article class="pcard pcard--lease">
+          <span class="pcard__flag pcard__flag--lease">Zero commitment</span>
+          <div class="pcard__head"><span class="pcard__num">03 · Lease it</span><span class="pcard__ic"><svg class="ic"><use href="assets/img/icons.svg#instant"/></svg></span></div>
+          <div class="pcard__price">$25<span class="pcard__sub">/mo</span></div>
+          <div class="pcard__unit">Filters, UV-C &amp; service included</div>
+          <h3 class="pcard__title">Try it. Keep it. Fully managed.</h3>
+          <p class="pcard__desc">A low monthly payment with everything looked after — service and warranty included for the life of the lease.</p>
+          <ul class="pcard__list">
+            <li>Professional installation included</li>
+            <li>MAZE filters &amp; UV-C lamps included</li>
+            <li>Service &amp; warranty for the lease term</li>
+            <li>Low monthly — small setup fee</li>
+          </ul>
+          <a class="btn btn--ghost btn--lg btn--block pcard__cta" href="#plans">Start a lease →</a>
+        </article>
       </div>
-
-      <div class="planpanel" data-plan-panel="lease" hidden>
-        <p class="lede" style="max-width:62ch;margin:0 auto 24px">A low monthly payment with everything looked after &mdash; a small one-time setup fee, then service and warranty included.</p>
-        <div class="planpanel__grid">
-          <div class="planfeat"><span class="planfeat__ic"><svg class="ic"><use href="assets/img/icons.svg#instant"/></svg></span><h4>The Better Tap system</h4><p>Installed and ready, with professional installation included.</p></div>
-          <div class="planfeat"><span class="planfeat__ic"><svg class="ic"><use href="assets/img/icons.svg#maze"/></svg></span><h4>Filters &amp; UV included</h4><p>MAZE cartridges and UV-C lamps included throughout your lease.</p></div>
-          <div class="planfeat"><span class="planfeat__ic"><svg class="ic"><use href="assets/img/icons.svg#calendar"/></svg></span><h4>Very low monthly</h4><p>A low monthly payment with a small initial commitment fee.</p></div>
-          <div class="planfeat"><span class="planfeat__ic"><svg class="ic"><use href="assets/img/icons.svg#shield"/></svg></span><h4>Lifetime of service</h4><p>Service and warranty included for the life of the lease.</p></div>
-        </div>
-      </div>
-      <script>
-      (function(){var bx=document.querySelectorAll('.planpick__box'),pn=document.querySelectorAll('.planpanel');bx.forEach(function(b){b.addEventListener('click',function(){bx.forEach(function(x){x.classList.remove('active');});b.classList.add('active');var k=b.getAttribute('data-plan-tab');pn.forEach(function(p){p.hidden=p.getAttribute('data-plan-panel')!==k;});});});})();
-      </script>
 
     </div>
   </section>
