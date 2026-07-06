@@ -1547,3 +1547,9 @@ html.io [data-seq] [data-rise]{will-change:opacity,transform}
 .pcard:hover .pcard__ic{background:rgba(255,255,255,.16)}
 .pcard:hover .pcard__ic svg{color:#fff}
 .pcard:hover .pcard__cta.btn--ghost{background:#fff;color:var(--navy);border-color:#fff}
+
+
+/* recommended (lease) middle card + subscribe icon */
+.pcard__ic--blue{background:var(--blue-050)}
+.pcard__ic svg{color:var(--blue)}
+@media(min-width:921px){.pcard--rec{transform:translateY(-8px)}.pcard--rec:hover{transform:translateY(-14px)}}
