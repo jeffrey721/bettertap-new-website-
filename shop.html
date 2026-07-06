@@ -612,12 +612,12 @@
 <script>
 /* Better Tap — pricing models
    1) Cash: $1,200 one-time (3-year warranty)
-   2) Installments: $1,499 total, paid over time via Shop Pay Installments; terms chosen at checkout
-   3) Lease: $500 upfront, then $25/mo for life (service & warranty incl.)  */
+   2) Installments: $1,200 base +5% per term over 12/24/36 months (3-year warranty)
+   3) Lease: $450 upfront, then $25/mo (lifetime warranty)  */
 (function(){
   var CASH = 1200;                              // pay-in-full, one-time (no term)
   var INSTALL_TOTAL = 1380;                     // installments: total price when financed
-  var INSTALL_MO = { 12:105, 24:55, 36:38 };    // installments: monthly payment by term (~$1,499)
+  var INSTALL_MO = { 12:105, 24:55, 36:38 };    // installments: monthly payment by term (base $1,200 +5%/term)
   var LEASE_UP = 450, LEASE_MO = 25;            // lease: $450 upfront + $25/mo
   var root = document.querySelector('[data-plans]');
   if(!root) return;
