@@ -1526,3 +1526,24 @@ html.io [data-seq] [data-rise]{will-change:opacity,transform}
 .pay-pill--amazon{background:#FF9900;color:#17120b}
 .pcard__cta--teal{background:#34c0a8;color:#0c1836}
 .pcard__cta--teal:hover{background:#2bb39a;color:#0c1836}
+
+
+/* ===== uniform pricing tiles + dark-blue hover ===== */
+.pcard,.pcard--pop,.pcard--lease{background:#fff;border:1px solid var(--line-soft);color:var(--ink);transform:none;box-shadow:var(--shadow-sm);transition:background .25s var(--ease),color .25s,transform .22s var(--ease),box-shadow .25s}
+.pcard--pop .pcard__num{color:var(--ink-40)}
+.pcard--pop .pcard__price{color:var(--navy)}
+.pcard--pop .pcard__sub{color:var(--ink-40)}
+.pcard--pop .pcard__unit{color:var(--blue)}
+.pcard--pop .pcard__title{color:var(--navy)}
+.pcard--pop .pcard__desc{color:var(--ink-60)}
+.pcard--pop .pcard__list li{color:var(--ink)}
+.pcard:hover{background:var(--navy);color:#fff;transform:translateY(-6px);box-shadow:0 30px 60px -22px rgba(14,18,48,.55)}
+.pcard:hover .pcard__num{color:rgba(255,255,255,.6)}
+.pcard:hover .pcard__price,.pcard:hover .pcard__title{color:#fff}
+.pcard:hover .pcard__sub{color:rgba(255,255,255,.55)}
+.pcard:hover .pcard__unit{color:#7fe0cf}
+.pcard:hover .pcard__desc{color:rgba(255,255,255,.82)}
+.pcard:hover .pcard__list li{color:rgba(255,255,255,.92)}
+.pcard:hover .pcard__ic{background:rgba(255,255,255,.16)}
+.pcard:hover .pcard__ic svg{color:#fff}
+.pcard:hover .pcard__cta.btn--ghost{background:#fff;color:var(--navy);border-color:#fff}
