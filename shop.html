@@ -201,7 +201,7 @@
             <li>First year of filters &amp; UV-C included</li>
             <li>3 full years of warranty</li>
           </ul>
-          <a class="btn btn--ghost btn--lg btn--block pcard__cta" data-buy-now href="https://dqz0fm-jv.myshopify.com/cart/48528551149817:1">Buy Better Tap →</a>
+          <a class="btn btn--ghost btn--lg btn--block pcard__cta" data-plan-cta="cash" href="#plans">Buy Better Tap →</a>
         </article>
 
         <article class="pcard pcard--lease pcard--rec">
@@ -219,7 +219,7 @@
             <li>MAZE filters &amp; UV-C lamps included</li>
             <li>Cancel any time — free uninstall</li>
           </ul>
-          <a class="btn btn--lg btn--block pcard__cta pcard__cta--teal" href="#plans">Start a lease →</a>
+          <a class="btn btn--lg btn--block pcard__cta pcard__cta--teal" data-plan-cta="lease" href="#plans">Start a lease →</a>
         </article>
 
         <article class="pcard">
@@ -242,7 +242,7 @@
             <li>36 months — $38/mo · $1,380</li>
             <li>3-year warranty included</li>
           </ul>
-          <a class="btn btn--ghost btn--lg btn--block pcard__cta" data-buy-now href="https://dqz0fm-jv.myshopify.com/cart/48528551149817:1">Choose a plan →</a>
+          <a class="btn btn--ghost btn--lg btn--block pcard__cta" data-plan-cta="installments" href="#plans">Choose a plan →</a>
         </article>
       </div>
 
@@ -686,6 +686,22 @@
 </script>
 <!-- Shopify real cart + hosted checkout (self-disables until token is set in shopify-cart.js) -->
 <script src="assets/js/shopify-cart.js"></script>
+<script>
+/* Pricing-card CTAs -> select the matching plan tab, then run the PDP's wired checkout
+   (cash/installments -> one-time machine checkout; lease -> lease checkout). */
+(function(){
+  document.querySelectorAll('[data-plan-cta]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      var plan = a.getAttribute('data-plan-cta');
+      var tab = document.querySelector('[data-plans] .plan-tab[data-plan="'+plan+'"]');
+      if(tab){ tab.click(); }
+      var buy = document.querySelector('.pdp [data-buy-now]') || document.querySelector('[data-buy-now]');
+      if(buy){ buy.click(); } else { location.hash = 'plans'; }
+    });
+  });
+})();
+</script>
 <!-- Reliable Shopify checkout wiring (cart permalinks, colour-aware) -->
 <script>
 (function(){
