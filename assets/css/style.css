@@ -1552,4 +1552,4 @@ html.io [data-seq] [data-rise]{will-change:opacity,transform}
 /* recommended (lease) middle card + subscribe icon */
 .pcard__ic--blue{background:var(--blue-050)}
 .pcard__ic svg{color:var(--blue)}
-@media(min-width:921px){.pcard--rec{transform:translateY(-8px)}.pcard--rec:hover{transform:translateY(-14px)}}
+/* recommended card stays on the same line as the others (no raise) */
