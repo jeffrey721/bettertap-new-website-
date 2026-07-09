@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Calcium (Ca)">
+  <rect x="3.5" y="3.5" width="93" height="93" rx="18" fill="#ffffff" stroke="#0E1230" stroke-width="5"/>
+  <rect x="10" y="10" width="80" height="80" rx="12" fill="#ffffff" stroke="#A9DEFF" stroke-width="5"/>
+  <text x="50" y="51" text-anchor="middle" dominant-baseline="central" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-weight="700" font-size="33" fill="#0E1230">Ca</text>
+</svg>
