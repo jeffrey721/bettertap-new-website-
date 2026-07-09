@@ -253,9 +253,21 @@
     f.addEventListener('submit', function(e){
       e.preventDefault();
       var msg=f.getAttribute('data-msg')||'Thanks — we’ll be in touch.';
-      var n=document.createElement('p'); n.textContent=msg; n.style.cssText='margin-top:12px;font-weight:600;color:var(--blue)';
-      if(!f.querySelector('.form-note')){n.className='form-note';f.appendChild(n);}
-      f.reset();
+      var email=f.querySelector('input[type="email"]');
+      if(email){
+        // green check confirmation inside the email box (keeps the input's exact size)
+        email.value='✓ Subscribed';
+        email.readOnly=true;
+        email.style.cssText+=';color:#1f8a5b;font-weight:700;border-color:#1f8a5b';
+      } else { f.reset(); }
+      // append the confirmation note to the form's parent (BELOW the row) so the
+      // flex row never gains a third item and keeps its exact dimensions
+      var host=f.parentNode||f;
+      if(host && !host.querySelector('.form-note')){
+        var n=document.createElement('p'); n.className='form-note'; n.textContent=msg;
+        n.style.cssText='margin-top:12px;font-weight:600;color:var(--blue)';
+        host.appendChild(n);
+      }
     });
   });
 })();
