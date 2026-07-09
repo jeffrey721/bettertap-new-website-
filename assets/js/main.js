@@ -255,6 +255,11 @@
       var msg=f.getAttribute('data-msg')||'Thanks — we’ll be in touch.';
       var email=f.querySelector('input[type="email"]');
       if(email){
+        var addr=(email.value||'').trim();
+        // send the welcome email via the Better Tap API (non-blocking; newsletter form only)
+        if(addr && f.classList.contains('subscribe')){
+          try{ fetch('https://clear-bar.vercel.app/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:addr})}).catch(function(){}); }catch(e){}
+        }
         // green check confirmation inside the email box (keeps the input's exact size)
         email.value='✓ Subscribed';
         email.readOnly=true;
