@@ -1455,7 +1455,9 @@ html.io [data-seq] [data-rise]{will-change:opacity,transform}
 .phero__media{position:relative;display:grid;place-items:center;min-height:min(60vh,540px)}
 .phero__media .phero__machine{position:relative;z-index:1}
 .phero__media .phero__img{height:min(58vh,540px);width:auto}
-.pbadge{position:absolute;z-index:3;background:#fff;border:1px solid var(--line-soft);border-radius:100px;padding:9px 15px;font-size:.82rem;font-weight:600;color:var(--navy);box-shadow:0 14px 34px -14px rgba(20,25,55,.4);display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.pbadge{position:absolute;z-index:3;background:#fff;border:1px solid var(--line-soft);border-radius:100px;padding:9px 15px;font-size:.82rem;font-weight:600;color:var(--navy);text-decoration:none;box-shadow:0 14px 34px -14px rgba(20,25,55,.4);display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+a.pbadge{cursor:pointer;transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+a.pbadge:hover{transform:translateY(-2px);box-shadow:0 18px 40px -14px rgba(20,25,55,.5)}
 .pbadge::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--blue);flex:none}
 .pbadge--tr{top:5%;right:-2%}
 .pbadge--mr{top:46%;right:-6%}
