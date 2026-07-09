@@ -345,7 +345,7 @@ body.menu-open .mobile-menu{transform:translateX(0)}
 .pstep h3{font-size:var(--step-0);margin-bottom:6px}
 .pstep p{font-size:var(--step--1);color:var(--ink-60)}
 .mineral{background:#fff;border-radius:var(--radius);padding:24px;text-align:center}
-.mineral .sym{font-family:var(--display);font-weight:700;font-size:var(--step-2);color:var(--navy)}
+.mineral .sym{display:block;margin:0 auto;width:92px;height:auto}
 .mineral .amt{font-size:var(--step--2);color:var(--ink-40)}
 
 /* contaminant pills grid */
