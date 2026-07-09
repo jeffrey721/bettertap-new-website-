@@ -21,7 +21,29 @@
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="assets/css/style.css?v=2" />
-<!-- Google tag (gtag.js) -->
+<style>
+  .cert-hero{background:linear-gradient(135deg,#0E1230 0%,#1b2350 60%,#243063 100%);color:#fff;text-align:center;padding:clamp(48px,7vw,88px) 20px clamp(40px,6vw,72px)}
+  .cert-hero .eyebrow{color:#8fc0ee}
+  .cert-badges{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px}
+  .cert-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:100px;padding:9px 16px;font-weight:600;font-size:var(--step--1)}
+  .cert-badge svg{width:18px;height:18px}
+  .certwrap{max-width:1040px;margin:0 auto;padding:clamp(28px,5vw,64px) 20px}
+  .cert-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+  .cert-card{background:#fff;border:1px solid var(--line-soft);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
+  .cert-card__ic{width:52px;height:52px;border-radius:14px;background:var(--blue-050);color:var(--blue);display:grid;place-items:center;margin-bottom:14px}
+  .cert-card__ic svg{width:28px;height:28px}
+  .cert-card__std{font-weight:700;font-size:var(--step-0);color:var(--navy)}
+  .cert-card__cat{font-weight:600;color:var(--blue);margin:2px 0 8px}
+  .cert-card p{font-size:var(--step--1);color:var(--ink-60);margin:0}
+  .cert-table{width:100%;border-collapse:collapse;margin-top:22px;font-size:var(--step--1);background:#fff;border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+  .cert-table th,.cert-table td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--grey-200);vertical-align:top}
+  .cert-table thead th{background:var(--navy);color:#fff;font-weight:600}
+  .cert-table tbody tr:nth-child(even){background:rgba(0,0,0,.02)}
+  .cert-std{font-weight:600;white-space:nowrap;color:var(--blue)}
+  .cert-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:34px}
+  .cert-note{margin-top:20px;font-size:var(--step--2);color:var(--ink-60);max-width:80ch}
+  .cert-scroll{overflow-x:auto}
+</style>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-GB5LHQ2SJR"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -34,24 +56,97 @@
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://drinkbettertap.com/"},{"@type":"ListItem","position":2,"name":"Certifications","item":"https://drinkbettertap.com/certifications.html"}]}
 </script>
 </head>
-<body class="cert-body">
-<h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0">Better Tap Certifications — NSF/ANSI 42, 53, 401 and 55 Class B</h1>
+<body>
 
-<!-- persistent return bar — always visible -->
-<header class="cert-bar">
-  <a href="index.html#certified" class="btn btn--ghost cert-back">&larr; Back to Better Tap</a>
-  <span class="cert-bar__title">Certification &amp; conformity</span>
-  <a href="pds.html" class="btn btn--ghost">Performance Data Sheet</a>
-  <a href="assets/docs/bettertap-certification.pdf" download class="btn btn--primary">Download PDF</a>
+<!-- ===== NAV (shared) ===== -->
+<header class="nav">
+  <div class="nav__inner">
+    <a href="https://www.drinkbettertap.com" class="nav__brand"><img src="assets/img/bmark-white.png" alt="" /> Bettertap<sup class="brand-tm">&trade;</sup></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="shop.html">Shop</a>
+      <a href="technology.html">Technology</a>
+      <a href="science.html">Why Better Tap</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav__actions">
+      <a href="shop.html" class="btn btn--primary">Shop Better Tap</a>
+    </div>
+  </div>
 </header>
-<p style="max-width:920px;margin:14px auto 0;padding:0 20px;font-size:14px;color:var(--ink-60);text-align:center">Tested and certified by NSF International to NSF/ANSI 42, 53, 401 and 55 Class B for the reduction of the substances listed in the Performance Data Sheet.</p>
 
-<main class="cert-main">
-  <iframe class="cert-frame" src="assets/docs/bettertap-certification.pdf#view=FitH" title="Better Tap certification &amp; conformity report (PDF)"></iframe>
-  <noscript><p style="padding:20px">Your browser can't display the embedded PDF. <a href="assets/docs/bettertap-certification.pdf">Open the certification report</a>.</p></noscript>
+<main>
+  <!-- Hero -->
+  <section class="cert-hero">
+    <p class="eyebrow">Independently Tested. Rigorously Certified.</p>
+    <h1 style="font-size:var(--step-4);margin-top:8px;color:#fff">Certification &amp; Conformity</h1>
+    <p class="lede" style="max-width:64ch;margin:14px auto 0;color:rgba(255,255,255,.85)">Better Tap is tested and certified by NSF International to NSF/ANSI 42, 53, 401 and 55 Class B for the reduction of the substances below — independently verified, not just claimed.</p>
+    <div class="cert-badges">
+      <span class="cert-badge"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 12l2.2 2.2 4.8-5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>NSF/ANSI 42</span>
+      <span class="cert-badge"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 12l2.2 2.2 4.8-5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>NSF/ANSI 53</span>
+      <span class="cert-badge"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 12l2.2 2.2 4.8-5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>NSF/ANSI 401</span>
+      <span class="cert-badge"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 12l2.2 2.2 4.8-5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>NSF 55 (Class B)</span>
+    </div>
+  </section>
+
+  <div class="certwrap">
+    <!-- Standard cards -->
+    <div class="cert-cards">
+      <div class="cert-card">
+        <div class="cert-card__ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3s6 6.5 6 10.5a6 6 0 0 1-12 0C6 9.5 12 3 12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+        <div class="cert-card__std">NSF/ANSI 42</div>
+        <div class="cert-card__cat">Aesthetic effects</div>
+        <p>Chlorine, taste &amp; odor, and particulates larger than 0.5 micron (Class I).</p>
+      </div>
+      <div class="cert-card">
+        <div class="cert-card__ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 12l2.2 2.2 4.8-5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="cert-card__std">NSF/ANSI 53</div>
+        <div class="cert-card__cat">Health effects</div>
+        <p>Lead, mercury, asbestos, pesticides (Atrazine) and parasitic cysts.</p>
+      </div>
+      <div class="cert-card">
+        <div class="cert-card__ic"><svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v5.2L5.4 16A2 2 0 0 0 7.2 19h9.6a2 2 0 0 0 1.8-3L14 8.2V3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 14h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        <div class="cert-card__std">NSF/ANSI 401</div>
+        <div class="cert-card__cat">Emerging contaminants</div>
+        <p>Pharmaceuticals, hormones, environmental pollutants and microplastics.</p>
+      </div>
+      <div class="cert-card">
+        <div class="cert-card__ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.7"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        <div class="cert-card__std">NSF 55 (Class B)</div>
+        <div class="cert-card__cat">Microbiological UV</div>
+        <p>UV-C microbiological treatment at the moment you pour — no chemicals added.</p>
+      </div>
+    </div>
+
+    <!-- Full data table -->
+    <h2 style="font-size:var(--step-2);margin-top:clamp(36px,5vw,56px)">Certified reduction — full list</h2>
+    <p class="lede" style="max-width:70ch;margin-top:8px">Every substance Better Tap's MAZE multi-stage filtration and UV-C stage is certified to reduce, grouped by treatment category and the NSF/ANSI standard it is tested under.</p>
+    <div class="cert-scroll">
+      <table class="cert-table">
+        <thead>
+          <tr><th>Treatment category</th><th>Substances reduced</th><th>Standard</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Aesthetic impurities</td><td>Chlorine · Particles larger than 0.5 micron (Class I)</td><td class="cert-std">NSF/ANSI 42</td></tr>
+          <tr><td>Microbiological — treatment</td><td>Microbiological treatment (UV-C system)</td><td class="cert-std">NSF 55 Class B</td></tr>
+          <tr><td>Microbiological — parasites</td><td>Cysts</td><td class="cert-std">NSF/ANSI 53</td></tr>
+          <tr><td>Harmful contaminants</td><td>Asbestos · Pesticides (Atrazine) · Heavy metals — Lead, Mercury</td><td class="cert-std">NSF/ANSI 53</td></tr>
+          <tr><td>Incidental / emerging<div style="font-size:var(--step--2);color:var(--ink-40);font-weight:500;margin-top:4px">pharmaceuticals, hormones &amp; environmental pollutants</div></td><td>Environmental — Bisphenol A, Nonylphenol, Linuron, TCEP, DEET, TCPP, Metolachlor · Hormones — Estrone · Drugs — Naproxen, Atenolol, Carbamazepine, Trimethoprim, Phenytoin, Ibuprofen · Microplastics</td><td class="cert-std">NSF/ANSI 401</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="cert-note">Tested and certified by NSF International to NSF/ANSI 42, 53, 401 and 55 Class B for the reduction of the substances listed above. Quantitative percentage-reduction figures for each parameter are recorded in the official certification report (available to download below). Recommended filter replacement: every 6 months. This certification describes the Better Tap Edge (model WDC-E-032) for the U.S. market.</p>
+
+    <div class="cert-actions">
+      <a href="assets/docs/bettertap-certification.pdf" download class="btn btn--primary btn--lg">Download the official report (PDF)</a>
+      <a href="pds.html" class="btn btn--ghost btn--lg">Performance Data Sheet</a>
+      <a href="index.html#certified" class="btn btn--ghost btn--lg">&larr; Back to Better Tap</a>
+    </div>
+  </div>
 </main>
 
-<!-- floating return (also persistent, for mobile / if the PDF takes focus) -->
-<a href="index.html#certified" class="cert-float" aria-label="Back to Better Tap">&larr; Back to site</a>
+<a class="buybar" href="shop.html" aria-label="Shop Better Tap"><svg viewBox="0 0 24 24" fill="none"><path d="M6 7h12l-1 13H7L6 7Z" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 7a3 3 0 0 1 6 0" stroke="#fff" stroke-width="1.7"/></svg> Shop Better Tap <b>$25/mo</b></a>
+<script src="assets/js/main.js"></script>
 </body>
 </html>
