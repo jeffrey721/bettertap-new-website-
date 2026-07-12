@@ -1,0 +1,13 @@
+{
+  "name": "bettertap-website",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Better Tap marketing site + headless Shopify storefront (drinkbettertap.com).",
+  "scripts": {
+    "prerender": "node scripts/prerender.js",
+    "build": "node scripts/prerender.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
