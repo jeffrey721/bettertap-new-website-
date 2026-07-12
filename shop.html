@@ -701,10 +701,17 @@
   function goCheckout(cart) {
     if (cart && cart.checkoutUrl) window.location.href = cart.checkoutUrl;
   }
+  // Express-checkout paths (Buy now) must use BT.cart.buyNow, NOT .add.
+  // .add appends to the persisted bt_cart_id cart. If the user previously
+  // started a Cash Buy-now (leaving [machine] in that cart) and then
+  // switches to Lease and clicks Buy now, .add would produce
+  // [machine, setup, monthly] = $1,805 at checkout. buyNow creates a fresh
+  // cart with exactly the lines this plan needs (Cash/Installments: only
+  // the machine; Lease: only setup + monthly-with-sellingPlan).
   function buyMachine() {
     var v = machineVariant();
     if (!v || !v.availableForSale) return;
-    BT.cart.add([{ merchandiseId: v.id, quantity: state.qty }])
+    BT.cart.buyNow([{ merchandiseId: v.id, quantity: state.qty }])
       .then(goCheckout)
       .catch(function (err) { console.error('[Shop] Buy machine failed', err); });
   }
@@ -715,11 +722,12 @@
     }
     var setupId = state.leaseSetup.variants[0].id;
     var monthlyId = state.leaseMonthly.variants[0].id;
-    BT.cart.add([
+    BT.cart.buyNow([
       { merchandiseId: setupId, quantity: 1 },
       { merchandiseId: monthlyId, quantity: 1, sellingPlanId: state.leasePlanId }
     ]).then(goCheckout).catch(function (err) { console.error('[Shop] Lease checkout failed', err); });
   }
+  // Add-to-cart (drawer) uses .add — this is the "append to cart" flow.
   function addMachineToCart() {
     var v = machineVariant();
     if (!v || !v.availableForSale) return;

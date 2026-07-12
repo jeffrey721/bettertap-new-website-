@@ -510,6 +510,12 @@
     update: cartUpdate,
     remove: cartRemove,
     reset: cartReset,
+    // Express-checkout entrypoint. Creates a FRESH cart containing exactly
+    // `lines` (any previously persisted cart is abandoned). Use for any
+    // "Buy now" flow that must not append to whatever the user had before —
+    // otherwise a prior cart (e.g. one that started a Cash checkout with the
+    // machine) would get merged with the new lines and blow the total.
+    buyNow: cartCreate,
     checkoutUrl: function () { return cartState && cartState.checkoutUrl; },
     onChange: onChange,
     open: openDrawer,
