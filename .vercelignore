@@ -1,0 +1,6 @@
+# Keep out of Vercel deployments — local dev only.
+# server.js is a zero-dep static file server used with `node server.js`;
+# if uploaded, Vercel auto-detects it as the app's Node entrypoint and
+# ignores vercel.json's outputDirectory ("dist"), which breaks routing
+# and skips the pre-rendered HTML that scripts/prerender.js writes.
+server.js
