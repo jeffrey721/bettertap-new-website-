@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /crm/
+Disallow: /account/
+Disallow: /api/
+
+Sitemap: https://drinkbettertap.com/sitemap.xml

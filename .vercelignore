@@ -1,6 +1,15 @@
 # Keep out of Vercel deployments — local dev only.
+
 # server.js is a zero-dep static file server used with `node server.js`;
 # if uploaded, Vercel auto-detects it as the app's Node entrypoint and
 # ignores vercel.json's outputDirectory ("dist"), which breaks routing
 # and skips the pre-rendered HTML that scripts/prerender.js writes.
 server.js
+
+# Env files must never reach Vercel: real ones would leak secrets;
+# even the .example gets copied to dist/ and served at /.env.example,
+# exposing the naming and structure of our secret config.
+.env
+.env.local
+.env.*.local
+.env.example

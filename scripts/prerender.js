@@ -42,9 +42,10 @@ const SKIP_PATHS = new Set([
   'node_modules', '.git', '.github', 'dist', 'scripts',
   '.vercel', '.next', '.DS_Store', 'Thumbs.db',
   '_bg_pages', '_handoff_pages', '_bg_text.txt',
-  'package.json', 'package-lock.json', 'yarn.lock'
+  'package.json', 'package-lock.json', 'yarn.lock',
+  '.env', '.env.local', '.env.example'
 ]);
-const SKIP_PREFIXES = ['_preview', '_verify', '_handoff'];
+const SKIP_PREFIXES = ['_preview', '_verify', '_handoff', '.env.'];
 
 /* ---------- helpers ---------- */
 function log(msg)  { process.stdout.write('[prerender] ' + msg + '\n'); }
@@ -104,7 +105,27 @@ function fmtMoney(price) {
 }
 
 function stripHtml(s) {
-  return String(s || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  return sanitizeMojibake(String(s || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim());
+}
+
+/**
+ * Defensive sanitizer for common CP1252-double-encoding mojibake.
+ * If a UTF-8 payload was ever decoded as CP1252 then re-encoded as UTF-8,
+ * em-dashes / smart quotes come through as `â€"`, `â€™`, `â€œ`, etc.
+ * Today, Shopify returns clean UTF-8, so this is a no-op; kept as
+ * insurance against future Admin edits that paste from Word/PDF etc.
+ */
+function sanitizeMojibake(s) {
+  if (!s || !/â€|Â /.test(s)) return s;
+  return s
+    .replace(/â€”/g, '—')  // U+2014 em dash
+    .replace(/â€“/g, '–')  // U+2013 en dash
+    .replace(/â€™/g, '’') // right single quote
+    .replace(/â€˜/g, '‘') // left single quote
+    .replace(/â€œ/g, '“') // left double quote
+    .replace(/â€/g,  '”') // right double quote (any leftover â€)
+    .replace(/â€¦/g, '…')  // ellipsis
+    .replace(/Â /g,  ' '); // spurious non-breaking-space artifact
 }
 
 /**
