@@ -88,7 +88,7 @@
             <tr><th></th><th class="col-bt">Better Tap</th><th>Noam Water</th><th>Culligan (RO)</th><th>Avalon</th><th>Brio</th></tr>
           </thead>
           <tbody>
-            <tr><th scope="row">Price</th><td class="col-bt">$1,200 — or lease from $25/mo</td><td>Varies by model</td><td>Quote-based (RO system)</td><td>$150–$400 (bottleless cooler)</td><td>$150–$400 (bottleless cooler)</td></tr>
+            <tr><th scope="row">Price</th><td class="col-bt"><span data-bt-machine-price>—</span> — or lease from <span data-bt-lease-monthly>$25</span>/mo</td><td>Varies by model</td><td>Quote-based (RO system)</td><td>$150–$400 (bottleless cooler)</td><td>$150–$400 (bottleless cooler)</td></tr>
             <tr><th scope="row">Filtration</th><td class="col-bt">Multi-stage MAZE filter</td><td>Water-bar filter (varies)</td><td>Reverse osmosis</td><td>Carbon filter (varies)</td><td>Carbon filter (varies)</td></tr>
             <tr><th scope="row">Keeps healthy minerals</th><td class="col-bt">Yes — keeps calcium &amp; magnesium</td><td>Varies</td><td>No — RO removes minerals</td><td>Varies</td><td>Varies</td></tr>
             <tr><th scope="row">UV-C microbiological treatment</th><td class="col-bt">Yes — NSF/ANSI 55 Class B</td><td>Varies</td><td>Not typical</td><td>Some models</td><td>Some models</td></tr>
@@ -162,5 +162,23 @@
 
 <a class="buybar" href="shop.html" aria-label="Shop Better Tap"><svg viewBox="0 0 24 24" fill="none"><path d="M6 7h12l-1 13H7L6 7Z" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 7a3 3 0 0 1 6 0" stroke="#fff" stroke-width="1.7"/></svg> Shop Better Tap <b>$25/mo</b></a>
 <script src="assets/js/main.js"></script>
+<script src="assets/js/shopify.js"></script>
+<script>
+(function () {
+  if (!window.BT) return;
+  BT.productByHandle('better-tap-water-bar').then(function (p) {
+    if (!p) return;
+    var v = p.variants[0];
+    var priceEl = document.querySelector('[data-bt-machine-price]');
+    if (priceEl && v) priceEl.textContent = BT.formatMoney(v.price);
+  }).catch(function (err) { console.warn('[Compare] machine price load failed', err); });
+  BT.productByHandle('better-tap-lease-monthly').then(function (p) {
+    if (!p) return;
+    var v = p.variants[0];
+    var el = document.querySelector('[data-bt-lease-monthly]');
+    if (el && v) el.textContent = BT.formatMoney(v.price);
+  }).catch(function (err) { console.warn('[Compare] lease monthly load failed', err); });
+})();
+</script>
 </body>
 </html>
