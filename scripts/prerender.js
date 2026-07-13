@@ -24,6 +24,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const ROOT = path.resolve(__dirname, '..');
 const DIST = path.resolve(ROOT, 'dist');
@@ -278,7 +279,78 @@ const Q_LEASE_MONTHLY = `
     warn('dist/compare.html not found; skipping.');
   }
 
+  /* --- Cache-bust JS + CSS references in every dist/*.html ---------
+     assets/(.*) is served with `Cache-Control: max-age=31536000, immutable`
+     in vercel.json (correct for perf), so returning visitors would keep
+     executing the same-URL cached copy for a year — even after we ship a
+     bug fix. Appending ?v=<content-hash> gives each new build a unique URL
+     per changed asset, so browsers fetch the new file exactly when its
+     bytes changed, and old files stay cached (harmlessly) at their old URL. */
+  const assetHashes = computeAssetHashes(DIST);
+  if (Object.keys(assetHashes).length) {
+    log('Asset hashes:');
+    for (const [p, h] of Object.entries(assetHashes)) log('  ' + h + '  ' + p);
+    let rewritten = 0;
+    for (const htmlFile of walkHtmlFiles(DIST)) {
+      const before = fs.readFileSync(htmlFile, 'utf8');
+      const after = bustAssetReferences(before, assetHashes);
+      if (after !== before) {
+        fs.writeFileSync(htmlFile, after, 'utf8');
+        rewritten++;
+      }
+    }
+    log('Cache-busted asset refs in ' + rewritten + ' HTML file(s).');
+  }
+
   log('Done.');
 })().catch((err) => {
   fail('Unexpected error: ' + (err && err.stack || err));
 });
+
+/**
+ * Read every .js / .css under dist/assets/js/ and dist/assets/css/ and
+ * return a { "assets/js/file.js": "<10-hex-chars>" } map keyed by
+ * URL-shaped path (forward-slash), so cross-platform.
+ */
+function computeAssetHashes(distRoot) {
+  const out = {};
+  const scanDirs = ['assets/js', 'assets/css'];
+  for (const rel of scanDirs) {
+    const abs = path.join(distRoot, rel);
+    if (!fs.existsSync(abs)) continue;
+    for (const entry of fs.readdirSync(abs)) {
+      const p = path.join(abs, entry);
+      if (!fs.statSync(p).isFile()) continue;
+      if (!/\.(js|css)$/.test(entry)) continue;
+      const buf = fs.readFileSync(p);
+      out[rel + '/' + entry] = crypto.createHash('sha256').update(buf).digest('hex').slice(0, 10);
+    }
+  }
+  return out;
+}
+
+/**
+ * Rewrite <script src="..."> and <link href="..."> tags whose URL points
+ * to a known asset (with or without a leading ./ or /, and with or without
+ * an existing ?v= query) to include ?v=<new-hash>. Anything else is left
+ * untouched.
+ */
+function bustAssetReferences(html, hashes) {
+  const REF_RE = /((?:src|href)\s*=\s*["'])((?:\.\/|\/)?)(assets\/(?:js|css)\/[^"'?#]+)(\?[^"']*)?(["'])/g;
+  return html.replace(REF_RE, (match, before, prefix, assetPath, _oldQuery, after) => {
+    const hash = hashes[assetPath];
+    if (!hash) return match;
+    return before + prefix + assetPath + '?v=' + hash + after;
+  });
+}
+
+function walkHtmlFiles(dir) {
+  const out = [];
+  for (const entry of fs.readdirSync(dir)) {
+    const p = path.join(dir, entry);
+    const st = fs.statSync(p);
+    if (st.isDirectory()) out.push(...walkHtmlFiles(p));
+    else if (entry.endsWith('.html')) out.push(p);
+  }
+  return out;
+}
