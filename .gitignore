@@ -11,3 +11,12 @@ Thumbs.db
 
 _handoff_pages/
 _handoff_*.png
+
+# Shopify headless pre-render output (built by scripts/prerender.js; deployed by Vercel)
+dist/
+
+# Local secrets — never commit. Admin API token goes here for local dev of api/shopify-admin.
+.env
+.env.local
+.env.*.local
+.vercel

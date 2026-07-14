@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 920" role="img" aria-label="Contaminants the Better Tap MAZE filter reduces from a glass of water: lead, chlorine, microplastics, mercury, hormones, pharmaceuticals, pesticides, asbestos, sediment and more">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eef5fc"/><stop offset="1" stop-color="#f8fbff"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bfe0fb"/><stop offset="1" stop-color="#8fc4ee"/>
+    </linearGradient>
+    <linearGradient id="splash" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#bfe0fb"/><stop offset="1" stop-color="#6fb0e6"/>
+    </linearGradient>
+    <symbol id="sh" viewBox="0 0 24 24">
+      <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" fill="#EAF3FB" stroke="#4D97DB" stroke-width="1.4"/>
+      <path d="M8.5 12l2.2 2.2 4.8-5.4" fill="none" stroke="#4D97DB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+
+  <rect width="900" height="920" fill="url(#bg)"/>
+
+  <text x="450" y="76" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="34" fill="#141937">What the MAZE filter reduces</text>
+  <text x="450" y="112" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="600" font-size="16" letter-spacing="1.6" fill="#4D97DB">NSF/ANSI 42 · 53 · 401 · 55 CLASS B</text>
+
+  <!-- LEFT column -->
+  <g font-family="Inter,Arial,sans-serif" font-size="27" font-weight="600" fill="#141937">
+    <use href="#sh" x="70" y="176" width="36" height="36"/><text x="120" y="202">Lead</text>
+    <use href="#sh" x="70" y="256" width="36" height="36"/><text x="120" y="282">Microplastics</text>
+    <use href="#sh" x="70" y="336" width="36" height="36"/><text x="120" y="362">Hormones</text>
+    <use href="#sh" x="70" y="416" width="36" height="36"/><text x="120" y="442">Pharmaceuticals</text>
+    <use href="#sh" x="70" y="496" width="36" height="36"/><text x="120" y="522">Sediment</text>
+  </g>
+
+  <!-- RIGHT column -->
+  <g font-family="Inter,Arial,sans-serif" font-size="27" font-weight="600" fill="#141937">
+    <use href="#sh" x="500" y="176" width="36" height="36"/><text x="550" y="202">Chlorine</text>
+    <use href="#sh" x="500" y="256" width="36" height="36"/><text x="550" y="282">Mercury</text>
+    <use href="#sh" x="500" y="336" width="36" height="36"/><text x="550" y="362">Pesticides</text>
+    <use href="#sh" x="500" y="416" width="36" height="36"/><text x="550" y="442">Asbestos</text>
+    <use href="#sh" x="500" y="496" width="36" height="36"/><text x="550" y="522">…and more</text>
+  </g>
+
+  <!-- splash rising from the glass -->
+  <path d="M450 700 C 416 604, 512 572, 472 480 C 450 430, 504 404, 516 364" fill="none" stroke="url(#splash)" stroke-width="22" stroke-linecap="round" opacity="0.85"/>
+  <path d="M450 700 C 474 620, 398 584, 438 502" fill="none" stroke="url(#splash)" stroke-width="12" stroke-linecap="round" opacity="0.55"/>
+  <circle cx="516" cy="388" r="15" fill="#bfe0fb" opacity="0.8"/>
+  <circle cx="486" cy="446" r="19" fill="#a9d4f5" opacity="0.9"/>
+  <text x="486" y="452" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="700" fill="#2f6cc0">Cl</text>
+  <circle cx="526" cy="470" r="10" fill="#cfe8fb" opacity="0.85"/>
+  <circle cx="424" cy="536" r="8" fill="#cfe8fb" opacity="0.8"/>
+
+  <!-- glass -->
+  <path d="M368 686 L532 686 L516 872 Q514 883 503 883 L397 883 Q386 883 384 872 Z" fill="#f4fafe" stroke="#9db4c9" stroke-width="3"/>
+  <path d="M376 728 L524 728 L515 868 Q513 876 505 876 L395 876 Q387 876 385 868 Z" fill="url(#water)" opacity="0.92"/>
+  <ellipse cx="450" cy="686" rx="82" ry="11" fill="#eaf5fe" stroke="#9db4c9" stroke-width="2"/>
+  <ellipse cx="450" cy="728" rx="74" ry="9" fill="#cfe8fb"/>
+</svg>

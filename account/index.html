@@ -1,129 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sign in — BetterTap Account</title>
-<meta name="description" content="Sign in to your BetterTap customer account." />
-<meta name="theme-color" content="#141937" />
-<meta name="robots" content="noindex" />
-<link rel="icon" type="image/png" href="../assets/img/bmark-white.png" />
-<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/css/account.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Sign in — Better Tap</title>
+<link rel="icon" type="image/png" href="../assets/img/bmark-white.png">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/account.css?v=4">
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-VFHX5BXGTE"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GB5LHQ2SJR"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-VFHX5BXGTE');
+  gtag('config', 'G-GB5LHQ2SJR');
+  gtag('config', 'AW-18239012278');
 </script>
 </head>
 <body>
-
-<main class="auth">
-
-  <!-- ===== LEFT: BRAND PANEL ===== -->
-  <section class="auth__brand">
-    <a href="../index.html" class="brand-row">
-      <img src="../assets/img/bmark-white.png" alt="BetterTap" /> Bettertap
-    </a>
-
-    <div class="auth__brandbody">
-      <h1>Your BetterTap account</h1>
-      <p class="sub">Manage your machine, track service, and find everything you need — all in one place.</p>
-      <ul class="auth__bullets">
-        <li>
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 12l2.2 2.2 4.8-5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Track your machine &amp; warranty
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="15" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 3v4M16 3v4M4 10h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-          Book &amp; follow service requests
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24" fill="none"><path d="M6 3h9l4 4v14H6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 3v5h5M9 13h6M9 17h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-          Guides, manuals &amp; warranty docs
-        </li>
-      </ul>
-      <a href="../index.html" class="auth__back">&larr; Back to bettertap.com</a>
-    </div>
-  </section>
-
-  <!-- ===== RIGHT: AUTH CARD ===== -->
-  <section class="auth__panel">
-    <div class="auth__card">
-
-      <div class="topline">
-        <a href="../index.html" class="link" style="font-weight:600;font-size:14px;color:var(--ink-60)">&larr; bettertap.com</a>
-        <span class="demo-badge">Demo only</span>
+  <div class="auth">
+    <!-- LEFT: brand -->
+    <aside class="auth__brand">
+      <a href="https://www.drinkbettertap.com" class="brand-row"><img src="../assets/img/bmark-white.png" alt=""> Bettertap</a>
+      <div class="auth__brandbody">
+        <span class="demo-badge">Demo portal</span>
+        <h1>Your water, your account.</h1>
+        <p class="sub">Track orders, manage your filter subscription, and keep your details up to date — all in one place.</p>
+        <ul class="auth__bullets">
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Order history &amp; tracking</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Filter subscription &amp; replacement reminders</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Profile, addresses &amp; payment</li>
+        </ul>
       </div>
+      <a href="https://www.drinkbettertap.com" class="auth__back">&larr; Back to drinkbettertap.com</a>
+    </aside>
 
-      <!-- STEP 1: EMAIL + PASSWORD -->
-      <div id="step-email">
-        <h2>Sign in</h2>
-        <p class="lede">Welcome back. Enter your details to continue.</p>
+    <!-- RIGHT: form -->
+    <section class="auth__panel">
+      <div class="auth__card">
+        <div class="topline">
+          <span class="demo-badge">Better Tap</span>
+        </div>
+        <h2 id="title">Welcome back</h2>
+        <p class="lede" id="subtitle">Sign in to your Better Tap account.</p>
 
-        <form id="login-form" novalidate>
+        <div class="demo-hint">Demo login — email <b>you@drinkbettertap.com</b>, password <b>bettertap</b>. Or create a new account.</div>
+
+        <form id="authForm" autocomplete="on" novalidate>
+          <div class="field" id="nameField" style="display:none">
+            <label for="fullName">Full name</label>
+            <input type="text" id="fullName" autocomplete="name" placeholder="Jordan Bennett">
+          </div>
           <div class="field">
             <label for="email">Email address</label>
-            <input type="email" id="email" autocomplete="username" placeholder="you@example.com" />
+            <input type="email" id="email" autocomplete="email" required placeholder="you@drinkbettertap.com">
           </div>
-
           <div class="field">
             <label for="password">Password</label>
             <div class="input-wrap">
-              <input type="password" id="password" autocomplete="current-password" placeholder="Your password" />
-              <button type="button" class="toggle" id="pw-toggle">Show</button>
+              <input type="password" id="password" autocomplete="current-password" required minlength="6" placeholder="••••••••">
+              <button type="button" class="toggle" id="pwToggle" aria-label="Show password">Show</button>
             </div>
           </div>
-
-          <div class="err" id="login-err"></div>
-
-          <div class="row-between">
-            <label class="check">
-              <input type="checkbox" id="remember" /> Remember me
-            </label>
-            <a href="#" id="forgot" class="link">Forgot password?</a>
-          </div>
-
-          <button type="submit" class="btn btn--primary btn--block">Sign in</button>
+          <p class="err" id="err"></p>
+          <button type="submit" class="btn btn--primary btn--block" id="submitBtn">Sign in</button>
         </form>
 
-        <p class="auth__alt">Any non-empty credentials work in this prototype.</p>
+        <p class="auth__alt"><span id="altText">New to Better Tap?</span> <a class="link" id="altLink">Create an account</a></p>
       </div>
+    </section>
+  </div>
 
-      <!-- STEP 2: 2FA -->
-      <div id="step-2fa" style="display:none">
-        <h2>Two-factor verification</h2>
-        <p class="lede">Enter the 6-digit code we sent to <b id="otp-target">your email</b>.</p>
+  <script src="assets/js/account-backend.js?v=4"></script>
+  <script>
+  (function () {
+    'use strict';
+    var mode = 'signin';
+    var el = function (id) { return document.getElementById(id); };
+    var errEl = el('err');
+    function showErr(m) { errEl.textContent = m || ''; }
 
-        <form id="verify-form" novalidate>
-          <div class="otp">
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 1" />
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 2" />
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 3" />
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 4" />
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 5" />
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 6" />
-          </div>
-          <div class="err" id="otp-err"></div>
+    // already signed in? go to dashboard
+    if (window.BT_ACCT.auth.getSession()) { location.replace('app.html'); return; }
 
-          <div class="demo-hint">Demo hint: use code <b>123456</b> (or any 6 digits).</div>
+    el('pwToggle').addEventListener('click', function () {
+      var p = el('password');
+      var show = p.type === 'password';
+      p.type = show ? 'text' : 'password';
+      this.textContent = show ? 'Hide' : 'Show';
+    });
 
-          <button type="submit" class="btn btn--primary btn--block">Verify</button>
-          <p class="auth__alt"><button type="button" id="back-2fa" class="link" style="background:none">&larr; Use a different account</button></p>
-        </form>
-      </div>
+    function setMode(m) {
+      mode = m; showErr('');
+      var signup = m === 'signup';
+      el('title').textContent = signup ? 'Create your account' : 'Welcome back';
+      el('subtitle').textContent = signup ? 'Set up your Better Tap account.' : 'Sign in to your Better Tap account.';
+      el('submitBtn').textContent = signup ? 'Create account' : 'Sign in';
+      el('nameField').style.display = signup ? '' : 'none';
+      el('password').setAttribute('autocomplete', signup ? 'new-password' : 'current-password');
+      el('altText').textContent = signup ? 'Already have an account?' : 'New to Better Tap?';
+      el('altLink').textContent = signup ? 'Sign in' : 'Create an account';
+    }
+    el('altLink').addEventListener('click', function () { setMode(mode === 'signin' ? 'signup' : 'signin'); });
 
-    </div>
-  </section>
-
-</main>
-
-<script src="assets/js/account.js"></script>
+    el('authForm').addEventListener('submit', function (e) {
+      e.preventDefault(); showErr('');
+      var email = el('email').value.trim();
+      var password = el('password').value;
+      var name = el('fullName').value.trim();
+      if (!email || !password) { showErr('Please enter your email and password.'); return; }
+      if (password.length < 6) { showErr('Password must be at least 6 characters.'); return; }
+      var res = mode === 'signup'
+        ? window.BT_ACCT.auth.signUp(name, email, password)
+        : window.BT_ACCT.auth.signIn(email, password);
+      if (res.error) { showErr(res.error); return; }
+      location.href = 'app.html';
+    });
+  })();
+  </script>
 </body>
 </html>

@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 700" role="img" font-family="'Neue Haas Grotesk','Inter','Helvetica Neue',Arial,sans-serif">
+  <title>How to replace the UV-C lamp</title>
+  <desc>Six illustrated steps for replacing the Water Bar UV-C lamp, with a caution not to touch the lamp glass.</desc>
+  <defs>
+    <g id="unit">
+      <path d="M14 46 Q14 20 44 20 L104 20 Q134 20 134 46 L134 60 L14 60 Z" fill="#EAF3FB" stroke="#141937" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="58" cy="38" r="2.4" fill="#4D97DB"/><circle cx="70" cy="35" r="2.4" fill="#4D97DB"/><circle cx="82" cy="38" r="2.4" fill="#4D97DB"/><circle cx="64" cy="46" r="2.4" fill="#4D97DB"/><circle cx="76" cy="46" r="2.4" fill="#4D97DB"/>
+      <path d="M22 60 L126 60 Q132 60 132 78 L132 188 Q132 206 112 206 L36 206 Q16 206 16 188 L16 78 Q16 60 22 60 Z" fill="#fff" stroke="#141937" stroke-width="3" stroke-linejoin="round"/>
+      <rect x="68" y="76" width="12" height="26" rx="3" fill="#EAF3FB" stroke="#141937" stroke-width="2.6"/>
+      <ellipse cx="74" cy="196" rx="40" ry="9" fill="#EAF3FB" stroke="#141937" stroke-width="2.6"/>
+      <ellipse cx="74" cy="196" rx="18" ry="4.5" fill="none" stroke="#4D97DB" stroke-width="2"/>
+    </g>
+    <g id="lamp">
+      <rect x="-9" y="0" width="18" height="20" rx="4" fill="#EAF3FB" stroke="#141937" stroke-width="2.6"/>
+      <rect x="-4.5" y="20" width="9" height="64" rx="4.5" fill="#fff" stroke="#4D97DB" stroke-width="2.6"/>
+      <line x1="0" y1="30" x2="0" y2="76" stroke="#4D97DB" stroke-width="1.4" stroke-dasharray="2 5"/>
+    </g>
+    <g id="plug">
+      <rect x="0" y="-13" width="30" height="26" rx="6" fill="#fff" stroke="#141937" stroke-width="3"/>
+      <line x1="9" y1="-5" x2="9" y2="5" stroke="#4D97DB" stroke-width="3" stroke-linecap="round"/>
+      <line x1="19" y1="-5" x2="19" y2="5" stroke="#4D97DB" stroke-width="3" stroke-linecap="round"/>
+      <path d="M30 0 q26 2 30 26" fill="none" stroke="#9fb3c8" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <g id="socket">
+      <rect x="-20" y="-20" width="40" height="40" rx="9" fill="#fff" stroke="#141937" stroke-width="3"/>
+      <line x1="-7" y1="-8" x2="-7" y2="6" stroke="#141937" stroke-width="3" stroke-linecap="round"/>
+      <line x1="7" y1="-8" x2="7" y2="6" stroke="#141937" stroke-width="3" stroke-linecap="round"/>
+      <line x1="-9" y1="12" x2="9" y2="12" stroke="#141937" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#4D97DB"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1040" height="700" rx="20" fill="#fff"/>
+  <text x="44" y="58" fill="#141937" font-size="30" font-weight="700" letter-spacing="-0.5">How to replace the UV-C lamp</text>
+  <text x="44" y="86" fill="#4D97DB" font-size="14" font-weight="600" letter-spacing="2">BETTER TAP · WATER BAR CARE</text>
+  <line x1="44" y1="104" x2="996" y2="104" stroke="#E3E9F2" stroke-width="2"/>
+
+  <!-- Row 1 -->
+  <!-- Step 1 -->
+  <g transform="translate(44,132)">
+    <circle cx="14" cy="14" r="14" fill="#4D97DB"/><text x="14" y="19" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">1</text>
+    <g transform="translate(70,40)"><use href="#socket" x="120" y="40"/><g transform="translate(20,70)"><use href="#plug"/></g><line x1="56" y1="64" x2="92" y2="44" stroke="#4D97DB" stroke-width="3" marker-end="url(#ah)"/></g>
+    <text x="0" y="150" fill="#141937" font-size="15.5" font-weight="500">Unplug the device from</text>
+    <text x="0" y="171" fill="#141937" font-size="15.5" font-weight="500">the electrical socket.</text>
+  </g>
+  <!-- Step 2 -->
+  <g transform="translate(372,132)">
+    <circle cx="14" cy="14" r="14" fill="#4D97DB"/><text x="14" y="19" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">2</text>
+    <g transform="translate(95,8)"><use href="#unit"/><path d="M14 14 Q14 0 44 0 L104 0 Q134 0 134 14 L134 22 L14 22 Z" transform="translate(0,-26)" fill="#EAF3FB" stroke="#4D97DB" stroke-width="3" stroke-linejoin="round"/><line x1="74" y1="-44" x2="74" y2="-70" stroke="#4D97DB" stroke-width="3" marker-end="url(#ah)"/></g>
+    <text x="0" y="240" fill="#141937" font-size="15.5" font-weight="500">Remove the top panel.</text>
+  </g>
+  <!-- Step 3 -->
+  <g transform="translate(700,132)">
+    <circle cx="14" cy="14" r="14" fill="#4D97DB"/><text x="14" y="19" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">3</text>
+    <g transform="translate(70,30)">
+      <path d="M0 70 Q0 30 70 26 Q150 30 150 70 L150 120 Q150 140 130 140 L20 140 Q0 140 0 120 Z" fill="#fff" stroke="#141937" stroke-width="3" stroke-linejoin="round"/>
+      <g transform="translate(86,18)"><use href="#lamp"/></g>
+      <path d="M70 60 q-22 4 -22 26 q0 16 18 18" fill="none" stroke="#141937" stroke-width="3" stroke-linecap="round"/>
+      <line x1="86" y1="22" x2="86" y2="-4" stroke="#4D97DB" stroke-width="3" marker-end="url(#ah)"/>
+    </g>
+    <text x="0" y="232" fill="#141937" font-size="15.5" font-weight="500">Hold both sides of the lamp</text>
+    <text x="0" y="253" fill="#141937" font-size="15.5" font-weight="500">head and pull it straight up.</text>
+  </g>
+
+  <!-- Row 2 -->
+  <!-- Step 4 -->
+  <g transform="translate(44,420)">
+    <circle cx="14" cy="14" r="14" fill="#4D97DB"/><text x="14" y="19" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">4</text>
+    <g transform="translate(70,30)">
+      <path d="M0 70 Q0 30 70 26 Q150 30 150 70 L150 120 Q150 140 130 140 L20 140 Q0 140 0 120 Z" fill="#fff" stroke="#141937" stroke-width="3" stroke-linejoin="round"/>
+      <g transform="translate(86,14)"><use href="#lamp"/></g>
+      <line x1="86" y1="-8" x2="86" y2="14" stroke="#4D97DB" stroke-width="3" marker-end="url(#ah)"/>
+    </g>
+    <text x="0" y="232" fill="#141937" font-size="15.5" font-weight="500">Install the new UV-C lamp.</text>
+  </g>
+  <!-- Step 5 -->
+  <g transform="translate(372,420)">
+    <circle cx="14" cy="14" r="14" fill="#4D97DB"/><text x="14" y="19" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">5</text>
+    <g transform="translate(95,30)"><use href="#unit"/><path d="M14 14 Q14 0 44 0 L104 0 Q134 0 134 14 L134 22 L14 22 Z" transform="translate(0,-20)" fill="#EAF3FB" stroke="#4D97DB" stroke-width="3" stroke-linejoin="round"/><line x1="74" y1="-46" x2="74" y2="-24" stroke="#4D97DB" stroke-width="3" marker-end="url(#ah)"/></g>
+    <text x="0" y="252" fill="#141937" font-size="15.5" font-weight="500">Reattach the top panel.</text>
+  </g>
+  <!-- Step 6 -->
+  <g transform="translate(700,420)">
+    <circle cx="14" cy="14" r="14" fill="#4D97DB"/><text x="14" y="19" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">6</text>
+    <g transform="translate(70,40)"><use href="#socket" x="120" y="40"/><g transform="translate(40,70)"><use href="#plug"/></g><line x1="84" y1="48" x2="104" y2="42" stroke="#4D97DB" stroke-width="3" marker-end="url(#ah)"/></g>
+    <text x="0" y="170" fill="#141937" font-size="15.5" font-weight="500">Plug the device back into</text>
+    <text x="0" y="191" fill="#141937" font-size="15.5" font-weight="500">the electrical socket.</text>
+  </g>
+
+  <!-- Caution -->
+  <g transform="translate(44,630)">
+    <rect x="0" y="0" width="952" height="48" rx="12" fill="#EAF3FB"/>
+    <circle cx="30" cy="24" r="13" fill="none" stroke="#4D97DB" stroke-width="2.6"/>
+    <line x1="22" y1="16" x2="38" y2="32" stroke="#4D97DB" stroke-width="2.6" stroke-linecap="round"/>
+    <line x1="38" y1="16" x2="22" y2="32" stroke="#4D97DB" stroke-width="2.6" stroke-linecap="round"/>
+    <text x="58" y="30" fill="#23577E" font-size="15.5" font-weight="500">Avoid touching the glass of the UV-C lamp — hold it only by the head.</text>
+  </g>
+</svg>
